@@ -1,0 +1,34 @@
+{
+  "events": [
+    {
+      "title": "IEEE IC Hackathon 2.0 - Finals",
+      "year": 2024,
+      "description": "Qualified with AIR 7 out of 600 teams",
+      "type": "competition"
+    },
+    {
+      "title": "CVIA Workshop",
+      "year": 2024,
+      "description": "Computer Vision and Image Analysis workshop participation",
+      "type": "workshop"
+    },
+    {
+      "title": "AI Expo India",
+      "year": 2023,
+      "description": "Participated in India's premier AI exposition",
+      "type": "conference"
+    },
+    {
+      "title": "State-level Science Exhibition",
+      "year": 2021,
+      "description": "Secured 2nd position at Governor's house, Patna",
+      "type": "competition"
+    },
+    {
+      "title": "Atal Tinkering Lab Management",
+      "year": 2020,
+      "description": "Managed Bihar's first ATL funded by Niti Aayog",
+      "type": "leadership"
+    }
+  ]
+}

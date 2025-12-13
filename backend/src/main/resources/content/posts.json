@@ -1,0 +1,46 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "slug": "building-hybrid-ai-systems",
+      "title": "Building Hybrid AI Systems: Combining Neural and Symbolic Approaches",
+      "excerpt": "Exploring how to merge deep learning with symbolic reasoning for more robust and interpretable AI systems.",
+      "content": "In this post, I discuss my experience building HybEx-Law, a hybrid system that combines LegalBERT embeddings with Graph Neural Networks and Prolog-based symbolic reasoning. The key insight is that neural models excel at pattern recognition while symbolic systems provide interpretability and rule-based guarantees...",
+      "author": "Mohit Kumar",
+      "date": "2025-11-15",
+      "readTime": "8 min read",
+      "category": "AI Systems",
+      "tags": ["Hybrid AI", "Neural Networks", "Symbolic AI", "LegalBERT", "GNN"],
+      "featured": true,
+      "image": "/images/hybrid-ai.jpg"
+    },
+    {
+      "id": 2,
+      "slug": "multi-agent-research-automation",
+      "title": "Multi-Agent Research Automation with LangGraph",
+      "excerpt": "How I built Nexus, a three-agent system that automates research discovery and synthesis using LangGraph orchestration.",
+      "content": "Nexus demonstrates the power of multi-agent architectures for complex workflows. By splitting responsibilities across specialized agents—Research Agent for data collection, Reporting Agent for synthesis, and Storage Agent for output—we achieve 75% reduction in manual effort...",
+      "author": "Mohit Kumar",
+      "date": "2025-10-28",
+      "readTime": "10 min read",
+      "category": "AI Agents",
+      "tags": ["Multi-Agent", "LangGraph", "Automation", "Research", "Flask"],
+      "featured": true,
+      "image": "/images/nexus.jpg"
+    },
+    {
+      "id": 3,
+      "slug": "layout-free-parking-detection",
+      "title": "Layout-Free Parking Detection with Swin Transformers",
+      "excerpt": "Achieving 98.99% mAP50 in parking slot detection without predefined layouts using augmented Swin Transformer backbone.",
+      "content": "Traditional parking detection systems rely on predefined layouts, limiting their flexibility. In this project, I augmented the Swin Transformer with GLCM texture features via FiLM fusion, enabling dynamic slot inference in bird's-eye view space...",
+      "author": "Mohit Kumar",
+      "date": "2025-09-20",
+      "readTime": "7 min read",
+      "category": "Computer Vision",
+      "tags": ["Vision", "Swin Transformer", "Mask2Former", "Parking Detection", "GLCM"],
+      "featured": false,
+      "image": "/images/parking.jpg"
+    }
+  ]
+}

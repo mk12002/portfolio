@@ -1,0 +1,46 @@
+{
+  "certificates": [
+    {
+      "name": "Azure AI Engineer Associate (AI-102)",
+      "issuer": "Microsoft",
+      "category": "Cloud",
+      "icon": "microsoft"
+    },
+    {
+      "name": "Azure Data Scientist Associate (DP-100)",
+      "issuer": "Microsoft",
+      "category": "Cloud",
+      "icon": "microsoft"
+    },
+    {
+      "name": "Azure AI Fundamentals",
+      "issuer": "Microsoft",
+      "category": "Cloud",
+      "icon": "microsoft"
+    },
+    {
+      "name": "OCI Generative AI Professional 2024",
+      "issuer": "Oracle",
+      "category": "Cloud",
+      "icon": "oracle"
+    },
+    {
+      "name": "Data Structures and Algorithms",
+      "issuer": "VIT Chennai",
+      "category": "Programming",
+      "icon": "code"
+    },
+    {
+      "name": "Figma Essential Training",
+      "issuer": "LinkedIn Learning",
+      "category": "Design",
+      "icon": "figma"
+    },
+    {
+      "name": "ATL Tinkerpreneur Participation",
+      "issuer": "Niti Aayog",
+      "category": "Innovation",
+      "icon": "innovation"
+    }
+  ]
+}

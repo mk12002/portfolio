@@ -1,0 +1,56 @@
+LUNA: Logical Universal Networked Assistant
+(Status: Advanced Personal Project | Tech Stack: Python, Local LLM, Automation)
+
+The Concept: LUNA acts as a "central nervous system" for your computer, merging the cognitive abilities of cloud-based Large Language Models (LLMs) with the execution capabilities of local Python scripts. It solves the limitation of web-based chatbots, which can answer questions but cannot interact with your local operating system.
+
+Core Architecture: The "Intent Router" The system logic is built around a decision node that classifies user input into two streams:
+
+Thinking Stream (Cloud Intelligence):
+
+Logic: If the user asks for information, creative writing, or analysis (e.g., "Explain Quantum Physics"), the request is routed to a cloud LLM.
+
+APIs:
+
+Groq API: Used for simple queries requiring ultra-low latency. Its fast inference speed makes the conversation feel instantaneous.
+
+Cohere API: Used for more complex reasoning or RAG-based tasks where context retention is critical.
+
+Multimodal Vision Integration:
+
+Google Gemini Vision API: LUNA can "see" the user's screen or webcam feed.
+
+Use Case: The user can press a hotkey to take a screenshot of a coding error, and LUNA will analyze the image to provide a debugging solution, bypassing the need to copy-paste text.
+
+Doing Stream (Local Execution):
+
+Logic: If the user issues a command (e.g., "Open Spotify and play lofi"), LUNA bypasses the LLM's text generation and triggers a local execution pipeline.
+
+System Automation Layer:
+
+os and subprocess libraries: Used for basic file system operations, creating directories, and launching executable files.
+
+AppOpener: This library handles the complexity of mapping natural language app names ("VS Code") to their system executables (code.exe), allowing for "fuzzy" matching.
+
+PyAutoGUI: Acts as a "virtual user" to simulate mouse clicks and keystrokes for legacy applications that lack an API.
+
+Frontend & User Experience:
+
+GUI (PyQt5): Instead of a terminal window, LUNA uses a transparent, overlay GUI built with PyQt5. This provides a futuristic "HUD" (Heads-Up Display) experience that sits on top of other windows without obstructing workflow.
+
+Voice Pipeline:
+
+Wake Word Detection: A lightweight, offline model listens for a specific keyword to activate the system, ensuring privacy and responsiveness.
+
+Speech-to-Text: Utilizes the Web Speech API for high-accuracy transcription of user commands.
+
+Text-to-Speech: Integrated Edge TTS (Microsoft Edge's Neural TTS) to generate high-quality, natural-sounding voice responses, avoiding the robotic tone of standard offline TTS libraries.
+
+Web Automation Agent:
+
+Selenium Integration: LUNA includes a "Headless Browser" agent. When a user asks for real-time data not known to the LLM (e.g., "What is the current stock price of Apple?"), LUNA spins up a hidden browser instance, navigates to a search engine, scrapes the relevant data snippet, and feeds it back to the conversation engine. This gives LUNA "internet access" capabilities similar to Perplexity or Bing Chat, but fully locally controlled.
+
+Impact:
+
+Productivity: Automates repetitive desktop workflows, reducing friction between "thinking" about a task and "doing" it.
+
+Technical Showcase: Demonstrates proficiency in System Design, API Integration, GUI Development, and Process Automation.

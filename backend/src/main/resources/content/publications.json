@@ -1,0 +1,36 @@
+{
+  "publications": [
+    {
+      "title": "HybEx-Law: A Hybrid Neural-Symbolic System for Legal Aid Eligibility Determination",
+      "authors": ["Mohit Kumar", "Diya Ravishankar", "Yuganshu Kumar", "Sudhakaran G"],
+      "venue": "Under Review",
+      "year": 2025,
+      "abstract": "A system blending neural models with rule-based reasoning to determine legal aid eligibility, achieving F1-score of 0.985.",
+      "tags": ["Legal AI", "Hybrid Neural-Symbolic", "GNN", "Prolog"]
+    },
+    {
+      "title": "High-Precision Polygonal Parking Slot Detection via SwinMask2Former and Dynamic Gap Analysis",
+      "authors": ["Diya Ravishankar", "Mohit Kumar", "Yuganshu Kumar", "Vijayarajan Rajangam", "Sangeetha Nagarajan"],
+      "venue": "CVIA 2024",
+      "year": 2024,
+      "abstract": "Novel end-to-end framework for layout-free parking vacancy detection achieving mAP50 of 98.99%.",
+      "tags": ["Computer Vision", "Swin Transformer", "Instance Segmentation"]
+    },
+    {
+      "title": "Advancing Human Activity Recognition: A Comparative Analysis of Graph Convolutional Networks and Masked Autoencoders",
+      "authors": ["Dr. Balasundaram A", "Diya Ravishankar", "Mohit Kumar", "Aditi Bhargav"],
+      "venue": "Research Paper",
+      "year": 2024,
+      "abstract": "Comparative study achieving 99.99% accuracy with HAR-GCNN on PAMAP2 dataset.",
+      "tags": ["GNN", "HAR", "MetaMAE", "Time-Series"]
+    },
+    {
+      "title": "Nexus: A Three-Pronged Agentic AI System for Intelligent Research and Analysis",
+      "authors": ["Mohit Kumar", "Diya Ravishankar"],
+      "venue": "ReadyTensor",
+      "year": 2025,
+      "abstract": "Multi-agent system for automated research discovery and synthesis using LangGraph.",
+      "tags": ["Multi-Agent", "LangGraph", "Research Automation"]
+    }
+  ]
+}

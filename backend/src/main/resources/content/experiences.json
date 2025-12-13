@@ -1,0 +1,64 @@
+{
+  "experiences": [
+    {
+      "id": "shantou",
+      "organization": "Shantou University",
+      "role": "Research Intern",
+      "duration": "May 2025 – July 2025",
+      "location": "Shantou, China (Remote)",
+      "project": "Gated Multi-Domain CUT Model",
+      "problem": "Develop efficient X-ray normalization across multiple intensity levels using a single unified generator.",
+      "approach": "Designed a novel Gated Multi-Domain CUT model with attention-based architecture and hybrid contrastive loss for high anatomical fidelity.",
+      "impact": "Outperformed baselines (CycleGAN, StarGAN, CUT) achieving SSIM of 0.9858.",
+      "tags": ["Medical Imaging", "GANs", "CUT", "X-ray Normalization", "Deep Learning"]
+    },
+    {
+      "id": "annam",
+      "organization": "Annam.AI (IIT Ropar)",
+      "role": "Project Intern",
+      "duration": "May 2025 – July 2025",
+      "location": "IIT Ropar, Punjab (Remote)",
+      "project": "Sanchalak",
+      "problem": "Bridge the information gap between farmers and 50+ government welfare schemes through voice-driven AI.",
+      "approach": "Built FastAPI backend with Prolog-based rule engine, end-to-end pipeline using Whisper, Azure Translator/TTS, and Gemma LLM for personalized voice interactions.",
+      "impact": "Achieved <5s latency per query with 100% deterministic eligibility checks via hybrid Prolog+LLM architecture.",
+      "tags": ["Voice AI", "Prolog", "FastAPI", "Multilingual", "LLM", "AgriTech"]
+    },
+    {
+      "id": "samsung",
+      "organization": "Samsung R&D Institute India (PRISM)",
+      "role": "Research Intern",
+      "duration": "July 2024 – April 2025",
+      "location": "Chennai, India (On-Site)",
+      "project": "Medical Audio Classification",
+      "problem": "Enable zero-shot analysis of medical body sounds (heart, respiratory, bowel) for healthcare diagnostics.",
+      "approach": "Fine-tuned CLAP and CLIP on 20k+ medical audio samples from PhysioNet, BHIC, AudioSet, VGG-Sound. Built annotation + preprocessing pipeline with t-SNE visualization.",
+      "impact": "Enabled zero-shot analysis across 10+ body sound classes with high embedding quality.",
+      "tags": ["Audio AI", "CLIP", "CLAP", "Healthcare", "Zero-Shot Learning"]
+    },
+    {
+      "id": "ccps",
+      "organization": "CCPS, VIT Chennai",
+      "role": "Research Intern",
+      "duration": "June 2024 – August 2024",
+      "location": "Chennai, India (Hybrid)",
+      "project": "HAR-GCNN",
+      "problem": "Improve Human Activity Recognition accuracy with graph-based spatiotemporal modeling.",
+      "approach": "Developed HAR-GCNN model using Graph Convolutional Networks on PAMAP2 sensor dataset with robustness to 66% missing labels.",
+      "impact": "Achieved 99.99% accuracy, outperforming CNN (99.75%) and LSTM (98.10%) across 3-25 activity classes.",
+      "tags": ["GNN", "HAR", "Signal Processing", "Time-Series", "Sensor Data"]
+    },
+    {
+      "id": "dsc",
+      "organization": "Data Science Club VIT Chennai",
+      "role": "Research Team Member",
+      "duration": "May 2023 – June 2024",
+      "location": "Chennai, India",
+      "project": "ML Research & Development",
+      "problem": "Contribute to ML research projects and knowledge sharing within the university.",
+      "approach": "Participated in research initiatives, collaborated on ML projects, and contributed to team knowledge base.",
+      "impact": "Built foundation in applied ML research and collaborative development.",
+      "tags": ["Research", "ML", "Collaboration"]
+    }
+  ]
+}

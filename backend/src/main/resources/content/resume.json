@@ -1,0 +1,95 @@
+{
+  "name": "Mohit Kumar",
+  "title": "Machine Learning Engineer | ECE @ VIT Chennai",
+  "email": "mohit.kr1103@gmail.com",
+  "phone": "9973395247",
+  "location": "Bengaluru, India",
+  "summary": "B.Tech ECE student specializing in hybrid legal AI, multi-agent systems, digital twin prototyping, applied machine learning, computer vision, audio processing, and intelligent automation. Experienced in building production-grade AI systems with research internships at Shantou University, Samsung PRISM, Annam.AI, and CCPS VIT Chennai.",
+  "education": [
+    {
+      "degree": "B.Tech in Electronics and Computer Engineering",
+      "institution": "VIT Chennai",
+      "cgpa": "9.08 / 10.0",
+      "duration": "2022 – 2026",
+      "location": "Chennai, India"
+    },
+    {
+      "degree": "Higher Secondary Education (Class XII)",
+      "institution": "Radiant International School",
+      "percentage": "95.6%",
+      "duration": "2021",
+      "location": "Patna, India"
+    },
+    {
+      "degree": "Secondary Education (Class X)",
+      "institution": "Radiant International School",
+      "percentage": "94.2%",
+      "duration": "2019",
+      "location": "Patna, India"
+    }
+  ],
+  "skills": {
+    "machineLearning": [
+      "Neural Networks",
+      "Transformers",
+      "Vision Models",
+      "Audio Models",
+      "Hybrid AI",
+      "Digital Twin Modeling",
+      "Graph Neural Networks",
+      "Deep Learning"
+    ],
+    "frameworks": [
+      "PyTorch",
+      "TensorFlow",
+      "scikit-learn",
+      "LangGraph",
+      "LangChain",
+      "FastAPI",
+      "Flask",
+      "OpenCV"
+    ],
+    "tools": [
+      "Docker",
+      "Git/GitHub",
+      "Jupyter",
+      "VS Code",
+      "Postman",
+      "Streamlit",
+      "Unity",
+      "Anaconda"
+    ],
+    "cloud": [
+      "Azure AI Engineer (AI-102)",
+      "Azure Data Scientist (DP-100)",
+      "OCI GenAI Professional",
+      "AWS"
+    ],
+    "languages": [
+      "Python",
+      "Java",
+      "C/C++",
+      "SQL",
+      "MongoDB"
+    ]
+  },
+  "coursework": [
+    "Deep Learning",
+    "Computer Vision",
+    "Natural Language Processing",
+    "Data Structures and Algorithms",
+    "Database Management System",
+    "Operating Systems",
+    "Compiler Design",
+    "Probability & Statistics"
+  ],
+  "achievements": [
+    "Qualified for Final round of IEEE IC Hackathon 2.0 with AIR 7 out of 600 teams",
+    "Managed Bihar's first Atal Tinkering Lab funded by Niti Aayog",
+    "Organized technical fest events with 200+ participants",
+    "Secured 2nd position in State-level Science Exhibition at Governor's house, Patna",
+    "Mathematics, English, and Social Science Olympiad winner"
+  ],
+  "languages": ["English (Professional)", "Hindi (Native)", "Bengali (Native)", "French (Elementary)"],
+  "resumeFile": "/resume/Mohit_Kumar.pdf"
+}

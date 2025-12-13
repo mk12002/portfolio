@@ -1,0 +1,13 @@
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin or sensitive paths (if any in future)
+# Disallow: /admin/
+# Disallow: /api/
+
+# Crawl-delay for respectful crawling
+Crawl-delay: 1
+
+# Sitemap location
+Sitemap: https://mohitkumar.com/sitemap.xml
