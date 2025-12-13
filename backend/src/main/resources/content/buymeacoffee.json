@@ -1,8 +1,7 @@
 {
   "title": "Buy Me a Coffee",
   "description": "If you enjoy my work, research, or projects, consider supporting me with a coffee! It keeps me energized to build more ML systems and open-source tools.",
-  "upiId": "mohit.kr1103@upi",
-  "qrCodeImage": "/assets/coffee-qr.png",
-  "buttonText": "Buy Me a Coffee",
-  "externalLink": "https://www.buymeacoffee.com/mohitkumar"
+  "upiId": "mkd1112002@okicici",
+  "qrCodeImage": "/assets/coffee-qr.jpg",
+  "buttonText": "Buy Me a Coffee"
 }

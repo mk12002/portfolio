@@ -3,6 +3,7 @@ package com.mohit.portfolio.controller;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mohit.portfolio.model.ContactMessage;
 import com.mohit.portfolio.service.ContentService;
+import com.mohit.portfolio.service.EmailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class ApiController {
     
     @Autowired
     private ContentService contentService;
+    
+    @Autowired
+    private EmailService emailService;
     
     @GetMapping("/profile")
     public ResponseEntity<JsonNode> getProfile() throws IOException {
@@ -83,11 +87,26 @@ public class ApiController {
         System.out.println("Message: " + message.getMessage());
         System.out.println("Time: " + LocalDateTime.now());
         
-        Map<String, Object> response = new HashMap<>();
-        response.put("success", true);
-        response.put("message", "Thanks for reaching out! I'll get back to you soon.");
-        response.put("timestamp", LocalDateTime.now().toString());
-        
-        return ResponseEntity.ok(response);
+        try {
+            // Send email notification
+            emailService.sendContactEmail(
+                message.getName(),
+                message.getEmail(),
+                message.getMessage()
+            );
+            
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", true);
+            response.put("message", "Thanks for reaching out! I'll get back to you soon.");
+            response.put("timestamp", LocalDateTime.now().toString());
+            
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            System.err.println("Error processing contact form: " + e.getMessage());
+            Map<String, Object> response = new HashMap<>();
+            response.put("success", false);
+            response.put("message", "Failed to send message. Please try again or email directly.");
+            return ResponseEntity.status(500).body(response);
+        }
     }
 }

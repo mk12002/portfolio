@@ -11,7 +11,7 @@
     {
       "title": "High-Precision Polygonal Parking Slot Detection via SwinMask2Former and Dynamic Gap Analysis",
       "authors": ["Diya Ravishankar", "Mohit Kumar", "Yuganshu Kumar", "Vijayarajan Rajangam", "Sangeetha Nagarajan"],
-      "venue": "CVIA 2024",
+      "venue": "Under Review",
       "year": 2024,
       "abstract": "Novel end-to-end framework for layout-free parking vacancy detection achieving mAP50 of 98.99%.",
       "tags": ["Computer Vision", "Swin Transformer", "Instance Segmentation"]
@@ -19,10 +19,18 @@
     {
       "title": "Advancing Human Activity Recognition: A Comparative Analysis of Graph Convolutional Networks and Masked Autoencoders",
       "authors": ["Dr. Balasundaram A", "Diya Ravishankar", "Mohit Kumar", "Aditi Bhargav"],
-      "venue": "Research Paper",
+      "venue": "Under Review",
       "year": 2024,
       "abstract": "Comparative study achieving 99.99% accuracy with HAR-GCNN on PAMAP2 dataset.",
       "tags": ["GNN", "HAR", "MetaMAE", "Time-Series"]
+    },
+    {
+      "title": "AgriCure: An AWS S3-Integrated Deep Learning Platform for Automated Crop Disease Detection",
+      "authors": ["V. Ananthakrishnan", "Suryakiran R", "Sounak Shome", "Mohit Kumar", "Dr. Tharaga Sharmilan", "Dr. Gnana Swathika O. V"],
+      "venue": "IEEE i-PACT 2025",
+      "year": 2025,
+      "abstract": "A lightweight MobileNet-based disease classification system integrated with AWS S3 for automated tomato plant disease detection, achieving >90% accuracy with <150ms inference latency on mobile devices.",
+      "tags": ["Deep Learning", "AgriTech", "AWS S3", "Disease Detection", "MobileNet", "Computer Vision"]
     },
     {
       "title": "Nexus: A Three-Pronged Agentic AI System for Intelligent Research and Analysis",
@@ -30,7 +38,8 @@
       "venue": "ReadyTensor",
       "year": 2025,
       "abstract": "Multi-agent system for automated research discovery and synthesis using LangGraph.",
-      "tags": ["Multi-Agent", "LangGraph", "Research Automation"]
+      "tags": ["Multi-Agent", "LangGraph", "Research Automation"],
+      "url": "https://app.readytensor.ai/publications/nexus-a-three-pronged-agentic-ai-system-for-intelligent-research-and-analysis-Y06tMJMVmNjI"
     }
   ]
 }

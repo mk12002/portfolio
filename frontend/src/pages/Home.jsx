@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaGithub, FaLinkedin, FaEnvelope, FaDownload, FaArrowRight, FaUser } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaDownload, FaArrowRight, FaUser } from 'react-icons/fa'
 import NodeGraph from '../components/NodeGraph'
 import GlowCard from '../components/GlowCard'
 import TechStackGraph from '../components/TechStackGraph'
@@ -26,7 +26,7 @@ function FloatingShape({ className, delay = 0 }) {
   )
 }
 
-function ProfilePicture() {
+function ProfilePicture({ profilePicture }) {
   return (
     <motion.div
       className="relative"
@@ -50,12 +50,20 @@ function ProfilePicture() {
         className="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl"
         whileHover={{ scale: 1.05 }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-vision/20 to-vision/10 flex items-center justify-center">
-          <div className="text-center">
-            <FaUser className="text-6xl md:text-8xl text-white/40 mx-auto mb-2" />
-            <span className="text-white/50 text-sm">Your Photo Here</span>
+        {profilePicture ? (
+          <img 
+            src={profilePicture} 
+            alt="Profile" 
+            className="w-full h-full object-cover"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-vision/20 to-vision/10 flex items-center justify-center">
+            <div className="text-center">
+              <FaUser className="text-6xl md:text-8xl text-white/40 mx-auto mb-2" />
+              <span className="text-white/50 text-sm">Your Photo Here</span>
+            </div>
           </div>
-        </div>
+        )}
         
         <motion.div
           className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent"
@@ -191,6 +199,7 @@ export default function Home() {
               {[
                 { href: profile?.socialLinks?.github || '#', icon: FaGithub, color: 'hover:text-vision' },
                 { href: profile?.socialLinks?.linkedin || '#', icon: FaLinkedin, color: 'hover:text-vision' },
+                { href: profile?.socialLinks?.instagram || '#', icon: FaInstagram, color: 'hover:text-reasoning' },
                 { href: profile?.socialLinks?.email || 'mailto:mohit.kr1103@gmail.com', icon: FaEnvelope, color: 'hover:text-audio' }
               ].map((social, i) => (
                 <motion.a
@@ -214,7 +223,7 @@ export default function Home() {
             transition={{ duration: 0.8, delay: 0.3 }}
             className="order-1 lg:order-2 flex justify-center"
           >
-            <ProfilePicture />
+            <ProfilePicture profilePicture={profile?.profilePicture} />
           </motion.div>
         </div>
       </section>

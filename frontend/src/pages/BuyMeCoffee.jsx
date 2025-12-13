@@ -46,13 +46,21 @@ export default function BuyMeCoffee() {
                 className="relative inline-block"
               >
                 <div className="w-64 h-64 mx-auto bg-white rounded-2xl p-4 shadow-lg shadow-audio/20">
-                  <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
-                    <div className="text-center text-gray-500">
-                      <FaCoffee className="text-4xl mx-auto mb-2 text-audio" />
-                      <p className="text-sm">QR Code</p>
-                      <p className="text-xs">Upload your QR image</p>
+                  {coffeeData?.qrCodeImage ? (
+                    <img 
+                      src={coffeeData.qrCodeImage} 
+                      alt="Payment QR Code" 
+                      className="w-full h-full object-contain rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-200 rounded-lg flex items-center justify-center">
+                      <div className="text-center text-gray-500">
+                        <FaCoffee className="text-4xl mx-auto mb-2 text-audio" />
+                        <p className="text-sm">QR Code</p>
+                        <p className="text-xs">Upload your QR image to /assets/coffee-qr.jpg</p>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
 
                 <div className="absolute -inset-2 bg-gradient-to-r from-audio via-reasoning to-vision rounded-3xl opacity-20 blur-xl -z-10" />

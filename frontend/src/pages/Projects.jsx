@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaArrowRight, FaFilter, FaGithub } from 'react-icons/fa'
+import { FaArrowRight, FaFilter, FaGithub, FaNewspaper } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { useProjects } from '../hooks/useApi'
@@ -150,8 +150,23 @@ export default function Projects() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       onClick={(e) => e.stopPropagation()}
+                      title="View on GitHub"
                     >
                       <FaGithub size={20} />
+                    </motion.a>
+                  )}
+                  {project.articleUrl && (
+                    <motion.a
+                      href={project.articleUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={(e) => e.stopPropagation()}
+                      title="Read Article"
+                    >
+                      <FaNewspaper size={19} />
                     </motion.a>
                   )}
                 </div>

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaBriefcase, FaMapMarkerAlt, FaCalendar, FaCertificate, FaTimes } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
@@ -100,7 +101,15 @@ export default function Experiences() {
                   </div>
 
                   <div className="mb-4">
-                    <h4 className="text-sm font-medium text-reasoning mb-1">Project: {exp.project}</h4>
+                    {exp.projectSlug ? (
+                      <Link to={`/projects/${exp.projectSlug}`}>
+                        <h4 className="text-sm font-medium text-reasoning mb-1 hover:text-vision transition-colors cursor-pointer">
+                          Project: {exp.project} →
+                        </h4>
+                      </Link>
+                    ) : (
+                      <h4 className="text-sm font-medium text-reasoning mb-1">Project: {exp.project}</h4>
+                    )}
                     <p className="text-gray-400 text-sm">{exp.problem}</p>
                   </div>
 
