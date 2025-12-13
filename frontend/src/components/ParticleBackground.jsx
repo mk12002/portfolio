@@ -183,10 +183,8 @@ export default function ParticleBackground() {
 
   // Floating orbs with theme colors
   const orbs = useMemo(() => [
-    { x: 10, y: 20, color: `${colors.vision}26`, size: 400, delay: 0 },
-    { x: 70, y: 60, color: `${colors.reasoning}26`, size: 500, delay: 2 },
-    { x: 40, y: 80, color: `${colors.audio}1a`, size: 350, delay: 4 },
-    { x: 80, y: 10, color: `${colors.vision}1a`, size: 300, delay: 6 },
+    { x: 10, y: 20, color: `${colors.vision}1a`, size: 400, delay: 0 },
+    { x: 70, y: 60, color: `${colors.vision}1a`, size: 450, delay: 3 },
   ], [colors])
 
   // Calculate clustering effect based on scroll position
@@ -234,29 +232,13 @@ export default function ParticleBackground() {
 
       {/* Ambient glow spots */}
       <motion.div
-        className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.05) 0%, transparent 70%)',
-        }}
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.5, 0.8, 0.5],
-        }}
-        transition={{
-          duration: 8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      />
-
-      <motion.div
         className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full"
         style={{
-          background: 'radial-gradient(circle, rgba(34, 211, 238, 0.05) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(34, 211, 238, 0.04) 0%, transparent 70%)',
         }}
         animate={{
-          scale: [1.2, 1, 1.2],
-          opacity: [0.3, 0.6, 0.3],
+          scale: [1.1, 1, 1.1],
+          opacity: [0.3, 0.5, 0.3],
         }}
         transition={{
           duration: 10,

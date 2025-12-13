@@ -1,32 +1,50 @@
 {
   "certificates": [
     {
-      "name": "Azure AI Engineer Associate (AI-102)",
+      "name": "Microsoft Certified: Azure AI Engineer Associate",
       "issuer": "Microsoft",
       "category": "Cloud",
-      "icon": "microsoft"
+      "icon": "microsoft",
+      "credentialId": "FB7576BAB685E9BE",
+      "certificationNumber": "D085CD-ECQC5B",
+      "earnedDate": "June 17, 2025",
+      "expiryDate": "June 18, 2026",
+      "link": "https://learn.microsoft.com/en-us/users/mohitkumar-5451/credentials/fb7576bab685e9be",
+      "description": "Demonstrates expertise in designing and implementing AI solutions using Azure Cognitive Services, Azure Machine Learning, and Knowledge Mining."
     },
     {
-      "name": "Azure Data Scientist Associate (DP-100)",
+      "name": "Microsoft Certified: Azure Data Scientist Associate",
       "issuer": "Microsoft",
       "category": "Cloud",
-      "icon": "microsoft"
+      "icon": "microsoft",
+      "credentialId": "2117BF954DCDC5A5",
+      "certificationNumber": "D55VCB-2845B8",
+      "earnedDate": "June 18, 2025",
+      "expiryDate": "June 19, 2026",
+      "link": "https://learn.microsoft.com/en-us/users/mohitkumar-5451/credentials/2117bf954dcdc5a5",
+      "description": "Validates skills in applying machine learning techniques to train, evaluate, and deploy models using Azure Machine Learning and MLflow."
     },
     {
-      "name": "Azure AI Fundamentals",
+      "name": "Microsoft Certified: Azure AI Fundamentals",
       "issuer": "Microsoft",
       "category": "Cloud",
-      "icon": "microsoft"
+      "icon": "microsoft",
+      "earnedDate": "July 12, 2024",
+      "link": "https://www.credly.com/badges/502f6d52-f56b-4bd7-8b4c-e3364c5acc8b/linked_in_profile",
+      "description": "Foundational knowledge of machine learning and artificial intelligence concepts and related Microsoft Azure services."
     },
     {
-      "name": "OCI Generative AI Professional 2024",
+      "name": "Oracle Cloud Infrastructure 2024 Generative AI Certified Professional",
       "issuer": "Oracle",
       "category": "Cloud",
-      "icon": "oracle"
+      "icon": "oracle",
+      "earnedDate": "July 29, 2024",
+      "link": "https://catalog-education.oracle.com/ords/certview/sharebadge?id=CBA45575ECD2EA410B506FCD77CA2328F3CC8F54EE1EC201032A8490BDB46348",
+      "description": "Professional certification demonstrating proficiency in Oracle Cloud Infrastructure Generative AI services and implementation strategies."
     },
     {
       "name": "Data Structures and Algorithms",
-      "issuer": "VIT Chennai",
+      "issuer": "GeeksForGeeks",
       "category": "Programming",
       "icon": "code"
     },
@@ -35,12 +53,6 @@
       "issuer": "LinkedIn Learning",
       "category": "Design",
       "icon": "figma"
-    },
-    {
-      "name": "ATL Tinkerpreneur Participation",
-      "issuer": "Niti Aayog",
-      "category": "Innovation",
-      "icon": "innovation"
     }
   ]
 }

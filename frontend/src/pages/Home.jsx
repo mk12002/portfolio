@@ -35,15 +35,14 @@ function ProfilePicture() {
       transition={{ duration: 0.8 }}
     >
       <motion.div
-        className="absolute -inset-4 rounded-full bg-gradient-to-r from-vision via-reasoning to-audio opacity-50 blur-xl"
+        className="absolute -inset-4 rounded-full bg-vision opacity-30 blur-2xl"
         animate={{
-          scale: [1, 1.1, 1],
-          rotate: [0, 180, 360],
+          scale: [1, 1.05, 1],
         }}
         transition={{
-          duration: 10,
+          duration: 4,
           repeat: Infinity,
-          ease: "linear",
+          ease: "easeInOut",
         }}
       />
       
@@ -51,7 +50,7 @@ function ProfilePicture() {
         className="relative w-48 h-48 md:w-64 md:h-64 rounded-full overflow-hidden border-4 border-white/20 shadow-2xl"
         whileHover={{ scale: 1.05 }}
       >
-        <div className="absolute inset-0 bg-gradient-to-br from-vision/30 via-reasoning/30 to-audio/30 flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-vision/20 to-vision/10 flex items-center justify-center">
           <div className="text-center">
             <FaUser className="text-6xl md:text-8xl text-white/40 mx-auto mb-2" />
             <span className="text-white/50 text-sm">Your Photo Here</span>

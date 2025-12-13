@@ -1,10 +1,10 @@
 {
   "name": "Mohit Kumar",
-  "title": "Machine Learning Engineer | ECE @ VIT Chennai",
+  "title": "Machine Learning Engineer | Electronics and Computer Engineering @ VIT Chennai",
   "email": "mohit.kr1103@gmail.com",
   "phone": "9973395247",
   "location": "Bengaluru, India",
-  "summary": "B.Tech ECE student specializing in hybrid legal AI, multi-agent systems, digital twin prototyping, applied machine learning, computer vision, audio processing, and intelligent automation. Experienced in building production-grade AI systems with research internships at Shantou University, Samsung PRISM, Annam.AI, and CCPS VIT Chennai.",
+  "summary": "B.Tech Electronics and Computer Engineering student specializing in hybrid legal AI, multi-agent systems, digital twin prototyping, applied machine learning, computer vision, audio processing, and intelligent automation. Experienced in building production-grade AI systems with research internships at Shantou University, Samsung PRISM, Annam.AI, and Center for Cyber Physical Systems (CCPS) and Centre for Healthcare Advancement, Innovation and Research (CHAIR) at  VIT Chennai.",
   "education": [
     {
       "degree": "B.Tech in Electronics and Computer Engineering",
@@ -74,22 +74,38 @@
     ]
   },
   "coursework": [
-    "Deep Learning",
-    "Computer Vision",
-    "Natural Language Processing",
-    "Data Structures and Algorithms",
-    "Database Management System",
-    "Operating Systems",
-    "Compiler Design",
-    "Probability & Statistics"
-  ],
+  "Calculus",
+  "Differential Equations and Transforms",
+  "Complex Variables and Linear Algebra",
+  "Probability and Statistics",
+  "Computer Programming Python",
+  "Structured and Object-Oriented Programming",
+  "Computer Programming Java",
+  "Discrete Mathematics and Graph Theory",
+  "Data Structures and Algorithms",
+  "Design and Analysis of Algorithms",
+  "Computer Architecture and Organization",
+  "Operating Systems",
+  "Computer Networks",
+  "Database Systems",
+  "Theory of Computation",
+  "Compiler Design",
+  "Digital Systems",
+  "Microprocessors and Microcontrollers",
+  "Signal Processing",
+  "Artificial Intelligence and Machine Learning",
+  "Robotics and Automation",
+  "Computer Vision",
+  "Natural Language Processing",
+  "Deep Learning",
+  "Embedded C Programming"
+],
   "achievements": [
     "Qualified for Final round of IEEE IC Hackathon 2.0 with AIR 7 out of 600 teams",
     "Managed Bihar's first Atal Tinkering Lab funded by Niti Aayog",
     "Organized technical fest events with 200+ participants",
-    "Secured 2nd position in State-level Science Exhibition at Governor's house, Patna",
-    "Mathematics, English, and Social Science Olympiad winner"
+    "Secured 2nd position in State-level Science Exhibition at Governor's house, Patna"
   ],
-  "languages": ["English (Professional)", "Hindi (Native)", "Bengali (Native)", "French (Elementary)"],
+  "languages": ["English (Professional)", "Hindi (Native)", "Bengali (Native)", "French (Elementary)", "German (Elementary)"],
   "resumeFile": "/resume/Mohit_Kumar.pdf"
 }

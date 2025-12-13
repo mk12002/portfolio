@@ -1,26 +1,10 @@
 import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { FaBook, FaFileAlt, FaStar, FaExternalLinkAlt, FaBookOpen, FaChevronDown, FaFilter } from 'react-icons/fa'
+import { motion } from 'framer-motion'
+import { FaBook, FaFileAlt, FaExternalLinkAlt, FaBookOpen, FaFilter } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import { useReads } from '../hooks/useApi'
 
-function StarRating({ rating }) {
-  return (
-    <div className="flex gap-1">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <FaStar
-          key={star}
-          className={star <= rating ? 'text-yellow-400' : 'text-gray-600'}
-          size={14}
-        />
-      ))}
-    </div>
-  )
-}
-
 function BookCard({ book, index }) {
-  const [isExpanded, setIsExpanded] = useState(false)
-
   if (!book) return null
 
   return (
@@ -29,7 +13,7 @@ function BookCard({ book, index }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
     >
-      <GlowCard glowColor="vision" className="cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+      <GlowCard glowColor="vision">
         <div className="flex items-start gap-4">
           <motion.div
             className="w-12 h-16 rounded-lg bg-gradient-to-br from-vision/30 to-vision/10 flex items-center justify-center flex-shrink-0"
@@ -39,16 +23,7 @@ function BookCard({ book, index }) {
           </motion.div>
           
           <div className="flex-1 min-w-0">
-            <div className="flex items-start justify-between gap-2">
-              <h3 className="font-semibold text-lg leading-tight">{book.title || 'Untitled'}</h3>
-              <motion.div
-                animate={{ rotate: isExpanded ? 180 : 0 }}
-                className="text-gray-400 flex-shrink-0"
-              >
-                <FaChevronDown />
-              </motion.div>
-            </div>
-            
+            <h3 className="font-semibold text-lg leading-tight">{book.title || 'Untitled'}</h3>
             <p className="text-gray-400 text-sm mt-1">{book.author || 'Unknown Author'}</p>
             
             <div className="flex items-center gap-4 mt-2 flex-wrap">
@@ -62,23 +37,9 @@ function BookCard({ book, index }) {
               }`}>
                 {book.status === 'completed' ? 'Completed' : 'Reading'}
               </span>
-              {book.rating && <StarRating rating={book.rating} />}
             </div>
           </div>
         </div>
-
-        <AnimatePresence>
-          {isExpanded && book.notes && (
-            <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: 'auto', opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              className="mt-4 pt-4 border-t border-white/10"
-            >
-              <p className="text-gray-300 text-sm">{book.notes}</p>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </GlowCard>
     </motion.div>
   )
@@ -142,6 +103,26 @@ export default function Reads() {
   const [activeTab, setActiveTab] = useState('books')
   const [selectedCategory, setSelectedCategory] = useState('All')
 
+  // Ensure books and papers are always arrays
+  const books = Array.isArray(data?.books) ? data.books : []
+  const papers = Array.isArray(data?.papers) ? data.papers : []
+
+  // Extract unique categories from books
+  const bookCategories = useMemo(() => {
+    if (!books.length) return ['All']
+    const cats = books
+      .map(b => b?.category)
+      .filter(Boolean)
+    return ['All', ...Array.from(new Set(cats))]
+  }, [books])
+
+  // Filter books by selected category
+  const filteredBooks = useMemo(() => {
+    if (!books.length) return []
+    if (selectedCategory === 'All') return books
+    return books.filter(book => book?.category === selectedCategory)
+  }, [books, selectedCategory])
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center pt-20">
@@ -164,34 +145,6 @@ export default function Reads() {
       </div>
     )
   }
-
-  // BULLETPROOF: Ensure books and papers are always arrays
-  const books = Array.isArray(data?.books) ? data.books : []
-  const papers = Array.isArray(data?.papers) ? data.papers : []
-
-  // Extract unique categories for books (SAFE VERSION)
-  const bookCategories = useMemo(() => {
-    if (!Array.isArray(books) || books.length === 0) return ["All"]
-
-    const categories = books
-      .map(b => (typeof b?.category === "string" ? b.category.trim() : null))
-      .filter(Boolean)
-
-    return ["All", ...new Set(categories)].sort((a, b) =>
-      a.localeCompare(b)
-    )
-  }, [books])
-
-  // Filter books by category (SAFE VERSION)
-  const filteredBooks = useMemo(() => {
-    if (!Array.isArray(books)) return []
-    if (books.length === 0) return []
-    if (selectedCategory === 'All') return books
-    return books.filter(book => 
-      typeof book?.category === "string" &&
-      book.category.trim() === selectedCategory
-    )
-  }, [books, selectedCategory])
 
   return (
     <div className="min-h-screen pt-24 pb-20">
@@ -248,7 +201,7 @@ export default function Reads() {
           ))}
         </div>
 
-        {activeTab === 'books' && (
+        {activeTab === 'books' && bookCategories.length > 1 && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -257,7 +210,7 @@ export default function Reads() {
             <div className="flex items-center justify-center gap-2 flex-wrap">
               <FaFilter className="text-gray-500" />
               {bookCategories.map((category) => (
-                <button
+                <motion.button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
                   className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
@@ -265,50 +218,44 @@ export default function Reads() {
                       ? 'bg-vision/20 text-vision border border-vision/50'
                       : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white'
                   }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   {category}
-                </button>
+                </motion.button>
               ))}
             </div>
           </motion.div>
         )}
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeTab + selectedCategory}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="grid gap-6"
-          >
-            {activeTab === 'books' ? (
-              filteredBooks && filteredBooks.length > 0 ? (
-                filteredBooks.map((book, i) => (
-                  <BookCard key={`book-${i}-${book?.title}`} book={book} index={i} />
-                ))
-              ) : (
-                <div className="text-center py-20">
-                  <p className="text-gray-500">
-                    {selectedCategory !== 'All' 
-                      ? `No books found in ${selectedCategory} category.`
-                      : 'No books added yet.'
-                    }
-                  </p>
-                </div>
-              )
+        <div className="grid gap-6">
+          {activeTab === 'books' ? (
+            filteredBooks.length > 0 ? (
+              filteredBooks.map((book, i) => (
+                <BookCard key={`book-${i}-${book?.title}`} book={book} index={i} />
+              ))
             ) : (
-              papers && papers.length > 0 ? (
-                papers.map((paper, i) => (
-                  <PaperCard key={`paper-${i}-${paper?.title}`} paper={paper} index={i} />
-                ))
-              ) : (
-                <div className="text-center py-20">
-                  <p className="text-gray-500">No papers added yet.</p>
-                </div>
-              )
-            )}
-          </motion.div>
-        </AnimatePresence>
+              <div className="text-center py-20">
+                <p className="text-gray-500">
+                  {selectedCategory === 'All' 
+                    ? 'No books added yet.'
+                    : `No books found in "${selectedCategory}" category.`
+                  }
+                </p>
+              </div>
+            )
+          ) : (
+            papers.length > 0 ? (
+              papers.map((paper, i) => (
+                <PaperCard key={`paper-${i}-${paper?.title}`} paper={paper} index={i} />
+              ))
+            ) : (
+              <div className="text-center py-20">
+                <p className="text-gray-500">No papers added yet.</p>
+              </div>
+            )
+          )}
+        </div>
       </div>
     </div>
   )

@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { motion } from 'framer-motion'
-import { FaBriefcase, FaMapMarkerAlt, FaCalendar } from 'react-icons/fa'
+import { motion, AnimatePresence } from 'framer-motion'
+import { FaBriefcase, FaMapMarkerAlt, FaCalendar, FaCertificate, FaTimes } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import { useExperiences } from '../hooks/useApi'
 
 export default function Experiences() {
   const [activeTag, setActiveTag] = useState(null)
+  const [selectedCertificate, setSelectedCertificate] = useState(null)
   const { data, loading } = useExperiences()
 
   const experiences = data?.experiences || []
@@ -125,11 +126,64 @@ export default function Experiences() {
                       </span>
                     ))}
                   </div>
+
+                  {exp.certificateImage && (
+                    <motion.button
+                      onClick={() => setSelectedCertificate(exp.certificateImage)}
+                      className="mt-4 flex items-center gap-2 px-4 py-2 bg-vision/10 hover:bg-vision/20 text-vision rounded-lg transition-colors"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <FaCertificate />
+                      <span className="text-sm font-medium">View Certificate</span>
+                    </motion.button>
+                  )}
                 </GlowCard>
               </motion.div>
             ))}
           </div>
         </div>
+
+        {/* Certificate Modal */}
+        <AnimatePresence>
+          {selectedCertificate && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+              onClick={() => setSelectedCertificate(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                className="relative max-w-4xl w-full bg-secondary rounded-xl overflow-hidden border border-white/10"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setSelectedCertificate(null)}
+                  className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 rounded-full text-white transition-colors z-10"
+                >
+                  <FaTimes size={20} />
+                </button>
+                {selectedCertificate.endsWith('.pdf') ? (
+                  <iframe
+                    src={selectedCertificate}
+                    title="Certificate"
+                    className="w-full h-[80vh]"
+                  />
+                ) : (
+                  <img
+                    src={selectedCertificate}
+                    alt="Certificate"
+                    className="w-full h-auto"
+                  />
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   )

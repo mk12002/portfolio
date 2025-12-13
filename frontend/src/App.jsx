@@ -21,7 +21,7 @@ import Experiences from './pages/Experiences'
 import Certificates from './pages/Certificates'
 import Events from './pages/Events'
 import Publications from './pages/Publications'
-// import Reads from './pages/Reads'
+import Reads from './pages/Reads'
 import Contact from './pages/Contact'
 import BuyMeCoffee from './pages/BuyMeCoffee'
 
@@ -57,7 +57,7 @@ function App() {
           <Route path="/certificates" element={<Certificates />} />
           <Route path="/events" element={<Events />} />
           <Route path="/publications" element={<Publications />} />
-          {/* <Route path="/reads" element={<Reads />} /> */}
+          <Route path="/reads" element={<Reads />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/support" element={<BuyMeCoffee />} />
         </Routes>

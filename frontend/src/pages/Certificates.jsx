@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { FaMicrosoft, FaAws, FaCode, FaCloud, FaLightbulb } from 'react-icons/fa'
+import { FaMicrosoft, FaAws, FaCode, FaCloud, FaLightbulb, FaExternalLinkAlt, FaCalendarAlt, FaCertificate } from 'react-icons/fa'
 import { SiOracle } from 'react-icons/si'
 import { useCertificates } from '../hooks/useApi'
 
@@ -74,41 +74,79 @@ export default function Certificates() {
                 {category}
               </h2>
 
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid md:grid-cols-2 gap-6">
                 {certs.map((cert, i) => {
                   const IssuerIcon = issuerIcons[cert.issuer] || FaCode
                   
                   return (
                     <motion.div
                       key={i}
-                      initial={{ opacity: 0, rotateY: -90 }}
-                      whileInView={{ opacity: 1, rotateY: 0 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
                       transition={{ delay: i * 0.1 }}
-                      whileHover={{ scale: 1.05, rotateY: 10 }}
-                      className="group perspective-1000"
+                      className="group"
                     >
                       <div className={`
                         relative p-6 rounded-xl
                         bg-gradient-to-br from-${color}/10 to-transparent
                         border border-white/10 hover:border-${color}/50
-                        transition-all duration-500
-                        transform-gpu
+                        transition-all duration-300
+                        h-full flex flex-col
                       `}>
-                        <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-white/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="flex items-start justify-between mb-4">
+                          <IssuerIcon className={`text-4xl text-${color}`} />
+                          {cert.link && (
+                            <a
+                              href={cert.link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`text-${color} hover:scale-110 transition-transform`}
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              <FaExternalLinkAlt size={16} />
+                            </a>
+                          )}
+                        </div>
+
+                        <h3 className="font-semibold text-lg mb-2">{cert.name}</h3>
+                        <p className="text-sm text-gray-500 mb-3">{cert.issuer}</p>
                         
-                        <div className="relative z-10">
-                          <div className="flex items-center justify-between mb-4">
-                            <IssuerIcon className={`text-3xl text-${color}`} />
-                            <span className="text-xs text-gray-500">{cert.issuer}</span>
-                          </div>
-                          <h3 className="font-semibold text-lg">{cert.name}</h3>
+                        {cert.description && (
+                          <p className="text-sm text-gray-400 mb-4 flex-grow">{cert.description}</p>
+                        )}
+
+                        <div className="space-y-2 text-sm">
+                          {cert.credentialId && (
+                            <div className="flex items-center gap-2 text-gray-400">
+                              <FaCertificate className={`text-${color}`} size={14} />
+                              <span className="text-xs">ID: {cert.credentialId}</span>
+                            </div>
+                          )}
+                          {cert.certificationNumber && (
+                            <div className="flex items-center gap-2 text-gray-400">
+                              <FaCertificate className={`text-${color}`} size={14} />
+                              <span className="text-xs">Cert #: {cert.certificationNumber}</span>
+                            </div>
+                          )}
+                          {cert.earnedDate && (
+                            <div className="flex items-center gap-2 text-gray-400">
+                              <FaCalendarAlt className={`text-${color}`} size={14} />
+                              <span className="text-xs">Earned: {cert.earnedDate}</span>
+                            </div>
+                          )}
+                          {cert.expiryDate && (
+                            <div className="flex items-center gap-2 text-gray-400">
+                              <FaCalendarAlt className={`text-${color}`} size={14} />
+                              <span className="text-xs">Expires: {cert.expiryDate}</span>
+                            </div>
+                          )}
                         </div>
 
                         <div className={`
                           absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20
                           bg-gradient-to-r from-${color} to-transparent
-                          blur-xl transition-opacity duration-500
+                          blur-xl transition-opacity duration-300 pointer-events-none
                         `} />
                       </div>
                     </motion.div>

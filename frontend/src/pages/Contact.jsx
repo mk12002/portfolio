@@ -140,7 +140,7 @@ export default function Contact() {
               <h3 className="font-semibold mb-4">Connect on Social</h3>
               <div className="flex gap-4">
                 <a
-                  href="https://github.com/mohitkumar111"
+                  href="https://github.com/mk12002"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all"
@@ -148,7 +148,7 @@ export default function Contact() {
                   <FaGithub size={24} />
                 </a>
                 <a
-                  href="https://linkedin.com/in/mohitkumar111"
+                  href="https://www.linkedin.com/in/mohitkumar111/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all"

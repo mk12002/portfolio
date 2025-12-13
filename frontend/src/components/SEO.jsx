@@ -53,8 +53,8 @@ export default function SEO({
             "Legal AI"
           ],
           "sameAs": [
-            "https://github.com/mohitkumar",
-            "https://linkedin.com/in/mohitkumar"
+            "https://github.com/mk12002",
+            "https://www.linkedin.com/in/mohitkumar111/"
           ]
         })}
       </script>

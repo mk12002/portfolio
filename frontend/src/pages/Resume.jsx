@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { FaDownload, FaGraduationCap, FaCode, FaCloud, FaTools, FaBrain, FaTrophy } from 'react-icons/fa'
+import { FaDownload, FaGraduationCap, FaCode, FaCloud, FaTools, FaBrain, FaTrophy, FaLanguage } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { useResume } from '../hooks/useApi'
@@ -147,7 +147,7 @@ export default function Resume() {
         )}
 
         {resume?.achievements && (
-          <section>
+          <section className="mb-12">
             <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
               <FaTrophy className="text-audio" />
               Achievements
@@ -159,6 +159,27 @@ export default function Resume() {
                 </GlowCard>
               ))}
             </div>
+          </section>
+        )}
+
+        {resume?.languages && (
+          <section>
+            <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
+              <FaLanguage className="text-vision" />
+              Languages
+            </h2>
+            <GlowCard glowColor="vision">
+              <div className="flex flex-wrap gap-3">
+                {resume.languages.map((language, i) => (
+                  <span
+                    key={i}
+                    className="px-4 py-2 bg-vision/10 rounded-lg text-gray-300 border border-vision/30"
+                  >
+                    {language}
+                  </span>
+                ))}
+              </div>
+            </GlowCard>
           </section>
         )}
       </div>
