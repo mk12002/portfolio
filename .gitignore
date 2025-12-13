@@ -54,3 +54,6 @@ yarn-error.log*
 # Testing
 coverage/
 .nyc_output/
+.config
+attached_assets
+GMAIL_SETUP.md
