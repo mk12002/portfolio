@@ -1,8 +1,10 @@
 # 🎨 ML-Themed Portfolio
 
+> **🌐 Live Site:** [https://mohitkumar-portfolio.vercel.app](https://mohitkumar-portfolio.vercel.app)
+
 A modern, interactive portfolio website showcasing machine learning projects, research experience, publications, and technical skills. Built with React + Vite frontend and Spring Boot backend, featuring 3D animations, particle effects, and a custom terminal interface.
 
-![Portfolio Preview](https://via.placeholder.com/1200x600/0a0a0a/22d3ee?text=ML+Portfolio)
+![Portfolio Preview](./frontend/public/assets/Screenshot.png)
 
 ## ✨ Features
 
@@ -399,17 +401,6 @@ Contributions, issues, and feature requests are welcome!
 - Tailwind CSS for utility-first styling
 - Spring Boot documentation
 - Vercel and Render for free hosting
-
-## 📸 Screenshots
-
-### Home Page
-![Home](https://via.placeholder.com/800x500/0a0a0a/22d3ee?text=Home+Page)
-
-### Projects
-![Projects](https://via.placeholder.com/800x500/0a0a0a/f97316?text=Projects)
-
-### Terminal
-![Terminal](https://via.placeholder.com/800x500/0a0a0a/a855f7?text=Terminal)
 
 ---
 
