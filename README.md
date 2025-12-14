@@ -1,4 +1,4 @@
-# 🎨 ML-Themed Portfolio
+# 🎨 Portfolio
 
 > **🌐 Live Site:** [https://mohitkumar-portfolio.vercel.app](https://mohitkumar-portfolio.vercel.app)
 
