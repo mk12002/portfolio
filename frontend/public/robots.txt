@@ -10,4 +10,4 @@ Allow: /
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: https://mohitkumar.com/sitemap.xml
+Sitemap: https://mohitkumar-mu.vercel.app/sitemap.xml

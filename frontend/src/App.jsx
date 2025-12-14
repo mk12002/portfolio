@@ -8,7 +8,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ParticleBackground from './components/ParticleBackground'
 import LoadingScreen from './components/LoadingScreen'
-import EasterEggs from './components/EasterEggs'
+import Terminal from './components/Terminal'
 import ThemeSwitcher from './components/ThemeSwitcher'
 import ScrollToTop from './components/ScrollToTop'
 
@@ -42,7 +42,7 @@ function App() {
       <div className="min-h-screen bg-primary text-white relative">
         <LoadingScreen isLoading={isLoading} />
         <ParticleBackground />
-        <EasterEggs />
+        <Terminal />
         <ThemeSwitcher />
         <ScrollToTop />
         <Navbar />

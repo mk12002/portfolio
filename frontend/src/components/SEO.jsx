@@ -4,10 +4,10 @@ export default function SEO({
   title = "Mohit Kumar | ML Systems Engineer",
   description = "ML Systems Engineer specializing in Computer Vision, NLP, Multi-Agent Systems, and Legal AI. Expertise in PyTorch, Transformers, GNN, and production ML systems.",
   keywords = "Machine Learning, ML Engineer, Computer Vision, NLP, PyTorch, Transformers, AI, Neural Networks, Deep Learning, Legal AI, Multi-Agent Systems",
-  ogImage = "/og-image.jpg",
+  ogImage = "/og-image.png",
   pathname = "/"
 }) {
-  const siteUrl = "https://mohitkumar.com"
+  const siteUrl = "https://mohitkumar-mu.vercel.app"
   const canonicalUrl = `${siteUrl}${pathname}`
 
   return (
