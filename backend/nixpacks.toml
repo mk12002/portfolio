@@ -1,0 +1,8 @@
+[phases.build]
+cmds = ["mvn clean package -DskipTests"]
+
+[phases.start]
+cmd = "java -jar target/portfolio-1.0.0.jar"
+
+[variables]
+MAVEN_OPTS = "-Xmx512m"

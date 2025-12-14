@@ -39,6 +39,8 @@ backend/*.iws
 .env.local
 .env.production
 .env.test
+backend/.env
+backend/.env.local
 
 # OS
 Thumbs.db
