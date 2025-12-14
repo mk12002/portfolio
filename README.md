@@ -1,6 +1,6 @@
-# 🎨 ML-Themed Portfolio
+# 🎨 Portfolio
 
-> **🌐 Live Site:** [https://mohitkumar-portfolio.vercel.app](https://mohitkumar-portfolio.vercel.app)
+> **🌐 Live Site:** [https://mohitkumar-mu.vercel.app](https://mohitkumar-mu.vercel.app/)
 
 A modern, interactive portfolio website showcasing machine learning projects, research experience, publications, and technical skills. Built with React + Vite frontend and Spring Boot backend, featuring 3D animations, particle effects, and a custom terminal interface.
 
