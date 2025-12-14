@@ -861,9 +861,11 @@ export default function ProjectDetail() {
                   <h2 className="text-3xl font-bold mb-6 text-white border-b border-reasoning/30 pb-3">
                     Performance Metrics
                   </h2>
-                  <div className="text-gray-300 leading-relaxed text-base mb-6">
-                    {project.performanceMetrics.description}
-                  </div>
+                  {project.performanceMetrics.description && (
+                    <div className="text-gray-300 leading-relaxed text-base mb-6">
+                      {project.performanceMetrics.description}
+                    </div>
+                  )}
                   {project.performanceMetrics.evaluationTable && (
                     <div className="mb-6 p-6 bg-cyan-500/10 border-2 border-cyan-500/30 rounded-lg">
                       <h4 className="text-lg font-semibold text-cyan-400 mb-2">
@@ -1066,24 +1068,53 @@ export default function ProjectDetail() {
                       Comparative Analysis
                     </h4>
                     <div className="overflow-x-auto">
-                      <table className="w-full border-collapse text-sm">
-                        <thead>
-                          <tr className="border-b border-purple-500/30">
-                            <th className="text-left p-3 text-purple-300 font-semibold">System</th>
-                            <th className="text-left p-3 text-purple-300 font-semibold">Strength</th>
-                            <th className="text-left p-3 text-purple-300 font-semibold">Weakness</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Array.isArray(project.comparativeAnalysis) && project.comparativeAnalysis.map((comparison, i) => (
-                            <tr key={i} className={`border-b border-white/10 hover:bg-purple-500/5 transition-colors ${comparison.approach.includes('Nexus') || comparison.approach.includes('Hybrid') ? 'bg-purple-500/10' : ''}`}>
-                              <td className="p-3 text-gray-300 font-medium">{comparison.approach}</td>
-                              <td className="p-3 text-green-400">{comparison.strength}</td>
-                              <td className="p-3 text-red-400">{comparison.weakness}</td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
+                      {Array.isArray(project.comparativeAnalysis) && project.comparativeAnalysis.length > 0 && (
+                        project.comparativeAnalysis[0].feature ? (
+                          // Multi-column comparison table (machine-consciousness style)
+                          <table className="w-full border-collapse text-sm">
+                            <thead>
+                              <tr className="border-b border-purple-500/30">
+                                <th className="text-left p-3 text-purple-300 font-semibold">Feature</th>
+                                <th className="text-left p-3 text-purple-300 font-semibold">This Project</th>
+                                <th className="text-left p-3 text-purple-300 font-semibold">Manual Timeline</th>
+                                <th className="text-left p-3 text-purple-300 font-semibold">Wikipedia</th>
+                                <th className="text-left p-3 text-purple-300 font-semibold">Papers with Code</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {project.comparativeAnalysis.map((comparison, i) => (
+                                <tr key={i} className="border-b border-white/10 hover:bg-purple-500/5 transition-colors">
+                                  <td className="p-3 text-gray-300 font-medium">{comparison.feature}</td>
+                                  <td className="p-3 text-purple-400 font-semibold">{comparison.thisProject}</td>
+                                  <td className="p-3 text-gray-400">{comparison.manualTimeline}</td>
+                                  <td className="p-3 text-gray-400">{comparison.wikipedia}</td>
+                                  <td className="p-3 text-gray-400">{comparison.papersWithCode}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        ) : (
+                          // Standard approach/strength/weakness table
+                          <table className="w-full border-collapse text-sm">
+                            <thead>
+                              <tr className="border-b border-purple-500/30">
+                                <th className="text-left p-3 text-purple-300 font-semibold">System</th>
+                                <th className="text-left p-3 text-purple-300 font-semibold">Strength</th>
+                                <th className="text-left p-3 text-purple-300 font-semibold">Weakness</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {project.comparativeAnalysis.map((comparison, i) => (
+                                <tr key={i} className={`border-b border-white/10 hover:bg-purple-500/5 transition-colors ${comparison.approach?.includes('Nexus') || comparison.approach?.includes('Hybrid') ? 'bg-purple-500/10' : ''}`}>
+                                  <td className="p-3 text-gray-300 font-medium">{comparison.approach}</td>
+                                  <td className="p-3 text-green-400">{comparison.strength}</td>
+                                  <td className="p-3 text-red-400">{comparison.weakness}</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        )
+                      )}
                     </div>
                     {project.comparativeConclusion && (
                       <div className="mt-6 p-4 bg-reasoning/10 rounded-lg border-l-4 border-reasoning">

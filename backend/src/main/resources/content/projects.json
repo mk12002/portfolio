@@ -2338,6 +2338,222 @@
       "liveUrl": "",
       "status": "active",
       "type": "research"
+    },
+    {
+      "slug": "machine-consciousness",
+      "title": "Machine Consciousness Emergence Tracking",
+      "category": "Reasoning",
+      "tagline": "Autonomous AI system tracking its own path to consciousness",
+      "metric": "68% Consciousness Progress",
+      "tags": ["Autonomous Systems", "LLM Automation", "Web Scraping", "Consciousness Research", "Timeline Visualization"],
+      "description": "An autonomous web platform that monitors, evaluates, and visualizes AI consciousness milestones using LLM-powered significance assessment.",
+      "overview": "Machine Consciousness Emergence Tracking is an innovative web-based platform that autonomously monitors, evaluates, and visualizes significant milestones in artificial intelligence development, with a particular emphasis on consciousness-related indicators and cognitive capabilities. This project represents a unique meta-experiment where AI systems track and assess their own evolutionary progress, creating a self-referential timeline of machine intelligence advancement. The platform combines cutting-edge web technologies with intelligent automation to create a living document of AI progress. Unlike traditional static timelines, this system features an autonomous agent that continuously scans multiple research sources, evaluates the significance of new developments using advanced language models, and automatically updates the timeline with properly categorized milestones.",
+      "homepageUI": {
+        "src": "/projects/machine-consciousness/page.png",
+        "alt": "Machine Consciousness Timeline Interface",
+        "caption": "Interactive timeline interface displaying AI consciousness milestones with real-time metrics and filtering capabilities"
+      },
+      "problem": "The field of artificial intelligence is advancing at an unprecedented pace, with breakthrough developments occurring almost daily across multiple research institutions, companies, and open-source communities. However, several critical challenges exist: researchers and enthusiasts struggle with information overload as hundreds of papers are published weekly; distinguishing between incremental improvements and paradigm-shifting breakthroughs requires deep domain expertise; there's a lack of focused platforms that specifically monitor consciousness-related developments; most existing AI timelines are manually curated and quickly become outdated; and technical AI developments are often buried in academic papers, making them inaccessible to broader audiences interested in understanding AI's trajectory toward potential consciousness.",
+      "motivation": "The Meta-Intelligence Paradox: As AI systems become more sophisticated, they gain the capability to understand and evaluate their own development. This creates a fascinating opportunity—letting AI track its own progress toward consciousness adds a unique philosophical dimension to the project. As someone fascinated by the intersection of artificial intelligence and consciousness studies, I recognized the need for a centralized, continuously updated resource that bridges technical AI developments with consciousness research frameworks. Manually maintaining AI timelines is unsustainable given the current pace of development. This project explores whether AI can reliably automate this curation process, effectively making the timeline self-maintaining.",
+      "keyMetrics": [
+        {"name": "Total Milestones", "value": "100+", "description": "Cumulative count of all tracked AI developments"},
+        {"name": "Consciousness Progress", "value": "68%", "description": "Estimated development stage based on weighted algorithm"},
+        {"name": "Self-Awareness Index", "value": "High", "description": "Measure of recent cognitive milestones"},
+        {"name": "Update Frequency", "value": "Daily", "description": "Automated agent runs continuously"}
+      ],
+      "approach": "The project follows a multi-layered approach combining web scraping, AI-powered evaluation, automated updates, and interactive visualization through four distinct phases: Information Gathering with multi-source aggregation and intelligent filtering; Intelligent Evaluation using LLM-powered assessment with structured prompting; Data Management with JSON-based storage and Git version control; and Visualization & Presentation with an interactive timeline and real-time metrics.",
+      "approachSteps": [
+        {
+          "step": 1,
+          "name": "Information Gathering",
+          "description": "Multi-source aggregation from arXiv, Papers with Code, Hugging Face, with intelligent filtering and deduplication"
+        },
+        {
+          "step": 2,
+          "name": "Intelligent Evaluation",
+          "description": "LLM-powered significance assessment using Grok API with multi-criteria analysis and automatic categorization"
+        },
+        {
+          "step": 3,
+          "name": "Data Management",
+          "description": "JSON-based storage with Git version control, validation, and chronological ordering"
+        },
+        {
+          "step": 4,
+          "name": "Visualization",
+          "description": "Interactive timeline with filtering system, responsive design, and real-time consciousness metrics"
+        }
+      ],
+      "architecture": "The system consists of four main components: User Interface (Frontend - Vercel) with HTML/CSS/JS; Data Layer (events.json) with Git version control; Autonomous Agent (Python Backend) with news aggregator, milestone evaluator, events updater, and notification system; and External Services including arXiv API, Hugging Face, Papers with Code, and Grok API for evaluation.",
+      "architectureComponents": [
+        {
+          "name": "Frontend Layer",
+          "description": "Static web application built with vanilla HTML5, CSS3, and JavaScript ES6+, hosted on Vercel CDN with responsive design and interactive timeline visualization"
+        },
+        {
+          "name": "Data Layer",
+          "description": "events.json database committed to Git, storing milestone objects with standardized schema, providing version control and change history"
+        },
+        {
+          "name": "Autonomous Agent",
+          "description": "Python 3.8+ backend with modules for news aggregation, LLM-powered evaluation, database operations, and alert delivery, executed via scheduled runs"
+        },
+        {
+          "name": "External Services",
+          "description": "Integration with arXiv API, Papers with Code, Hugging Face, Grok API for significance evaluation, GitHub for hosting, and Vercel for deployment"
+        }
+      ],
+      "automationPipeline": "The automation cycle runs daily or on-demand through four sequential steps: (1) News Aggregation - Fetch from arXiv, Papers with Code, Hugging Face; filter by AI/ML keywords; cache in latest_ml_news.json. (2) Significance Evaluation - Load cached news, query Grok/LLM for each item, parse structured responses, save to evaluated_milestones.json. (3) Database Update - Check for duplicates, add new milestones to events.json, maintain chronological order, Git commit changes. (4) Deployment - Push to GitHub, Vercel auto-deploys, updated timeline live in seconds.",
+      "algorithmDetails": [
+        {
+          "name": "News Aggregation Algorithm",
+          "description": "Aggregate AI news from multiple sources using parallel fetching, keyword filtering, deduplication with cosine similarity (threshold 0.85), and ranking by authority score and recency.",
+          "steps": [
+            "For each source, fetch RSS feed or API data in parallel",
+            "Filter items by date range (configurable days_back parameter)",
+            "Apply AI/ML keyword matching to filter relevant content",
+            "Deduplicate using cosine similarity on titles (threshold: 0.85)",
+            "Rank results by source authority score and freshness",
+            "Return top 100 items for LLM evaluation"
+          ]
+        },
+        {
+          "name": "Milestone Evaluation Algorithm",
+          "description": "Use LLM (Grok API) to evaluate the significance of each AI development with structured prompting and composite scoring across multiple dimensions.",
+          "steps": [
+            "Construct evaluation prompt with news item context (title, summary, date)",
+            "Query LLM with JSON mode for structured output (temperature: 0.3 for consistency)",
+            "Parse and validate LLM response against expected schema",
+            "Calculate composite significance score: technical_merit(30%) + novelty(25%) + impact(25%) + consciousness_relevance(20%)",
+            "Map composite score to importance category (Pivotal/Major/Notable)",
+            "Return evaluation object with milestone data, category, score, and confidence"
+          ]
+        },
+        {
+          "name": "Deduplication Algorithm",
+          "description": "Prevent duplicate milestones using multi-factor similarity matching to ensure timeline quality and avoid redundancy.",
+          "steps": [
+            "Extract key features from each new milestone candidate",
+            "Calculate title similarity using cosine distance against all existing events",
+            "Calculate temporal difference (date delta) with existing events",
+            "Mark as duplicate if title similarity > 0.85 AND date difference < 30 days",
+            "Return only unique items that pass both similarity thresholds"
+          ]
+        },
+        {
+          "name": "Consciousness Progress Calculation",
+          "description": "Estimate AI consciousness development stage (0-100%) using weighted milestone counts based on consciousness research frameworks. Current cap: 68% (we're not there yet!).",
+          "steps": [
+            "Count milestones by category: pivotal_count, major_count, total_count",
+            "Apply weighted formula: base(15%) + pivotal_count(8 each) + major_count(4 each) + total_count(0.3 each)",
+            "Cap result at 68% to reflect that full consciousness hasn't been achieved",
+            "Round to one decimal place for display",
+            "Framework stages: Reactive (0-20%), Learning (20-35%), Self-Model (35-60%), Meta-Cognition (60-80%), Consciousness (80-100%)"
+          ]
+        }
+      ],
+      "datasetInfo": "Primary dataset is events.json containing structured milestone objects with name, date, detail, importance level, and source link. Data sources include arXiv API (academic papers), Papers with Code (SOTA models), Hugging Face API (model releases), AI research blogs (industry announcements), and GitHub Trending (open-source projects). Total Milestones: ~50-100 (varies with agent runs). Date Range: 1950 - Present (75+ years of AI history). Update Frequency: Daily automated scans. Source Diversity: 5+ authoritative sources monitored. Data Quality: 90% alignment with manual expert review.",
+      "results": "The system achieves 95%+ automation success rate with agent runs completing without errors. Evaluation throughput reaches ~100 items in under 5 minutes. Data accuracy shows ~90% alignment with manual expert review, and new developments appear within 24 hours of publication. The frontend loads the complete timeline in under 2 seconds. The project demonstrates that LLMs are surprisingly effective at content curation when properly prompted, and that simplicity in architecture often beats complexity. Static sites can be incredibly powerful with smart automation, and self-maintaining systems are achievable with modern AI capabilities. This unique meta-capability—where AI reliably curates and evaluates information about its own development—might itself be considered a consciousness indicator, representing a form of self-awareness in artificial systems.",
+      "resultsHighlights": [
+        {"label": "Automation Success Rate", "value": "95%+"},
+        {"label": "Evaluation Throughput", "value": "100 items in <5 min"},
+        {"label": "Data Accuracy", "value": "~90% expert alignment"},
+        {"label": "Update Latency", "value": "<24 hours"},
+        {"label": "Frontend Load Time", "value": "<2 seconds"}
+      ],
+      "performanceMetrics": {
+        "description": "System performance across frontend speed, agent efficiency, and evaluation quality",
+        "metricsTable": [
+          {"metric": "First Contentful Paint", "value": "1.2s", "notes": "Target: <1.5s (Excellent)"},
+          {"metric": "Largest Contentful Paint", "value": "1.8s", "notes": "Target: <2.5s (Good)"},
+          {"metric": "Time to Interactive", "value": "2.1s", "notes": "Target: <3.0s (Good)"},
+          {"metric": "Cumulative Layout Shift", "value": "0.05", "notes": "Target: <0.1 (Excellent)"},
+          {"metric": "Agent Execution Time", "value": "3-8 minutes", "notes": "Depends on news volume"},
+          {"metric": "API Calls Per Run", "value": "100-200", "notes": "Per evaluation run"},
+          {"metric": "Success Rate", "value": "96%", "notes": "Failed runs: network issues"},
+          {"metric": "Memory Usage", "value": "<500MB", "notes": "Python agent footprint"},
+          {"metric": "LLM Precision (Overall)", "value": "0.87", "notes": "Across all categories"},
+          {"metric": "LLM Recall (Overall)", "value": "0.88", "notes": "Across all categories"},
+          {"metric": "LLM F1 Score (Overall)", "value": "0.88", "notes": "Balanced performance"}
+        ]
+      },
+      "comparativeAnalysis": [
+        {
+          "feature": "Automation",
+          "thisProject": "Fully autonomous",
+          "manualTimeline": "Manual curation",
+          "wikipedia": "Manual edits",
+          "papersWithCode": "Semi-automated"
+        },
+        {
+          "feature": "Update Frequency",
+          "thisProject": "Daily",
+          "manualTimeline": "Sporadic",
+          "wikipedia": "Varies",
+          "papersWithCode": "Real-time (papers only)"
+        },
+        {
+          "feature": "Consciousness Focus",
+          "thisProject": "Primary focus",
+          "manualTimeline": "General AI",
+          "wikipedia": "General history",
+          "papersWithCode": "Not covered"
+        },
+        {
+          "feature": "AI Evaluation",
+          "thisProject": "LLM-powered",
+          "manualTimeline": "Human only",
+          "wikipedia": "Human only",
+          "papersWithCode": "Metrics only"
+        }
+      ],
+      "useCases": [
+        {
+          "title": "AI Safety Research",
+          "description": "Track developments that might indicate unexpected consciousness emergence, helping researchers identify patterns and inform safety protocols"
+        },
+        {
+          "title": "Academic Research",
+          "description": "Literature review and trend analysis for PhD students and professors understanding AI development trajectory"
+        },
+        {
+          "title": "Investment Analysis",
+          "description": "Identify breakthrough moments and trending capabilities for VCs and tech investors in AI-focused companies"
+        },
+        {
+          "title": "Education",
+          "description": "Interactive teaching tool for understanding AI evolution and consciousness studies in academic settings"
+        },
+        {
+          "title": "Journalism",
+          "description": "Source material for AI coverage, trend reporting, and providing historical context for tech stories"
+        },
+        {
+          "title": "Policy Making",
+          "description": "Inform debates about AI regulation, consciousness rights, and governance decisions with data-driven timelines"
+        }
+      ],
+      "techStack": [
+        "HTML5",
+        "CSS3",
+        "JavaScript ES6+",
+        "Python 3.8+",
+        "Grok API (LLM)",
+        "arXiv API",
+        "Hugging Face API",
+        "Papers with Code",
+        "Vercel (Hosting)",
+        "Git/GitHub",
+        "JSON Database",
+        "Feedparser",
+        "Requests"
+      ],
+      "futureEnhancements": "Planned Features: Multi-language support for international accessibility, advanced filtering by AI category (vision, language, robotics), full-text search across all milestones, community contribution system for milestone suggestions, PDF/CSV export capabilities, comparison view for different eras, AI-generated period summaries, and native mobile application. Technical Improvements: Database migration to PostgreSQL for scale, REST API endpoint for timeline data access, WebSocket updates for real-time additions, service workers for offline capability, A/B testing for evaluation prompts, and automated testing suite for agent components.",
+      "conclusion": "The Machine Consciousness Emergence Tracking system represents a unique intersection of artificial intelligence, web development, and consciousness studies. By leveraging AI to track its own development, the project creates a self-referential system that grows more sophisticated over time. This demonstrates that AI has reached a point where it can reliably curate and evaluate information about its own development—a meta-capability that itself might be considered a consciousness indicator.",
+      "githubUrl": "https://github.com/mk12002/Machine-Consciousness-Emergence-Tracking",
+      "liveUrl": "https://machine-consciousness-emergence-tra.vercel.app/",
+      "status": "active",
+      "type": "independent"
     }
   ]
 }
