@@ -165,6 +165,15 @@ export default function Contact() {
                 </a>
               </div>
             </GlowCard>
+
+            <GlowCard glowColor="vision">
+              <h3 className="font-semibold mb-4">LinkedIn Profile</h3>
+              <div className="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="mohitkumar111" data-version="v1">
+                <a className="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/mohitkumar111?trk=profile-badge">
+                  Mohit Kumar
+                </a>
+              </div>
+            </GlowCard>
           </motion.div>
         </div>
       </div>
