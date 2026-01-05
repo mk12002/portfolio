@@ -34,15 +34,6 @@
       "year": 2024,
       "abstract": "Comparative study achieving 99.99% accuracy with HAR-GCNN on PAMAP2 dataset.",
       "tags": ["GNN", "HAR", "MetaMAE", "Time-Series"]
-    },
-    {
-      "title": "Nexus: A Three-Pronged Agentic AI System for Intelligent Research and Analysis",
-      "authors": ["Mohit Kumar", "Diya Ravishankar"],
-      "venue": "ReadyTensor",
-      "year": 2025,
-      "abstract": "Multi-agent system for automated research discovery and synthesis using LangGraph.",
-      "tags": ["Multi-Agent", "LangGraph", "Research Automation"],
-      "url": "https://app.readytensor.ai/publications/nexus-a-three-pronged-agentic-ai-system-for-intelligent-research-and-analysis-Y06tMJMVmNjI"
     }
   ]
 }

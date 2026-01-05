@@ -1,3 +1,20 @@
 {
-  "posts": []
+  "posts": [
+    {
+      "title": "Nexus: A Three-Pronged Agentic AI System for Intelligent Research and Analysis",
+      "authors": ["Mohit Kumar", "Diya Ravishankar"],
+      "date": "March 11, 2025",
+      "excerpt": "Multi-agent system for automated research discovery and synthesis using LangGraph.",
+      "tags": ["Multi-Agent", "LangGraph", "Research Automation"],
+      "url": "https://app.readytensor.ai/publications/nexus-a-three-pronged-agentic-ai-system-for-intelligent-research-and-analysis-Y06tMJMVmNjI"
+    },
+    {
+      "title": "Sanchalak: Revolutionizing Rural Welfare Access",
+      "authors": ["Mohit Kumar"],
+      "date": "August 11, 2025",
+      "excerpt": "A comprehensive system designed to streamline access to government welfare schemes in rural India.",
+      "tags": ["Social Impact", "Government Tech", "Rural Development", "AI for Good"],
+      "url": "https://annam.ai/2025/08/11/sanchalak-revolutionizing-rural-welfare-access/"
+    }
+  ]
 }
