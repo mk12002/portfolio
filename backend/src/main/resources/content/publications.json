@@ -8,7 +8,8 @@
       "date": "December 2025",
       "abstract": "A lightweight MobileNet-based disease classification system integrated with AWS S3 for automated tomato plant disease detection, achieving >90% accuracy with <150ms inference latency on mobile devices.",
       "tags": ["Deep Learning", "AgriTech", "AWS S3", "Disease Detection", "MobileNet", "Computer Vision"],
-      "url": "https://ieeexplore.ieee.org/document/11307938"
+      "url": "https://ieeexplore.ieee.org/document/11307938",
+      "link": "https://ieeexplore.ieee.org/document/11307938"
     },
     {
       "title": "HybEx-Law: A Hybrid Neural-Symbolic System for Legal Aid Eligibility Determination",

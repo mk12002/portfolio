@@ -53,7 +53,7 @@ export default function Publications() {
                     <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-4">
                       <span>{pub.venue}</span>
                       <span className="flex items-center gap-1">
-                        <FaCalendar /> {pub.year}
+                        <FaCalendar /> {pub.date}
                       </span>
                     </div>
 
