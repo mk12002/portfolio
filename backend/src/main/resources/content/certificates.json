@@ -1,6 +1,32 @@
 {
   "certificates": [
     {
+      "name": "Core Designer Certificate",
+      "issuer": "Dataiku Academy",
+      "category": "Data Science",
+      "icon": "dataiku",
+      "earnedDate": "December 27, 2025",
+      "link": "https://verify.skilljar.com/c/vfqzv2gg6mt3",
+      "description": "Professional certification demonstrating expertise in designing and implementing end-to-end data science workflows using Dataiku's visual interface and automation capabilities."
+    },
+    {
+      "name": "ML Practitioner Certificate",
+      "issuer": "Dataiku Academy",
+      "category": "Data Science",
+      "icon": "dataiku",
+      "earnedDate": "December 27, 2025",
+      "link": "https://verify.skilljar.com/c/rj3rtcpoywfo",
+      "description": "Validates hands-on skills in building, training, and deploying machine learning models using Dataiku's platform for practical data science applications."
+    },
+    {
+      "name": "Python for Data Science",
+      "issuer": "IBM",
+      "category": "Data Science",
+      "icon": "python",
+      "earnedDate": "December 23, 2025",
+      "description": "Foundational certification demonstrating the ability to write Python scripts and perform hands-on data analysis using IBM's Jupyter-based lab environment."
+    },
+    {
       "name": "Microsoft Certified: Azure AI Engineer Associate",
       "issuer": "Microsoft",
       "category": "Cloud",
