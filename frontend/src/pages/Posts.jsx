@@ -145,16 +145,29 @@ export default function Posts() {
 
                   {/* Read Time & Link */}
                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/10">
-                    <div className="flex items-center gap-2 text-xs text-gray-500">
-                      <FaClock size={12} />
-                      {post.readTime}
-                    </div>
-                    <Link
-                      to={`/posts/${post.slug}`}
-                      className="inline-flex items-center gap-2 text-vision hover:text-white transition-colors text-sm"
-                    >
-                      Read More <FaArrowRight size={12} />
-                    </Link>
+                    {post.readTime && (
+                      <div className="flex items-center gap-2 text-xs text-gray-500">
+                        <FaClock size={12} />
+                        {post.readTime}
+                      </div>
+                    )}
+                    {post.url ? (
+                      <a
+                        href={post.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 text-vision hover:text-white transition-colors text-sm ml-auto"
+                      >
+                        Read More <FaArrowRight size={12} />
+                      </a>
+                    ) : (
+                      <Link
+                        to={`/posts/${post.slug}`}
+                        className="inline-flex items-center gap-2 text-vision hover:text-white transition-colors text-sm ml-auto"
+                      >
+                        Read More <FaArrowRight size={12} />
+                      </Link>
+                    )}
                   </div>
                 </GlowCard>
               ))}
