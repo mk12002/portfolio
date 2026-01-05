@@ -116,10 +116,20 @@ function GridLines() {
 export default function ParticleBackground() {
   const [scrollY, setScrollY] = useState(0)
   const { theme } = useTheme()
-
+  
+  // Throttle scroll handler for better performance
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY)
-    window.addEventListener('scroll', handleScroll)
+    let ticking = false
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setScrollY(window.scrollY)
+          ticking = false
+        })
+        ticking = true
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true })
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
@@ -130,11 +140,11 @@ export default function ParticleBackground() {
     reasoning: theme.colors.reasoning,
   }
 
-  // Generate data stream particles based on theme pattern
+  // Reduce particle count for better performance
   const dataStreams = useMemo(() => {
     const streams = []
     const domains = ['vision', 'audio', 'reasoning']
-    const count = theme.particles.count
+    const count = Math.min(theme.particles.count, 30) // Cap at 30 particles
     const speed = theme.particles.speed
     
     for (let i = 0; i < count; i++) {
@@ -169,10 +179,10 @@ export default function ParticleBackground() {
     return streams
   }, [theme.particles, colors])
 
-  // Generate matrix rain characters
+  // Reduce matrix rain characters for performance
   const matrixChars = useMemo(() => {
     const chars = '01'
-    const columns = 25
+    const columns = 15 // Reduced from 25
     return Array.from({ length: columns }, (_, i) => ({
       id: i,
       x: (i * 100) / columns + Math.random() * 3,

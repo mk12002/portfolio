@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -12,18 +12,19 @@ import Terminal from './components/Terminal'
 import ThemeSwitcher from './components/ThemeSwitcher'
 import ScrollToTop from './components/ScrollToTop'
 
-import Home from './pages/Home'
-import Resume from './pages/Resume'
-import Projects from './pages/Projects'
-import ProjectDetail from './pages/ProjectDetail'
-import Posts from './pages/Posts'
-import Experiences from './pages/Experiences'
-import Certificates from './pages/Certificates'
-import Events from './pages/Events'
-import Publications from './pages/Publications'
-import Reads from './pages/Reads'
-import Contact from './pages/Contact'
-import BuyMeCoffee from './pages/BuyMeCoffee'
+// Lazy load pages for better performance
+const Home = lazy(() => import('./pages/Home'))
+const Resume = lazy(() => import('./pages/Resume'))
+const Projects = lazy(() => import('./pages/Projects'))
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
+const Posts = lazy(() => import('./pages/Posts'))
+const Experiences = lazy(() => import('./pages/Experiences'))
+const Certificates = lazy(() => import('./pages/Certificates'))
+const Events = lazy(() => import('./pages/Events'))
+const Publications = lazy(() => import('./pages/Publications'))
+const Reads = lazy(() => import('./pages/Reads'))
+const Contact = lazy(() => import('./pages/Contact'))
+const BuyMeCoffee = lazy(() => import('./pages/BuyMeCoffee'))
 
 function App() {
   const [isLoading, setIsLoading] = useState(true)
@@ -32,7 +33,7 @@ function App() {
     // Simulate initial loading
     const timer = setTimeout(() => {
       setIsLoading(false)
-    }, 3500) // Show loading for 3.5 seconds
+    }, 2000) // Show loading for 2 seconds
 
     return () => clearTimeout(timer)
   }, [])
@@ -47,20 +48,26 @@ function App() {
         <ScrollToTop />
         <Navbar />
         <main className="relative z-10">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/resume" element={<Resume />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/projects/:slug" element={<ProjectDetail />} />
-          <Route path="/posts" element={<Posts />} />
-          <Route path="/experiences" element={<Experiences />} />
-          <Route path="/certificates" element={<Certificates />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/publications" element={<Publications />} />
-          <Route path="/reads" element={<Reads />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/support" element={<BuyMeCoffee />} />
-        </Routes>
+        <Suspense fallback={
+          <div className="min-h-screen flex items-center justify-center">
+            <div className="w-16 h-16 border-4 border-vision border-t-transparent rounded-full animate-spin" />
+          </div>
+        }>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/resume" element={<Resume />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/projects/:slug" element={<ProjectDetail />} />
+            <Route path="/posts" element={<Posts />} />
+            <Route path="/experiences" element={<Experiences />} />
+            <Route path="/certificates" element={<Certificates />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/publications" element={<Publications />} />
+            <Route path="/reads" element={<Reads />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/support" element={<BuyMeCoffee />} />
+          </Routes>
+        </Suspense>
       </main>
       <Footer />
         <ToastContainer
