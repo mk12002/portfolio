@@ -1,6 +1,15 @@
 {
   "certificates": [
     {
+      "name": "Cyber Security Fundamentals",
+      "issuer": "University of London via Coursera",
+      "category": "Cybersecurity",
+      "icon": "shield",
+      "earnedDate": "January 19, 2026",
+      "link": "https://coursera.org/share/41ae000d50e2502a39c4c17e39b36ca6",
+      "description": "Foundational certification covering essential cybersecurity concepts including threat landscape, cryptography, network security, risk management, and security best practices."
+    },
+    {
       "name": "Core Designer Certificate",
       "issuer": "Dataiku Academy",
       "category": "Data Science",
