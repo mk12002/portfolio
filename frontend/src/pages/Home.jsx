@@ -4,6 +4,8 @@ import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaDownload, FaArrowRight
 import NodeGraph from '../components/NodeGraph'
 import GlowCard from '../components/GlowCard'
 import TechStackGraph from '../components/TechStackGraph'
+import TerminalHero from '../components/TerminalHero'
+import StatsCounter from '../components/StatsCounter'
 import SEO from '../components/SEO'
 import { useProfile } from '../hooks/useApi'
 
@@ -156,7 +158,7 @@ export default function Home() {
 
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 Hi, I'm{' '}
-                <span className="gradient-text">{profile?.name || 'Mohit Kumar'}</span>
+                <span className="gradient-text glitch-text" data-text={profile?.name || 'Mohit Kumar'}>{profile?.name || 'Mohit Kumar'}</span>
               </h1>
 
               <motion.p
@@ -226,10 +228,12 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="order-1 lg:order-2 flex justify-center"
             >
-              <ProfilePicture profilePicture={profile?.profilePicture} />
+              <TerminalHero />
             </motion.div>
           </div>
         </section>
+
+        <StatsCounter />
 
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
           <motion.div

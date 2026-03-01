@@ -27,6 +27,7 @@ const Publications = lazy(() => import('./pages/Publications'))
 const Reads = lazy(() => import('./pages/Reads'))
 const Contact = lazy(() => import('./pages/Contact'))
 const BuyMeCoffee = lazy(() => import('./pages/BuyMeCoffee'))
+const CTF = lazy(() => import('./pages/CTF'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 // Page transition wrapper
@@ -97,6 +98,7 @@ function App() {
                 <Route path="/reads" element={<PageTransition><Reads /></PageTransition>} />
                 <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
                 <Route path="/support" element={<PageTransition><BuyMeCoffee /></PageTransition>} />
+                <Route path="/ctf" element={<PageTransition><CTF /></PageTransition>} />
                 <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
               </Routes>
             </AnimatePresence>
@@ -107,7 +109,7 @@ function App() {
           position="bottom-right"
           autoClose={3000}
           theme="dark"
-          toastStyle={{ backgroundColor: '#0b1020', border: '1px solid rgba(168, 85, 247, 0.3)' }}
+          toastStyle={{ backgroundColor: '#0b1020', border: '1px solid rgba(0, 255, 65, 0.3)' }}
         />
       </div>
     </ThemeProvider>

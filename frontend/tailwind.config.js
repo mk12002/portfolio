@@ -9,15 +9,15 @@ export default {
       colors: {
         primary: '#0a0e17',
         secondary: '#0d1321',
-        // Security domain colors
-        offensive: '#00ff41',     // neon green — hacker/offensive
-        defensive: '#3b82f6',     // electric blue — shield/defense
-        threat: '#ef4444',        // red — threats/alerts
-        warning: '#fbbf24',       // amber — caution
-        // Legacy ML color aliases (for backward compat)
-        vision: '#00ff41',
-        audio: '#3b82f6',
-        reasoning: '#ef4444',
+        // Dynamic theme colors via CSS custom properties
+        offensive: 'var(--color-vision)',
+        defensive: 'var(--color-audio)',
+        threat: 'var(--color-reasoning)',
+        warning: '#fbbf24',
+        // Legacy aliases — also dynamic
+        vision: 'var(--color-vision)',
+        audio: 'var(--color-audio)',
+        reasoning: 'var(--color-reasoning)',
         accent: {
           green: '#00ff41',
           blue: '#3b82f6',
