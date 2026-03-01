@@ -8,17 +8,17 @@ export default function ThemeSwitcher() {
   const { currentTheme, theme, themes, changeTheme } = useTheme()
 
   const themeIcons = {
-    transformer: '🔷',
-    cnn: '🔶',
-    rnn: '🔸',
-    gan: '🟢'
+    offensive: '🗡️',
+    defensive: '🛡️',
+    forensics: '🔍',
+    adversarial: '⚔️'
   }
 
   return (
     <>
       {/* Floating Theme Button */}
       <motion.button
-        className="fixed bottom-6 left-6 z-40 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-white border-2 transition-all"
+        className="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-white border-2 transition-all"
         style={{
           background: `linear-gradient(135deg, ${theme.colors.primary}, ${theme.colors.secondary})`,
           borderColor: theme.colors.accent,
@@ -56,17 +56,17 @@ export default function ThemeSwitcher() {
 
             {/* Panel */}
             <motion.div
-              initial={{ opacity: 0, x: -100, scale: 0.9 }}
+              initial={{ opacity: 0, x: 100, scale: 0.9 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
-              exit={{ opacity: 0, x: -100, scale: 0.9 }}
-              className="fixed left-6 bottom-24 z-[70] bg-dark-900/95 backdrop-blur-xl border-2 rounded-2xl shadow-2xl p-6 w-80"
+              exit={{ opacity: 0, x: 100, scale: 0.9 }}
+              className="fixed right-6 bottom-24 z-[70] bg-dark-900/95 backdrop-blur-xl border-2 rounded-2xl shadow-2xl p-6 w-80"
               style={{ borderColor: theme.colors.primary }}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <h3 className="text-xl font-bold text-white mb-1">ML Themes</h3>
+                  <h3 className="text-xl font-bold text-white mb-1">Security Themes</h3>
                   <p className="text-xs text-gray-400">{theme.description}</p>
                 </div>
                 <button
@@ -82,16 +82,15 @@ export default function ThemeSwitcher() {
                 {Object.keys(themes).map((themeName) => {
                   const t = themes[themeName]
                   const isActive = currentTheme === themeName
-                  
+
                   return (
                     <motion.button
                       key={themeName}
                       onClick={() => changeTheme(themeName)}
-                      className={`w-full p-4 rounded-xl border-2 transition-all text-left relative overflow-hidden ${
-                        isActive ? 'border-white' : 'border-white/20 hover:border-white/40'
-                      }`}
+                      className={`w-full p-4 rounded-xl border-2 transition-all text-left relative overflow-hidden ${isActive ? 'border-white' : 'border-white/20 hover:border-white/40'
+                        }`}
                       style={{
-                        background: isActive 
+                        background: isActive
                           ? `linear-gradient(135deg, ${t.colors.primary}20, ${t.colors.secondary}20)`
                           : 'rgba(255, 255, 255, 0.05)'
                       }}

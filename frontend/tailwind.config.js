@@ -7,16 +7,26 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#050816',
-        secondary: '#0b1020',
-        vision: '#22d3ee',
-        audio: '#f97316',
-        reasoning: '#a855f7',
+        primary: '#0a0e17',
+        secondary: '#0d1321',
+        // Security domain colors
+        offensive: '#00ff41',     // neon green — hacker/offensive
+        defensive: '#3b82f6',     // electric blue — shield/defense
+        threat: '#ef4444',        // red — threats/alerts
+        warning: '#fbbf24',       // amber — caution
+        // Legacy ML color aliases (for backward compat)
+        vision: '#00ff41',
+        audio: '#3b82f6',
+        reasoning: '#ef4444',
         accent: {
-          cyan: '#22d3ee',
-          orange: '#f97316',
-          purple: '#a855f7',
-          pink: '#ec4899'
+          green: '#00ff41',
+          blue: '#3b82f6',
+          red: '#ef4444',
+          amber: '#fbbf24'
+        },
+        dark: {
+          800: '#111827',
+          900: '#0a0e17'
         }
       },
       fontFamily: {
@@ -26,7 +36,8 @@ export default {
       animation: {
         'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
         'float': 'float 6s ease-in-out infinite',
-        'gradient': 'gradient 8s ease infinite'
+        'gradient': 'gradient 8s ease infinite',
+        'scanline': 'scanline 8s linear infinite'
       },
       keyframes: {
         'pulse-glow': {
@@ -40,6 +51,10 @@ export default {
         'gradient': {
           '0%, 100%': { backgroundPosition: '0% 50%' },
           '50%': { backgroundPosition: '100% 50%' }
+        },
+        'scanline': {
+          '0%': { transform: 'translateY(-100%)' },
+          '100%': { transform: 'translateY(100%)' }
         }
       }
     },

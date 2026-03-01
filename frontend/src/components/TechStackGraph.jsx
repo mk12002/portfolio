@@ -2,77 +2,88 @@ import { motion } from 'framer-motion'
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-// Tech stack data with proficiency and relationships based on resume and projects
+// Tech stack data — cybersecurity + ML hybrid
 const techData = {
   // Languages (Foundation)
-  Python: { proficiency: 98, category: 'language', connections: ['PyTorch', 'TensorFlow', 'FastAPI', 'Flask', 'Prolog', 'OpenCV'] },
+  Python: { proficiency: 98, category: 'language', connections: ['PyTorch', 'TensorFlow', 'FastAPI', 'Flask', 'Nmap', 'Burp Suite'] },
   Java: { proficiency: 90, category: 'language', connections: ['SpringBoot'] },
-  SQL: { proficiency: 88, category: 'language', connections: ['MongoDB', 'Database'] },
-  
+  SQL: { proficiency: 88, category: 'language', connections: ['MongoDB', 'SQLMap'] },
+  Bash: { proficiency: 85, category: 'language', connections: ['Python', 'Nmap', 'Linux'] },
+  PowerShell: { proficiency: 80, category: 'language', connections: ['Bash', 'Windows'] },
+
   // Core ML Frameworks
-  PyTorch: { proficiency: 95, category: 'ml', connections: ['Python', 'Transformers', 'GNN', 'OpenCV', 'CLIP', 'CLAP', 'Vision'] },
+  PyTorch: { proficiency: 95, category: 'ml', connections: ['Python', 'Transformers', 'GNN', 'OpenCV', 'Adversarial ML'] },
   TensorFlow: { proficiency: 85, category: 'ml', connections: ['Python', 'scikit-learn'] },
-  'scikit-learn': { proficiency: 88, category: 'ml', connections: ['Python', 'TensorFlow'] },
-  
+  'scikit-learn': { proficiency: 88, category: 'ml', connections: ['Python', 'TensorFlow', 'Anomaly Detection'] },
+
   // Transformers & NLP
-  Transformers: { proficiency: 92, category: 'ml', connections: ['PyTorch', 'LegalBERT', 'CLIP', 'LangChain', 'Vision'] },
-  LegalBERT: { proficiency: 95, category: 'ml', connections: ['Transformers', 'PyTorch', 'NLP', 'Prolog'] },
-  
-  // Graph Neural Networks
+  Transformers: { proficiency: 92, category: 'ml', connections: ['PyTorch', 'LegalBERT', 'LangChain'] },
+  LegalBERT: { proficiency: 95, category: 'ml', connections: ['Transformers', 'PyTorch', 'Prolog'] },
+
+  // Graph & Symbolic
   GNN: { proficiency: 92, category: 'ml', connections: ['PyTorch', 'Python', 'LegalBERT', 'Prolog'] },
-  
+  Prolog: { proficiency: 94, category: 'ml', connections: ['Python', 'LegalBERT', 'GNN', 'FastAPI'] },
+
   // Multi-Agent & LLM
-  LangGraph: { proficiency: 90, category: 'framework', connections: ['Python', 'LangChain', 'Flask', 'MultiAgent'] },
+  LangGraph: { proficiency: 90, category: 'framework', connections: ['Python', 'LangChain', 'Flask'] },
   LangChain: { proficiency: 88, category: 'framework', connections: ['Python', 'Transformers', 'LangGraph'] },
-  
+
+  // Security for AI
+  'Adversarial ML': { proficiency: 82, category: 'ai_security', connections: ['PyTorch', 'Anomaly Detection', 'Python'] },
+  'Anomaly Detection': { proficiency: 85, category: 'ai_security', connections: ['scikit-learn', 'Adversarial ML', 'Splunk'] },
+
+  // Offensive Security Tools
+  'Burp Suite': { proficiency: 80, category: 'offensive', connections: ['Python', 'SQLMap', 'Nmap'] },
+  Nmap: { proficiency: 82, category: 'offensive', connections: ['Python', 'Bash', 'Burp Suite'] },
+  SQLMap: { proficiency: 78, category: 'offensive', connections: ['SQL', 'Burp Suite', 'Nmap'] },
+  Nessus: { proficiency: 75, category: 'offensive', connections: ['Nmap', 'Burp Suite'] },
+
+  // Defensive / SOC Tools
+  Splunk: { proficiency: 78, category: 'defensive', connections: ['Sentinel', 'Anomaly Detection', 'Bash'] },
+  Sentinel: { proficiency: 76, category: 'defensive', connections: ['Splunk', 'Defender'] },
+  Defender: { proficiency: 75, category: 'defensive', connections: ['Sentinel', 'Windows'] },
+  Wireshark: { proficiency: 77, category: 'defensive', connections: ['Nmap', 'Bash'] },
+
   // Web Frameworks
-  FastAPI: { proficiency: 92, category: 'framework', connections: ['Python', 'Prolog', 'Whisper', 'Azure'] },
-  Flask: { proficiency: 90, category: 'framework', connections: ['Python', 'LangGraph', 'React'] },
-  Streamlit: { proficiency: 85, category: 'framework', connections: ['Python', 'FastAPI'] },
-  
+  FastAPI: { proficiency: 92, category: 'framework', connections: ['Python', 'Prolog', 'Azure'] },
+  Flask: { proficiency: 90, category: 'framework', connections: ['Python', 'LangGraph'] },
+
   // Computer Vision
-  OpenCV: { proficiency: 92, category: 'vision', connections: ['Python', 'PyTorch', 'Swin', 'Mask2Former'] },
-  Swin: { proficiency: 90, category: 'vision', connections: ['PyTorch', 'Transformers', 'OpenCV'] },
-  Mask2Former: { proficiency: 88, category: 'vision', connections: ['PyTorch', 'Swin', 'OpenCV'] },
-  CLIP: { proficiency: 88, category: 'vision', connections: ['PyTorch', 'Transformers', 'CLAP'] },
-  
-  // Audio/Speech Processing
-  CLAP: { proficiency: 88, category: 'audio', connections: ['PyTorch', 'CLIP', 'Whisper'] },
-  Whisper: { proficiency: 90, category: 'audio', connections: ['PyTorch', 'FastAPI', 'Azure'] },
-  
-  // Symbolic AI & Logic
-  Prolog: { proficiency: 94, category: 'symbolic', connections: ['Python', 'LegalBERT', 'GNN', 'FastAPI'] },
-  
+  OpenCV: { proficiency: 92, category: 'vision', connections: ['Python', 'PyTorch'] },
+
   // Cloud & DevOps
-  Azure: { proficiency: 92, category: 'cloud', connections: ['Python', 'FastAPI', 'Whisper'] },
-  AWS: { proficiency: 80, category: 'cloud', connections: ['Python'] },
-  Docker: { proficiency: 85, category: 'tool', connections: ['Python', 'FastAPI', 'Flask'] },
-  
-  // Version Control & Tools
-  Git: { proficiency: 95, category: 'tool', connections: ['Python', 'JavaScript', 'Docker'] },
+  Azure: { proficiency: 92, category: 'cloud', connections: ['Python', 'FastAPI', 'Sentinel'] },
+  AWS: { proficiency: 80, category: 'cloud', connections: ['Python', 'Docker'] },
+  Docker: { proficiency: 85, category: 'tool', connections: ['Python', 'FastAPI', 'Flask', 'Linux'] },
+
+  // Systems
+  Linux: { proficiency: 85, category: 'tool', connections: ['Bash', 'Docker', 'Nmap'] },
+  Windows: { proficiency: 80, category: 'tool', connections: ['PowerShell', 'Defender'] },
+  Git: { proficiency: 95, category: 'tool', connections: ['Python', 'Docker'] },
   MongoDB: { proficiency: 80, category: 'tool', connections: ['Python', 'SQL'] },
 }
 
 const categoryColors = {
-  ml: '#a855f7',         // purple - reasoning
-  framework: '#22d3ee',  // cyan - vision
-  language: '#f97316',   // orange - audio
-  vision: '#22d3ee',     
-  audio: '#f97316',      
-  symbolic: '#a855f7',   
-  tool: '#64748b',       // gray
-  cloud: '#3b82f6',      // blue
+  ml: '#a855f7',         // purple - ML/AI
+  ai_security: '#00ff41', // neon green - AI for Security
+  offensive: '#ef4444',   // red - offensive security
+  defensive: '#3b82f6',   // blue - defensive/SOC
+  framework: '#06b6d4',   // cyan - frameworks
+  language: '#f97316',     // orange - languages
+  vision: '#22d3ee',       // cyan - vision
+  tool: '#64748b',         // gray - tools
+  cloud: '#3b82f6',        // blue - cloud
 }
 
 function TechNode({ tech, data, position, isActive, isConnected, onClick }) {
   const proficiency = data.proficiency
-  const size = 8 + (proficiency / 100) * 12 // 8-20px based on proficiency
+  const size = 8 + (proficiency / 100) * 12
   const glowIntensity = proficiency / 100
-  
+
   return (
     <motion.g
       initial={{ opacity: 0, scale: 0 }}
-      animate={{ 
+      animate={{
         opacity: isActive ? 1 : (isConnected ? 0.8 : 0.5),
         scale: isActive ? 1.3 : 1
       }}
@@ -80,7 +91,7 @@ function TechNode({ tech, data, position, isActive, isConnected, onClick }) {
       style={{ cursor: 'pointer' }}
       onClick={onClick}
     >
-      {/* Glow effect based on proficiency */}
+      {/* Glow */}
       <motion.circle
         cx={position.x}
         cy={position.y}
@@ -97,8 +108,8 @@ function TechNode({ tech, data, position, isActive, isConnected, onClick }) {
           ease: "easeInOut"
         }}
       />
-      
-      {/* Main node */}
+
+      {/* Node */}
       <motion.circle
         cx={position.x}
         cy={position.y}
@@ -108,8 +119,8 @@ function TechNode({ tech, data, position, isActive, isConnected, onClick }) {
         strokeWidth={isActive ? 2 : 1}
         whileHover={{ scale: 1.2 }}
       />
-      
-      {/* Inner highlight */}
+
+      {/* Highlight */}
       <circle
         cx={position.x}
         cy={position.y}
@@ -117,7 +128,7 @@ function TechNode({ tech, data, position, isActive, isConnected, onClick }) {
         fill="white"
         opacity={0.6}
       />
-      
+
       {/* Label */}
       <text
         x={position.x}
@@ -130,7 +141,7 @@ function TechNode({ tech, data, position, isActive, isConnected, onClick }) {
       >
         {tech}
       </text>
-      
+
       {/* Proficiency badge */}
       {isActive && (
         <text
@@ -169,36 +180,35 @@ export default function TechStackGraph() {
   const [selectedTech, setSelectedTech] = useState(null)
   const [hoveredTech, setHoveredTech] = useState(null)
   const navigate = useNavigate()
-  
+
   const activeTech = selectedTech || hoveredTech
 
-  // Generate force-directed layout positions
+  // Generate force-directed positions
   const positions = useMemo(() => {
     const width = 800
     const height = 600
     const centerX = width / 2
     const centerY = height / 2
-    
+
     const techs = Object.keys(techData)
     const pos = {}
-    
-    // Group by category for initial positioning
+
     const categories = {}
     techs.forEach(tech => {
       const cat = techData[tech].category
       if (!categories[cat]) categories[cat] = []
       categories[cat].push(tech)
     })
-    
+
     const catKeys = Object.keys(categories)
     const angleStep = (2 * Math.PI) / catKeys.length
-    
+
     catKeys.forEach((cat, catIdx) => {
       const angle = angleStep * catIdx
       const radius = 200
       const catCenterX = centerX + Math.cos(angle) * radius
       const catCenterY = centerY + Math.sin(angle) * radius
-      
+
       categories[cat].forEach((tech, techIdx) => {
         const subAngle = (2 * Math.PI * techIdx) / categories[cat].length
         const subRadius = 60
@@ -208,11 +218,10 @@ export default function TechStackGraph() {
         }
       })
     })
-    
+
     return pos
   }, [])
 
-  // Get connections for active tech
   const activeConnections = useMemo(() => {
     if (!activeTech || !techData[activeTech]) return new Set()
     return new Set(techData[activeTech].connections)
@@ -220,8 +229,6 @@ export default function TechStackGraph() {
 
   const handleTechClick = (tech) => {
     setSelectedTech(tech === selectedTech ? null : tech)
-    // Navigate to projects filtered by this tech (you can implement this later)
-    // navigate(`/projects?tech=${tech}`)
   }
 
   return (
@@ -238,7 +245,7 @@ export default function TechStackGraph() {
           viewBox="0 0 800 600"
           className="max-w-full"
         >
-          {/* Render connections first */}
+          {/* Connections */}
           {Object.entries(techData).map(([tech, data]) =>
             data.connections
               .filter(connTech => techData[connTech] && positions[connTech])
@@ -258,7 +265,7 @@ export default function TechStackGraph() {
               ))
           )}
 
-          {/* Render nodes */}
+          {/* Nodes */}
           {Object.entries(techData).map(([tech, data]) => (
             <TechNode
               key={tech}
@@ -276,10 +283,11 @@ export default function TechStackGraph() {
         <div className="mt-6 flex flex-wrap gap-4 justify-center">
           {Object.entries({
             'ML/AI': 'ml',
+            'AI for Security': 'ai_security',
+            'Offensive': 'offensive',
+            'Defensive/SOC': 'defensive',
             'Framework': 'framework',
             'Language': 'language',
-            'Vision': 'vision',
-            'Audio': 'audio',
             'Cloud': 'cloud'
           }).map(([label, cat]) => (
             <div key={cat} className="flex items-center gap-2">
@@ -300,7 +308,7 @@ export default function TechStackGraph() {
           transition={{ delay: 1 }}
         >
           <p className="text-sm text-gray-400">
-            {selectedTech 
+            {selectedTech
               ? `Click again to deselect • ${techData[selectedTech]?.proficiency}% proficiency`
               : 'Click any technology to see connections • Glow intensity = proficiency level'
             }

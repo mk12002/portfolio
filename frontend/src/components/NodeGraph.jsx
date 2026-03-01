@@ -1,63 +1,63 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { useNavigate } from 'react-router-dom'
-import { FaEye, FaHeadphones, FaBrain } from 'react-icons/fa'
+import { FaShieldAlt, FaCrosshairs, FaBolt } from 'react-icons/fa'
 
-// Neural Network Layer Configuration
-const networkLayers = [
-  { id: 'input', neurons: 3, x: 15, label: 'Input', domains: ['Vision', 'Audio', 'Reasoning'] },
-  { id: 'hidden1', neurons: 5, x: 35, label: 'Feature Extraction' },
-  { id: 'hidden2', neurons: 4, x: 55, label: 'Processing' },
-  { id: 'hidden3', neurons: 3, x: 75, label: 'Integration' },
-  { id: 'output', neurons: 3, x: 95, label: 'Output', domains: ['Vision', 'Audio', 'Reasoning'] }
+// Cyber Kill Chain Stages
+const killChainStages = [
+  { id: 'recon', neurons: 3, x: 10, label: 'Reconnaissance', domains: ['Offensive', 'Defensive', 'AI-Sec'] },
+  { id: 'weaponize', neurons: 4, x: 28, label: 'Weaponize' },
+  { id: 'deliver', neurons: 3, x: 46, label: 'Deliver & Exploit' },
+  { id: 'install', neurons: 4, x: 64, label: 'Install & C2' },
+  { id: 'action', neurons: 3, x: 85, label: 'Actions', domains: ['Offensive', 'Defensive', 'AI-Sec'] }
 ]
 
 const domainColors = {
-  'Vision': { color: '#22d3ee', glow: 'rgba(34, 211, 238, 0.4)', icon: FaEye },
-  'Audio': { color: '#f97316', glow: 'rgba(249, 115, 22, 0.4)', icon: FaHeadphones },
-  'Reasoning': { color: '#a855f7', glow: 'rgba(168, 85, 247, 0.4)', icon: FaBrain }
+  'Offensive': { color: '#ef4444', glow: 'rgba(239, 68, 68, 0.4)', icon: FaCrosshairs },
+  'Defensive': { color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.4)', icon: FaShieldAlt },
+  'AI-Sec': { color: '#00ff41', glow: 'rgba(0, 255, 65, 0.4)', icon: FaBolt }
 }
 
-// Neuron component with activation pulse effect
-function Neuron({ x, y, domain, layerId, neuronIndex, isHovered, onHover, onClick }) {
-  const config = domain ? domainColors[domain] : { color: '#6b7280', glow: 'rgba(107, 114, 128, 0.3)' }
+// Node in the kill chain
+function KillChainNode({ x, y, domain, stageId, nodeIndex, isHovered, onHover, onClick }) {
+  const config = domain ? domainColors[domain] : { color: '#4b5563', glow: 'rgba(75, 85, 99, 0.3)' }
   const Icon = config.icon
-  const isInputOrOutput = layerId === 'input' || layerId === 'output'
+  const isEndpoint = stageId === 'recon' || stageId === 'action'
 
   return (
     <motion.g
-      style={{ cursor: isInputOrOutput ? 'pointer' : 'default' }}
-      onMouseEnter={() => isInputOrOutput && onHover({ layerId, neuronIndex, domain })}
-      onMouseLeave={() => isInputOrOutput && onHover(null)}
-      onClick={() => isInputOrOutput && onClick(domain)}
-      whileHover={isInputOrOutput ? { scale: 1.15 } : {}}
+      style={{ cursor: isEndpoint ? 'pointer' : 'default' }}
+      onMouseEnter={() => isEndpoint && onHover({ stageId, nodeIndex, domain })}
+      onMouseLeave={() => isEndpoint && onHover(null)}
+      onClick={() => isEndpoint && onClick(domain)}
+      whileHover={isEndpoint ? { scale: 1.15 } : {}}
     >
-      {/* Activation Pulse Ring */}
+      {/* Pulse ring */}
       <motion.circle
         cx={x}
         cy={y}
-        r={isInputOrOutput ? 26 : 16}
+        r={isEndpoint ? 26 : 16}
         fill="none"
         stroke={config.color}
         strokeWidth="2"
         opacity="0"
         animate={{
-          r: isInputOrOutput ? [26, 40] : [16, 28],
+          r: isEndpoint ? [26, 40] : [16, 28],
           opacity: [0.8, 0],
         }}
         transition={{
           duration: 2,
           repeat: Infinity,
-          delay: neuronIndex * 0.2,
+          delay: nodeIndex * 0.2,
           ease: "easeOut"
         }}
       />
 
-      {/* Glow Effect */}
+      {/* Glow */}
       <motion.circle
         cx={x}
         cy={y}
-        r={isInputOrOutput ? 26 : 16}
+        r={isEndpoint ? 26 : 16}
         fill={config.glow}
         filter="blur(10px)"
         animate={{
@@ -67,11 +67,11 @@ function Neuron({ x, y, domain, layerId, neuronIndex, isHovered, onHover, onClic
         transition={{ duration: 0.3 }}
       />
 
-      {/* Main Neuron Body */}
+      {/* Main body */}
       <motion.circle
         cx={x}
         cy={y}
-        r={isInputOrOutput ? 24 : 14}
+        r={isEndpoint ? 24 : 14}
         fill={`url(#gradient-${domain || 'default'})`}
         stroke={config.color}
         strokeWidth={isHovered ? 3 : 2}
@@ -81,12 +81,12 @@ function Neuron({ x, y, domain, layerId, neuronIndex, isHovered, onHover, onClic
         transition={{
           duration: 3,
           repeat: Infinity,
-          delay: neuronIndex * 0.3,
+          delay: nodeIndex * 0.3,
         }}
       />
 
-      {/* Icon for input/output neurons */}
-      {isInputOrOutput && Icon && (
+      {/* Icon */}
+      {isEndpoint && Icon && (
         <foreignObject x={x - 14} y={y - 14} width={28} height={28}>
           <div className="flex items-center justify-center w-full h-full">
             <Icon style={{ color: '#ffffff', fontSize: '16px' }} />
@@ -97,11 +97,10 @@ function Neuron({ x, y, domain, layerId, neuronIndex, isHovered, onHover, onClic
   )
 }
 
-// Connection between neurons with data flow animation
+// Connection with data flow
 function Connection({ from, to, color, delay, isActive }) {
   return (
     <g>
-      {/* Connection line */}
       <motion.line
         x1={from.x}
         y1={from.y}
@@ -111,14 +110,14 @@ function Connection({ from, to, color, delay, isActive }) {
         strokeWidth="1"
         opacity="0.15"
         initial={{ pathLength: 0 }}
-        animate={{ 
+        animate={{
           pathLength: 1,
           opacity: isActive ? 0.4 : 0.15
         }}
         transition={{ duration: 1, delay: delay * 0.1 }}
       />
 
-      {/* Flowing data particle */}
+      {/* Flow particle */}
       <motion.circle
         r="3.5"
         fill={color}
@@ -139,14 +138,13 @@ function Connection({ from, to, color, delay, isActive }) {
   )
 }
 
-// Layer label
-function LayerLabel({ x, y, label }) {
+function StageLabel({ x, y, label }) {
   return (
     <text
       x={x}
       y={y}
       fill="#9ca3af"
-      fontSize="11"
+      fontSize="10"
       textAnchor="middle"
       className="font-mono"
     >
@@ -157,62 +155,67 @@ function LayerLabel({ x, y, label }) {
 
 export default function NodeGraph() {
   const navigate = useNavigate()
-  const [hoveredNeuron, setHoveredNeuron] = useState(null)
+  const [hoveredNode, setHoveredNode] = useState(null)
 
-  const handleNeuronClick = (domain) => {
+  const handleNodeClick = (domain) => {
     if (domain) {
-      navigate(`/projects?category=${domain}`)
+      const categoryMap = {
+        'Offensive': 'Reasoning',
+        'Defensive': 'Reasoning',
+        'AI-Sec': 'All'
+      }
+      navigate(`/projects?category=${categoryMap[domain] || 'All'}`)
     }
   }
 
-  // Calculate neuron positions for each layer
-  const getNeuronPositions = () => {
+  // Calculate node positions
+  const getNodePositions = () => {
     const positions = []
     const svgHeight = 300
     const svgWidth = 700
 
-    networkLayers.forEach((layer) => {
-      const layerPositions = []
-      const spacing = svgHeight / (layer.neurons + 1)
-      const xPos = (layer.x / 100) * svgWidth
+    killChainStages.forEach((stage) => {
+      const stagePositions = []
+      const spacing = svgHeight / (stage.neurons + 1)
+      const xPos = (stage.x / 100) * svgWidth
 
-      for (let i = 0; i < layer.neurons; i++) {
+      for (let i = 0; i < stage.neurons; i++) {
         const yPos = spacing * (i + 1)
-        const domain = layer.domains ? layer.domains[i] : null
-        layerPositions.push({
+        const domain = stage.domains ? stage.domains[i] : null
+        stagePositions.push({
           x: xPos,
           y: yPos,
           domain,
-          layerId: layer.id,
-          neuronIndex: i
+          stageId: stage.id,
+          nodeIndex: i
         })
       }
-      positions.push({ ...layer, positions: layerPositions })
+      positions.push({ ...stage, positions: stagePositions })
     })
     return positions
   }
 
-  const layers = getNeuronPositions()
+  const stages = getNodePositions()
 
-  // Generate connections between layers
+  // Generate connections
   const getConnections = () => {
     const connections = []
-    for (let i = 0; i < layers.length - 1; i++) {
-      const currentLayer = layers[i]
-      const nextLayer = layers[i + 1]
-      
-      currentLayer.positions.forEach((fromNeuron, fromIdx) => {
-        nextLayer.positions.forEach((toNeuron, toIdx) => {
-          const color = fromNeuron.domain 
-            ? domainColors[fromNeuron.domain].color 
-            : '#6b7280'
-          
-          const isActive = hoveredNeuron && 
-            (hoveredNeuron.layerId === currentLayer.id && hoveredNeuron.neuronIndex === fromIdx)
+    for (let i = 0; i < stages.length - 1; i++) {
+      const currentStage = stages[i]
+      const nextStage = stages[i + 1]
+
+      currentStage.positions.forEach((fromNode, fromIdx) => {
+        nextStage.positions.forEach((toNode, toIdx) => {
+          const color = fromNode.domain
+            ? domainColors[fromNode.domain].color
+            : '#4b5563'
+
+          const isActive = hoveredNode &&
+            (hoveredNode.stageId === currentStage.id && hoveredNode.nodeIndex === fromIdx)
 
           connections.push({
-            from: fromNeuron,
-            to: toNeuron,
+            from: fromNode,
+            to: toNode,
             color,
             delay: fromIdx + toIdx,
             isActive
@@ -227,32 +230,32 @@ export default function NodeGraph() {
 
   return (
     <div className="relative w-full h-[350px] md:h-[400px] flex items-center justify-center">
-      <svg 
-        viewBox="0 0 700 300" 
+      <svg
+        viewBox="0 0 700 300"
         className="w-full h-full"
         style={{ maxWidth: '700px' }}
       >
-        {/* Gradient definitions */}
+        {/* Gradients */}
         <defs>
-          <radialGradient id="gradient-Vision" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#0891b2" stopOpacity="0.7" />
+          <radialGradient id="gradient-Offensive" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#ef4444" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#dc2626" stopOpacity="0.7" />
           </radialGradient>
-          <radialGradient id="gradient-Audio" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#f97316" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#ea580c" stopOpacity="0.7" />
+          <radialGradient id="gradient-Defensive" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#2563eb" stopOpacity="0.7" />
           </radialGradient>
-          <radialGradient id="gradient-Reasoning" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#a855f7" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#9333ea" stopOpacity="0.7" />
+          <radialGradient id="gradient-AI-Sec" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stopColor="#00ff41" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#22c55e" stopOpacity="0.7" />
           </radialGradient>
           <radialGradient id="gradient-default" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#6b7280" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#4b5563" stopOpacity="0.5" />
+            <stop offset="0%" stopColor="#4b5563" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#374151" stopOpacity="0.5" />
           </radialGradient>
         </defs>
 
-        {/* Draw all connections first (behind neurons) */}
+        {/* Connections */}
         {connections.map((conn, idx) => (
           <Connection
             key={idx}
@@ -264,49 +267,49 @@ export default function NodeGraph() {
           />
         ))}
 
-        {/* Draw layer labels */}
-        {layers.map((layer) => (
-          <LayerLabel
-            key={layer.id}
-            x={(layer.x / 100) * 700}
-            y={280}
-            label={layer.label}
+        {/* Stage labels */}
+        {stages.map((stage) => (
+          <StageLabel
+            key={stage.id}
+            x={(stage.x / 100) * 700}
+            y={285}
+            label={stage.label}
           />
         ))}
 
-        {/* Draw all neurons */}
-        {layers.map((layer) =>
-          layer.positions.map((pos, idx) => (
-            <Neuron
-              key={`${layer.id}-${idx}`}
+        {/* Nodes */}
+        {stages.map((stage) =>
+          stage.positions.map((pos, idx) => (
+            <KillChainNode
+              key={`${stage.id}-${idx}`}
               x={pos.x}
               y={pos.y}
               domain={pos.domain}
-              layerId={layer.id}
-              neuronIndex={idx}
+              stageId={stage.id}
+              nodeIndex={idx}
               isHovered={
-                hoveredNeuron &&
-                hoveredNeuron.layerId === layer.id &&
-                hoveredNeuron.neuronIndex === idx
+                hoveredNode &&
+                hoveredNode.stageId === stage.id &&
+                hoveredNode.nodeIndex === idx
               }
-              onHover={setHoveredNeuron}
-              onClick={handleNeuronClick}
+              onHover={setHoveredNode}
+              onClick={handleNodeClick}
             />
           ))
         )}
       </svg>
 
-      {/* Hover tooltip */}
-      {hoveredNeuron && hoveredNeuron.domain && (
+      {/* Tooltip */}
+      {hoveredNode && hoveredNode.domain && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="absolute bottom-4 left-1/2 transform -translate-x-1/2 
             px-4 py-2 bg-secondary/90 backdrop-blur-sm rounded-lg border border-white/20
             text-sm font-medium pointer-events-none z-10"
-          style={{ color: domainColors[hoveredNeuron.domain].color }}
+          style={{ color: domainColors[hoveredNode.domain].color }}
         >
-          Click to explore {hoveredNeuron.domain} projects
+          Explore {hoveredNode.domain} projects
         </motion.div>
       )}
     </div>

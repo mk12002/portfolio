@@ -2,35 +2,39 @@ import { useState, useEffect, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaTimes, FaTerminal } from 'react-icons/fa'
 
-const ML_PUNS = [
-  "Why did the neural network break up? Too many hidden layers in the relationship.",
-  "I told my model a joke, but it didn't get it. Must need more training data.",
-  "What's a data scientist's favorite exercise? Cross-validation!",
-  "Why don't ML engineers like jokes? They can't handle the bias.",
-  "My model's accuracy is 99.9%. The 0.1% is when I forget to normalize.",
-  "Overfitting is like studying only past exam papers. Works great until the actual test!",
-  "Why did the gradient descent algorithm go to therapy? Too many local minima.",
-  "I trained a model to predict the weather. It just outputs 'cloudy' – classic dropout!",
-  "What do you call a neural network that sings? A vocal cord!",
-  "Why was the activation function always happy? It was ReLU positive!",
-  "My model has an identity crisis. It can't decide if it's classification or regression.",
-  "Backpropagation is just a fancy way of saying 'I messed up, let me fix it'.",
-  "Why did the ML engineer bring a ladder? To reach the higher dimensions!",
-  "What's a GPU's favorite movie? The Matrix (multiplication).",
-  "I asked my model for dating advice. It said 'optimize your features first'."
+const SECURITY_PUNS = [
+  "Why do hackers wear glasses? Because they can't C#.",
+  "There are only 10 types of people: those who understand binary and those who don't.",
+  "A SQL query walks into a bar, sees two tables and asks... 'Can I JOIN you?'",
+  "Why did the security engineer go broke? Because he lost his cache.",
+  "I told my firewall a joke. It didn't let it through.",
+  "What's a hacker's favorite season? Phishing season!",
+  "My password is 'incorrect' — that way if I forget, the computer tells me.",
+  "Why don't hackers like nature? Too many bugs.",
+  "Port 443 walks into a bar. The bartender says 'I see you're secure today.'",
+  "I'd tell you a UDP joke, but you might not get it.",
+  "Why was the JavaScript developer sad? Because he didn't Node how to Express himself.",
+  "A pentester walks into a bar... and then into the bar next door, and the bar after that.",
+  "What do you call a computer that sings? A-Dell.",
+  "The best thing about TCP jokes? I keep telling them until you get them.",
+  "Why do programmers prefer dark mode? Because light attracts bugs!"
 ]
 
 const COMMANDS = {
-  help: "Available commands: help, puns, train, matrix, clear, exit",
-  puns: "Generating ML humor...",
-  train: "Training neural network on dad jokes dataset...",
-  matrix: "There is no spoon.",
+  help: "Available commands: help, puns, scan, exploit, defend, nmap, whois, clear, exit",
+  puns: "Generating security humor...",
+  scan: "Scanning target network...",
+  exploit: "Launching exploit payload...",
+  defend: "Activating defense protocols...",
+  nmap: "Starting Nmap 7.94 — https://nmap.org",
+  whois: "Querying WHOIS database...",
   clear: "",
-  exit: "Goodbye, human!",
+  exit: "Connection terminated.",
   whoami: "You are: A curious explorer of portfolio easter eggs 🎉",
-  ls: "projects/ certificates/ skills/ resume.pdf secrets/",
-  pwd: "/home/portfolio/easter-eggs",
-  sudo: "Nice try! Access denied. 🔒"
+  ls: "projects/ certificates/ tools/ exploits/ resume.pdf .secrets/",
+  pwd: "/root/portfolio/easter-eggs",
+  sudo: "[sudo] Nice try! Root access denied. 🔒",
+  matrix: "There is no spoon... but there IS a buffer overflow."
 }
 
 export default function EasterEggs() {
@@ -39,8 +43,8 @@ export default function EasterEggs() {
   const [showTerminal, setShowTerminal] = useState(false)
   const [terminalInput, setTerminalInput] = useState('')
   const [terminalHistory, setTerminalHistory] = useState([
-    { type: 'system', text: 'Welcome to Portfolio Terminal v1.0' },
-    { type: 'system', text: 'Type "help" for available commands or "puns" for ML humor!' }
+    { type: 'system', text: 'root@kali:~# Portfolio Terminal v2.0 — Security Edition' },
+    { type: 'system', text: 'Type "help" for available commands or "puns" for hacker humor!' }
   ])
   const [logoClicks, setLogoClicks] = useState(0)
   const [showMiniGame, setShowMiniGame] = useState(false)
@@ -80,7 +84,7 @@ export default function EasterEggs() {
 
   const handleTerminalCommand = (cmd) => {
     const command = cmd.trim().toLowerCase()
-    
+
     setTerminalHistory(prev => [...prev, { type: 'user', text: `$ ${cmd}` }])
 
     if (command === 'clear') {
@@ -91,28 +95,61 @@ export default function EasterEggs() {
     if (command === 'exit') {
       setShowTerminal(false)
       setTerminalHistory([
-        { type: 'system', text: 'Welcome to Portfolio Terminal v1.0' },
-        { type: 'system', text: 'Type "help" for available commands or "puns" for ML humor!' }
+        { type: 'system', text: 'root@kali:~# Portfolio Terminal v2.0 — Security Edition' },
+        { type: 'system', text: 'Type "help" for available commands or "puns" for hacker humor!' }
       ])
       return
     }
 
     if (command === 'puns') {
-      const randomPun = ML_PUNS[Math.floor(Math.random() * ML_PUNS.length)]
-      setTerminalHistory(prev => [...prev, 
-        { type: 'output', text: COMMANDS.puns },
-        { type: 'pun', text: randomPun }
+      const randomPun = SECURITY_PUNS[Math.floor(Math.random() * SECURITY_PUNS.length)]
+      setTerminalHistory(prev => [...prev,
+      { type: 'output', text: COMMANDS.puns },
+      { type: 'pun', text: randomPun }
       ])
       return
     }
 
-    if (command === 'train') {
-      setTerminalHistory(prev => [...prev, 
-        { type: 'output', text: COMMANDS.train },
-        { type: 'loading', text: 'Epoch 1/3... Loss: 0.95' },
-        { type: 'loading', text: 'Epoch 2/3... Loss: 0.42' },
-        { type: 'loading', text: 'Epoch 3/3... Loss: 0.01' },
-        { type: 'success', text: '✓ Training complete! Humor level: Maximum' }
+    if (command === 'scan') {
+      setTerminalHistory(prev => [...prev,
+      { type: 'output', text: COMMANDS.scan },
+      { type: 'loading', text: 'Scanning port 22 (ssh)... OPEN' },
+      { type: 'loading', text: 'Scanning port 80 (http)... OPEN' },
+      { type: 'loading', text: 'Scanning port 443 (https)... OPEN' },
+      { type: 'success', text: '✓ Scan complete! 3 open ports found.' }
+      ])
+      return
+    }
+
+    if (command === 'exploit') {
+      setTerminalHistory(prev => [...prev,
+      { type: 'output', text: COMMANDS.exploit },
+      { type: 'loading', text: 'Preparing payload...' },
+      { type: 'loading', text: 'Bypassing WAF...' },
+      { type: 'error', text: '✗ Access denied! This is a CTF, not a real target. 😉' }
+      ])
+      return
+    }
+
+    if (command === 'defend') {
+      setTerminalHistory(prev => [...prev,
+      { type: 'output', text: COMMANDS.defend },
+      { type: 'loading', text: 'Enabling firewall rules...' },
+      { type: 'loading', text: 'Updating IDS signatures...' },
+      { type: 'loading', text: 'Deploying AI anomaly detector...' },
+      { type: 'success', text: '✓ Defense protocols activated! Threat level: MINIMAL' }
+      ])
+      return
+    }
+
+    if (command === 'nmap') {
+      setTerminalHistory(prev => [...prev,
+      { type: 'output', text: COMMANDS.nmap },
+      { type: 'loading', text: 'PORT     STATE  SERVICE' },
+      { type: 'loading', text: '22/tcp   open   ssh' },
+      { type: 'loading', text: '80/tcp   open   http' },
+      { type: 'loading', text: '443/tcp  open   https' },
+      { type: 'success', text: 'Nmap done: 1 IP address (1 host up) scanned in 2.34 seconds' }
       ])
       return
     }
@@ -120,9 +157,9 @@ export default function EasterEggs() {
     if (COMMANDS[command]) {
       setTerminalHistory(prev => [...prev, { type: 'output', text: COMMANDS[command] }])
     } else {
-      setTerminalHistory(prev => [...prev, { 
-        type: 'error', 
-        text: `Command not found: ${command}. Type "help" for available commands.` 
+      setTerminalHistory(prev => [...prev, {
+        type: 'error',
+        text: `Command not found: ${command}. Type "help" for available commands.`
       }])
     }
   }
@@ -154,7 +191,7 @@ export default function EasterEggs() {
         id: Date.now() + Math.random(),
         x: Math.random() * 80 + 10,
         y: Math.random() * 80 + 10,
-        color: ['#22d3ee', '#f97316', '#a855f7'][Math.floor(Math.random() * 3)]
+        color: ['#00ff41', '#ef4444', '#3b82f6'][Math.floor(Math.random() * 3)]
       }
       setParticles(prev => [...prev, newParticle])
 
@@ -229,7 +266,7 @@ export default function EasterEggs() {
                 key={i}
                 className="absolute w-4 h-4 rounded-full"
                 style={{
-                  background: ['#22d3ee', '#f97316', '#a855f7'][i % 3],
+                  background: ['#00ff41', '#ef4444', '#3b82f6'][i % 3],
                   left: '50%',
                   top: '50%',
                 }}
@@ -271,7 +308,7 @@ export default function EasterEggs() {
               <div className="flex items-center justify-between px-4 py-3 border-b border-vision/30 bg-dark-800">
                 <div className="flex items-center gap-2">
                   <FaTerminal className="text-vision" />
-                  <span className="font-mono text-sm text-gray-300">portfolio@terminal:~$</span>
+                  <span className="font-mono text-sm text-gray-300">root@kali:~#</span>
                 </div>
                 <button
                   onClick={() => setShowTerminal(false)}
@@ -343,8 +380,8 @@ export default function EasterEggs() {
           >
             {/* Game UI */}
             <div className="absolute top-8 left-1/2 -translate-x-1/2 text-center">
-              <h2 className="text-3xl font-bold gradient-text mb-2">Neural Particle Hunt!</h2>
-              <p className="text-gray-400 mb-4">Click the particles before they disappear!</p>
+              <h2 className="text-3xl font-bold gradient-text mb-2">Threat Hunt!</h2>
+              <p className="text-gray-400 mb-4">Click the threats before they disappear!</p>
               <div className="text-5xl font-bold text-vision">{gameScore}</div>
             </div>
 

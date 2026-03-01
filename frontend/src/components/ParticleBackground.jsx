@@ -36,30 +36,30 @@ function DataStreamParticle({ delay, x, y, color, speed, angle }) {
   )
 }
 
-// Binary rain character
-function MatrixChar({ delay, x, char }) {
+// Subtle falling dot particle (replaces binary text rain)
+function FallingDot({ delay, x, color }) {
   return (
     <motion.div
-      className="absolute font-mono text-sm font-bold"
+      className="absolute rounded-full"
       style={{
         left: `${x}%`,
-        color: '#22d3ee',
-        textShadow: '0 0 5px #22d3ee',
+        width: 2,
+        height: 2,
+        background: color || '#22d3ee',
+        boxShadow: `0 0 4px ${color || '#22d3ee'}`,
       }}
-      initial={{ top: '-5%', opacity: 0 }}
+      initial={{ top: '-2%', opacity: 0 }}
       animate={{
         top: '105%',
-        opacity: [0, 0.8, 0.8, 0],
+        opacity: [0, 0.4, 0.4, 0],
       }}
       transition={{
-        duration: 8,
+        duration: 10,
         delay,
         repeat: Infinity,
         ease: "linear",
       }}
-    >
-      {char}
-    </motion.div>
+    />
   )
 }
 
@@ -95,19 +95,19 @@ function GridLines() {
       <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
-            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(168, 85, 247, 0.3)" strokeWidth="0.5"/>
+            <path d="M 50 0 L 0 0 0 50" fill="none" stroke="rgba(168, 85, 247, 0.3)" strokeWidth="0.5" />
           </pattern>
           <linearGradient id="fadeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="white" stopOpacity="0"/>
-            <stop offset="30%" stopColor="white" stopOpacity="1"/>
-            <stop offset="70%" stopColor="white" stopOpacity="1"/>
-            <stop offset="100%" stopColor="white" stopOpacity="0"/>
+            <stop offset="0%" stopColor="white" stopOpacity="0" />
+            <stop offset="30%" stopColor="white" stopOpacity="1" />
+            <stop offset="70%" stopColor="white" stopOpacity="1" />
+            <stop offset="100%" stopColor="white" stopOpacity="0" />
           </linearGradient>
           <mask id="fadeMask">
-            <rect width="100%" height="100%" fill="url(#fadeGradient)"/>
+            <rect width="100%" height="100%" fill="url(#fadeGradient)" />
           </mask>
         </defs>
-        <rect width="100%" height="100%" fill="url(#grid)" mask="url(#fadeMask)"/>
+        <rect width="100%" height="100%" fill="url(#grid)" mask="url(#fadeMask)" />
       </svg>
     </div>
   )
@@ -116,7 +116,7 @@ function GridLines() {
 export default function ParticleBackground() {
   const [scrollY, setScrollY] = useState(0)
   const { theme } = useTheme()
-  
+
   // Throttle scroll handler for better performance
   useEffect(() => {
     let ticking = false
@@ -146,11 +146,11 @@ export default function ParticleBackground() {
     const domains = ['vision', 'audio', 'reasoning']
     const count = Math.min(theme.particles.count, 30) // Cap at 30 particles
     const speed = theme.particles.speed
-    
+
     for (let i = 0; i < count; i++) {
       const domain = domains[i % 3]
       let angle = Math.random() * 360
-      
+
       // Apply theme-specific patterns
       if (theme.particles.pattern === 'layered') {
         // CNN: horizontal layers
@@ -165,7 +165,7 @@ export default function ParticleBackground() {
         // GAN: opposing flows
         angle = i % 2 === 0 ? 45 : 225
       }
-      
+
       streams.push({
         id: i,
         x: Math.random() * 100,
@@ -179,17 +179,17 @@ export default function ParticleBackground() {
     return streams
   }, [theme.particles, colors])
 
-  // Reduce matrix rain characters for performance
-  const matrixChars = useMemo(() => {
-    const chars = '01'
-    const columns = 15 // Reduced from 25
+  // Subtle falling dots for ambient effect
+  const fallingDots = useMemo(() => {
+    const dotColors = [colors.vision, colors.audio, colors.reasoning]
+    const columns = 10
     return Array.from({ length: columns }, (_, i) => ({
       id: i,
-      x: (i * 100) / columns + Math.random() * 3,
-      char: chars[Math.floor(Math.random() * chars.length)],
-      delay: Math.random() * 8,
+      x: (i * 100) / columns + Math.random() * 5,
+      color: dotColors[i % 3],
+      delay: Math.random() * 10,
     }))
-  }, [])
+  }, [colors])
 
   // Floating orbs with theme colors
   const orbs = useMemo(() => [
@@ -205,17 +205,17 @@ export default function ParticleBackground() {
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
       {/* Grid background */}
       <GridLines />
-      
-      {/* Matrix rain effect */}
-      {matrixChars.map((char) => (
-        <MatrixChar key={`matrix-${char.id}`} {...char} />
+
+      {/* Subtle falling dots */}
+      {fallingDots.map((dot) => (
+        <FallingDot key={`dot-${dot.id}`} {...dot} />
       ))}
 
       {/* Floating orbs */}
       {orbs.map((orb, i) => (
         <FloatingOrb key={`orb-${i}`} {...orb} />
       ))}
-      
+
       {/* Data stream particles */}
       {dataStreams.map((stream) => (
         <DataStreamParticle key={`stream-${stream.id}`} {...stream} />

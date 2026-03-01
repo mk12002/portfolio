@@ -1,8 +1,62 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 
 const themes = {
-  transformer: {
-    name: 'Transformer',
+  offensive: {
+    name: 'Offensive Security',
+    colors: {
+      primary: '#ef4444',    // red
+      secondary: '#f97316',  // orange
+      accent: '#dc2626',     // red-600
+      vision: '#ef4444',
+      audio: '#f97316',
+      reasoning: '#dc2626',
+    },
+    particles: {
+      type: 'attack',
+      count: 60,
+      speed: 1.2,
+      pattern: 'directional'
+    },
+    description: 'Red team operations, penetration testing & exploit development'
+  },
+  defensive: {
+    name: 'Defensive Security',
+    colors: {
+      primary: '#3b82f6',    // blue
+      secondary: '#06b6d4',  // cyan
+      accent: '#0ea5e9',     // sky
+      vision: '#3b82f6',
+      audio: '#06b6d4',
+      reasoning: '#0ea5e9',
+    },
+    particles: {
+      type: 'shield',
+      count: 80,
+      speed: 0.5,
+      pattern: 'layered'
+    },
+    description: 'Blue team SOC monitoring, incident response & threat hunting'
+  },
+  forensics: {
+    name: 'Digital Forensics',
+    colors: {
+      primary: '#00ff41',    // neon green
+      secondary: '#22c55e',  // green-500
+      accent: '#10b981',     // emerald
+      vision: '#00ff41',
+      audio: '#22c55e',
+      reasoning: '#10b981',
+    },
+    particles: {
+      type: 'trace',
+      count: 50,
+      speed: 0.8,
+      pattern: 'sequential'
+    },
+    description: 'Evidence analysis, malware reverse engineering & log forensics'
+  },
+  adversarial: {
+    name: 'Adversarial ML',
     colors: {
       primary: '#a855f7',    // purple
       secondary: '#ec4899',  // pink
@@ -12,77 +66,23 @@ const themes = {
       reasoning: '#8b5cf6',
     },
     particles: {
-      type: 'attention',
-      count: 60,
-      speed: 0.5,
-      pattern: 'bidirectional'
-    },
-    description: 'Self-attention mechanisms with bidirectional flow'
-  },
-  cnn: {
-    name: 'CNN',
-    colors: {
-      primary: '#22d3ee',    // cyan
-      secondary: '#06b6d4',  // cyan-600
-      accent: '#0ea5e9',     // sky
-      vision: '#22d3ee',
-      audio: '#06b6d4',
-      reasoning: '#0ea5e9',
-    },
-    particles: {
-      type: 'convolution',
-      count: 80,
-      speed: 1.2,
-      pattern: 'layered'
-    },
-    description: 'Hierarchical feature extraction through convolution layers'
-  },
-  rnn: {
-    name: 'RNN',
-    colors: {
-      primary: '#f97316',    // orange
-      secondary: '#fb923c',  // orange-400
-      accent: '#ea580c',     // orange-600
-      vision: '#f97316',
-      audio: '#fb923c',
-      reasoning: '#ea580c',
-    },
-    particles: {
-      type: 'sequential',
-      count: 50,
-      speed: 0.8,
-      pattern: 'temporal'
-    },
-    description: 'Sequential processing with temporal dependencies'
-  },
-  gan: {
-    name: 'GAN',
-    colors: {
-      primary: '#10b981',    // emerald
-      secondary: '#14b8a6',  // teal
-      accent: '#059669',     // emerald-600
-      vision: '#10b981',
-      audio: '#14b8a6',
-      reasoning: '#059669',
-    },
-    particles: {
       type: 'adversarial',
       count: 70,
       speed: 1.5,
       pattern: 'opposing'
     },
-    description: 'Generator vs Discriminator adversarial training'
+    description: 'AI for Security & Security for AI — adversarial robustness'
   }
 }
 
 const ThemeContext = createContext()
 
 export function ThemeProvider({ children }) {
-  const [currentTheme, setCurrentTheme] = useState('transformer')
+  const [currentTheme, setCurrentTheme] = useState('forensics')
 
   useEffect(() => {
     // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('ml-portfolio-theme')
+    const savedTheme = localStorage.getItem('security-portfolio-theme')
     if (savedTheme && themes[savedTheme]) {
       setCurrentTheme(savedTheme)
     }
@@ -91,8 +91,8 @@ export function ThemeProvider({ children }) {
   const changeTheme = (themeName) => {
     if (themes[themeName]) {
       setCurrentTheme(themeName)
-      localStorage.setItem('ml-portfolio-theme', themeName)
-      
+      localStorage.setItem('security-portfolio-theme', themeName)
+
       // Update CSS variables
       const theme = themes[themeName]
       const root = document.documentElement
@@ -109,11 +109,11 @@ export function ThemeProvider({ children }) {
   }, [currentTheme])
 
   return (
-    <ThemeContext.Provider value={{ 
-      currentTheme, 
+    <ThemeContext.Provider value={{
+      currentTheme,
       theme: themes[currentTheme],
       themes,
-      changeTheme 
+      changeTheme
     }}>
       {children}
     </ThemeContext.Provider>

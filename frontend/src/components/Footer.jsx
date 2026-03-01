@@ -14,7 +14,7 @@ export default function Footer() {
               <span className="font-semibold text-lg">Mohit Kumar</span>
             </div>
             <p className="text-gray-400 text-sm">
-              ML Systems Engineer building hybrid AI architectures across vision, audio, and reasoning domains.
+              Cybersecurity Engineer exploring AI for Security & Security for AI. Deep ML background across vision, reasoning, and multi-agent systems.
             </p>
           </div>
 

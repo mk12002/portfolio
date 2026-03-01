@@ -29,8 +29,8 @@ export default function LoadingScreen({ isLoading }) {
           {/* Animated background grid */}
           <div className="absolute inset-0 overflow-hidden opacity-20">
             <div className="absolute inset-0" style={{
-              backgroundImage: `linear-gradient(rgba(34, 211, 238, 0.1) 1px, transparent 1px),
-                               linear-gradient(90deg, rgba(34, 211, 238, 0.1) 1px, transparent 1px)`,
+              backgroundImage: `linear-gradient(rgba(0, 255, 65, 0.1) 1px, transparent 1px),
+                               linear-gradient(90deg, rgba(0, 255, 65, 0.1) 1px, transparent 1px)`,
               backgroundSize: '50px 50px'
             }} />
           </div>
@@ -64,8 +64,8 @@ export default function LoadingScreen({ isLoading }) {
             <div className="bg-dark-800/50 backdrop-blur-sm rounded-lg p-8 border border-vision/20">
               <div className="text-center">
                 <div className="flex justify-center items-center gap-3 mb-4">
-                  <span className="text-sm text-gray-400">Epoch</span>
-                  <motion.span 
+                  <span className="text-sm text-gray-400">Scanning</span>
+                  <motion.span
                     className="text-5xl font-mono font-bold text-vision"
                     key={epoch}
                     initial={{ scale: 1.3, opacity: 0 }}

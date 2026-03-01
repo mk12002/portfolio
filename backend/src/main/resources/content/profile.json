@@ -1,8 +1,8 @@
 {
   "name": "Mohit Kumar",
-  "tagline": "Cybersecurity & AI Security Enthusiast",
-  "shortIntro": "I'm exploring AI for security and security for AI through my cybersecurity internship at ITC Infotech. I build applied ML systems across vision, audio, reasoning, legal AI, digital twins, and multi-agent automation while learning to secure them.",
-  "longIntro": "I'm a cybersecurity intern at ITC Infotech learning to work at the intersection of AI and security. My journey spans building ML systems including Legal AI (HybEx-Law), multi-agent research systems (Nexus), lung surgery digital twin prototyping (LUNA), vision-based parking systems, agricultural diagnostics, and healthcare audio processing. Now I'm focused on understanding AI for security (leveraging ML for threat detection, anomaly detection) and security for AI (protecting ML systems from adversarial attacks and ensuring robust AI deployments).",
+  "tagline": "Cybersecurity Engineer × ML — AI for Security & Security for AI",
+  "shortIntro": "Cybersecurity intern at ITC Infotech working at the intersection of AI and security. I build ML-powered defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack.",
+  "longIntro": "I'm a Cybersecurity Intern at ITC Infotech, focused on AI for Security and Security for AI. My journey started in deep ML — building Legal AI systems (HybEx-Law), multi-agent research platforms (Nexus), lung surgery digital twins (LUNA), vision-based parking systems, and healthcare audio pipelines. Now I'm applying that ML depth to cybersecurity: conducting VAPT with Burp Suite, Nmap, and sqlmap, running SOC operations with Splunk and Microsoft Sentinel, hardening cloud environments on AWS, and engineering a multi-agentic AI system for autonomous email threat neutralization. I believe the future of security is AI-native — and the future of AI must be secure.",
   "interests": [
     "AI for Security",
     "Security for AI",
