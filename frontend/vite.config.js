@@ -21,15 +21,11 @@ export default defineConfig({
       }
     }
   },
+  esbuild: {
+    drop: ['console', 'debugger'], // Remove console logs in production
+  },
   build: {
-    // Performance optimizations
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true, // Remove console logs in production
-        drop_debugger: true,
-      },
-    },
+    minify: 'esbuild',
     rollupOptions: {
       output: {
         manualChunks: {
