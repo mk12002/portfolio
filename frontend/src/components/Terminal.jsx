@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaTimes, FaTerminal } from 'react-icons/fa'
 
@@ -37,6 +38,7 @@ const COMMANDS = {
 }
 
 export default function Terminal() {
+  const navigate = useNavigate()
   const [showTerminal, setShowTerminal] = useState(false)
   const [terminalInput, setTerminalInput] = useState('')
   const [terminalHistory, setTerminalHistory] = useState([
@@ -94,6 +96,17 @@ export default function Terminal() {
       { type: 'loading', text: '443/tcp open https' },
       { type: 'success', text: '✓ Scan complete! 3 open ports found. System secure.' }
       ])
+      return
+    }
+
+    if (command === 'ctf') {
+      setTerminalHistory(prev => [...prev,
+      { type: 'success', text: '🏴 CTF Challenge detected! Redirecting to /ctf...' }
+      ])
+      setTimeout(() => {
+        setShowTerminal(false)
+        navigate('/ctf')
+      }, 1000)
       return
     }
 
