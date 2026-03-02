@@ -9,15 +9,15 @@ export default {
       colors: {
         primary: '#0a0e17',
         secondary: '#0d1321',
-        // Dynamic theme colors via CSS custom properties
-        offensive: 'var(--color-vision)',
-        defensive: 'var(--color-audio)',
-        threat: 'var(--color-reasoning)',
+        // Dynamic theme colors via CSS custom properties (RGB channels)
+        offensive: 'rgb(var(--color-vision) / <alpha-value>)',
+        defensive: 'rgb(var(--color-audio) / <alpha-value>)',
+        threat: 'rgb(var(--color-reasoning) / <alpha-value>)',
         warning: '#fbbf24',
         // Legacy aliases — also dynamic
-        vision: 'var(--color-vision)',
-        audio: 'var(--color-audio)',
-        reasoning: 'var(--color-reasoning)',
+        vision: 'rgb(var(--color-vision) / <alpha-value>)',
+        audio: 'rgb(var(--color-audio) / <alpha-value>)',
+        reasoning: 'rgb(var(--color-reasoning) / <alpha-value>)',
         accent: {
           green: '#00ff41',
           blue: '#3b82f6',

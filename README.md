@@ -1,15 +1,15 @@
-# 🎨 Portfolio
+# 🛡️ Portfolio — Cybersecurity × ML
 
 > **🌐 Live Site:** [https://mohitkumar-mu.vercel.app](https://mohitkumar-mu.vercel.app/)
 
-A modern, interactive portfolio website showcasing machine learning projects, research experience, publications, and technical skills. Built with React + Vite frontend and Spring Boot backend, featuring 3D animations, particle effects, and a custom terminal interface.
+A cybersecurity-themed interactive portfolio showcasing security research, ML projects, publications, and technical expertise. Features a hacker-aesthetic dark UI with dynamic theme switching, a Cyber Kill Chain visualization, animated terminal hero, mini CTF challenge, and interactive security tool graph. Built with React + Vite frontend and Spring Boot backend.
 
 ![Portfolio Preview](./frontend/public/assets/Screenshot.png)
 
 ## ✨ Features
 
 ### 🎯 Core Pages
-- **Home** - Interactive hero section with animated profile, social links, and role showcase
+- **Home** - Animated terminal hero with typing commands, glitch text effect, stats counter, and Cyber Kill Chain visualization
 - **Resume** - Downloadable resume with skills visualization and timeline
 - **Projects** - Detailed project cards with filtering, search, and comprehensive writeups
 - **Experience** - Internship timeline with clickable project links
@@ -18,14 +18,20 @@ A modern, interactive portfolio website showcasing machine learning projects, re
 - **Blog** - Technical articles and insights (Coming Soon)
 - **Reads** - Curated reading list and recommendations
 - **Contact** - Gmail-integrated contact form with social links
+- **CTF** - Hidden 3-level Capture The Flag challenge (Base64, HTML inspection, XOR cipher)
 - **Support** - UPI payment integration with QR code
 
 ### 🚀 Technical Features
+- **Terminal Hero** - Typing animation simulating security commands (`whoami`, `nmap`)
+- **Cyber Kill Chain** - Interactive SVG visualization of security domains
+- **4 Security Themes** - Offensive (red), Defensive (blue), Forensics (green), Adversarial ML (purple)
+- **Stats Counter** - Animated count-up numbers triggered on scroll
+- **Glitch Text Effect** - CSS-powered cybersecurity-style text animation
+- **Mini CTF** - Hidden `/ctf` route with 3 puzzle levels
 - **3D Animations** - Three.js/React Three Fiber for immersive experiences
-- **Particle System** - Dynamic WebGL particle background
-- **Framer Motion** - Smooth page transitions and micro-interactions
-- **Terminal Interface** - Press `/` for interactive ML-themed terminal with puns
-- **Dark Theme** - AI/ML-inspired cyan, orange, purple gradient theme
+- **Particle System** - Dynamic WebGL particle background with binary characters
+- **Terminal Interface** - Press `/` for interactive security-themed terminal with hacker humor
+- **Dark Theme** - Cybersecurity-inspired neon green, electric blue, red gradient theme
 - **Responsive Design** - Mobile-first Tailwind CSS styling
 - **SEO Optimized** - React Helmet for meta tags and social sharing
 - **Email Integration** - Gmail SMTP for contact form notifications

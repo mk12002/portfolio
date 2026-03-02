@@ -77,6 +77,13 @@ const themes = {
 
 const ThemeContext = createContext()
 
+// Convert hex color to space-separated RGB channels
+function hexToRgbChannels(hex) {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+  if (!result) return '0 0 0'
+  return `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`
+}
+
 export function ThemeProvider({ children }) {
   const [currentTheme, setCurrentTheme] = useState('forensics')
 
@@ -93,13 +100,13 @@ export function ThemeProvider({ children }) {
       setCurrentTheme(themeName)
       localStorage.setItem('security-portfolio-theme', themeName)
 
-      // Update CSS variables
+      // Update CSS variables with RGB channel values
       const theme = themes[themeName]
       const root = document.documentElement
-      root.style.setProperty('--color-vision', theme.colors.vision)
-      root.style.setProperty('--color-audio', theme.colors.audio)
-      root.style.setProperty('--color-reasoning', theme.colors.reasoning)
-      root.style.setProperty('--color-primary', theme.colors.primary)
+      root.style.setProperty('--color-vision', hexToRgbChannels(theme.colors.vision))
+      root.style.setProperty('--color-audio', hexToRgbChannels(theme.colors.audio))
+      root.style.setProperty('--color-reasoning', hexToRgbChannels(theme.colors.reasoning))
+      root.style.setProperty('--color-primary', hexToRgbChannels(theme.colors.primary))
     }
   }
 
