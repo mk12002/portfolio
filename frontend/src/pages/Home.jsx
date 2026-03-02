@@ -228,9 +228,14 @@ export default function Home() {
               transition={{ duration: 0.8, delay: 0.3 }}
               className="order-1 lg:order-2 flex justify-center"
             >
-              <TerminalHero />
+              <ProfilePicture profilePicture={profile?.profilePicture} />
             </motion.div>
           </div>
+        </section>
+
+        {/* Terminal Hero */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex justify-center">
+          <TerminalHero />
         </section>
 
         <StatsCounter />
