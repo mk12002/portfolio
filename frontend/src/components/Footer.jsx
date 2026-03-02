@@ -55,6 +55,10 @@ export default function Footer() {
 
         <div className="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-500">
           <p>&copy; {new Date().getFullYear()} Mohit Kumar. Built with React, Spring Boot & Three.js</p>
+          {/* Hidden CTF breadcrumb */}
+          <Link to="/ctf" className="inline-block mt-2 text-gray-700 hover:text-vision transition-colors text-xs" title="Think you can hack it?">
+            🏴 Can you capture the flag?
+          </Link>
         </div>
       </div>
     </footer>

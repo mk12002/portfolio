@@ -21,7 +21,7 @@ const SECURITY_PUNS = [
 ]
 
 const COMMANDS = {
-  help: "Available commands: help, puns, scan, exploit, defend, nmap, whois, clear, exit",
+  help: "Available commands: help, puns, scan, exploit, defend, nmap, whois, ctf, clear, exit",
   puns: "Generating security humor...",
   scan: "Scanning target network...",
   exploit: "Launching exploit payload...",
@@ -34,7 +34,8 @@ const COMMANDS = {
   ls: "projects/ certificates/ tools/ exploits/ resume.pdf .secrets/",
   pwd: "/root/portfolio/easter-eggs",
   sudo: "[sudo] Nice try! Root access denied. 🔒",
-  matrix: "There is no spoon... but there IS a buffer overflow."
+  matrix: "There is no spoon... but there IS a buffer overflow.",
+  ctf: "🏴 CTF Challenge detected! Navigate to /ctf to test your skills. 3 levels await..."
 }
 
 export default function EasterEggs() {
