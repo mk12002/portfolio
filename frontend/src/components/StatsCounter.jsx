@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { FaProjectDiagram, FaShieldAlt, FaFileAlt, FaBriefcase, FaCertificate, FaTools } from 'react-icons/fa'
-import { useProfile } from '../hooks/useProfile'
 
 function CountUp({ end, duration = 2, suffix = '', isInView }) {
     const [count, setCount] = useState(0)
