@@ -2,43 +2,46 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaTimes, FaTerminal } from 'react-icons/fa'
 
-const ML_PUNS = [
-  "Why did the neural network break up? Too many hidden layers in the relationship.",
-  "I told my model a joke, but it didn't get it. Must need more training data.",
-  "What's a data scientist's favorite exercise? Cross-validation!",
-  "Why don't ML engineers like jokes? They can't handle the bias.",
-  "My model's accuracy is 99.9%. The 0.1% is when I forget to normalize.",
-  "Overfitting is like studying only past exam papers. Works great until the actual test!",
-  "Why did the gradient descent algorithm go to therapy? Too many local minima.",
-  "I trained a model to predict the weather. It just outputs 'cloudy' – classic dropout!",
-  "What do you call a neural network that sings? A vocal cord!",
-  "Why was the activation function always happy? It was ReLU positive!",
-  "My model has an identity crisis. It can't decide if it's classification or regression.",
-  "Backpropagation is just a fancy way of saying 'I messed up, let me fix it'.",
-  "Why did the ML engineer bring a ladder? To reach the higher dimensions!",
-  "What's a GPU's favorite movie? The Matrix (multiplication).",
-  "I asked my model for dating advice. It said 'optimize your features first'."
+const SECURITY_PUNS = [
+  "Why do hackers wear glasses? Because they can't C#.",
+  "There are only 10 types of people: those who understand binary and those who don't.",
+  "A SQL query walks into a bar, sees two tables and asks... 'Can I JOIN you?'",
+  "Why did the security engineer go broke? Because he lost his cache.",
+  "I told my firewall a joke. It didn't let it through.",
+  "What's a hacker's favorite season? Phishing season!",
+  "My password is 'incorrect' — that way if I forget, the computer tells me.",
+  "Why don't hackers like nature? Too many bugs.",
+  "Port 443 walks into a bar. The bartender says 'I see you're secure today.'",
+  "I'd tell you a UDP joke, but you might not get it.",
+  "A pentester walks into a bar... and then into the bar next door, and the bar after that.",
+  "The best thing about TCP jokes? I keep telling them until you get them.",
+  "Why do programmers prefer dark mode? Because light attracts bugs!"
 ]
 
 const COMMANDS = {
-  help: "Available commands: help, puns, train, matrix, clear, exit",
-  puns: "Generating ML humor...",
-  train: "Training neural network on dad jokes dataset...",
-  matrix: "There is no spoon.",
+  help: "Available commands: help, puns, scan, nmap, exploit, defend, whois, ctf, clear, exit",
+  puns: "Generating security humor...",
+  scan: "Scanning target network...",
+  nmap: "Starting Nmap 7.94 — https://nmap.org",
+  exploit: "Launching exploit payload...",
+  defend: "Activating defense protocols...",
+  whois: "Querying WHOIS database... mohitkumar.dev → Cybersecurity × ML Engineer",
+  ctf: "🏴 CTF Challenge detected! Navigate to /ctf to test your skills. 3 levels await...",
   clear: "",
-  exit: "Goodbye, human!",
+  exit: "Connection terminated.",
   whoami: "You are: A curious explorer of portfolio easter eggs 🎉",
-  ls: "projects/ certificates/ skills/ resume.pdf secrets/",
-  pwd: "/home/portfolio/terminal",
-  sudo: "Nice try! Access denied. 🔒"
+  ls: "projects/ certificates/ tools/ exploits/ resume.pdf .secrets/",
+  pwd: "/root/portfolio/terminal",
+  sudo: "[sudo] Nice try! Root access denied. 🔒",
+  matrix: "There is no spoon... but there IS a buffer overflow."
 }
 
 export default function Terminal() {
   const [showTerminal, setShowTerminal] = useState(false)
   const [terminalInput, setTerminalInput] = useState('')
   const [terminalHistory, setTerminalHistory] = useState([
-    { type: 'system', text: 'Welcome to Portfolio Terminal v1.0' },
-    { type: 'system', text: 'Type "help" for available commands or "puns" for ML humor!' }
+    { type: 'system', text: 'root@kali:~# Portfolio Terminal v2.0 — Security Edition' },
+    { type: 'system', text: 'Type "help" for available commands or "puns" for hacker humor!' }
   ])
 
   useEffect(() => {
@@ -57,8 +60,8 @@ export default function Terminal() {
 
   const handleTerminalCommand = (cmd) => {
     const command = cmd.trim().toLowerCase()
-    
-    setTerminalHistory(prev => [...prev, { type: 'user', text: `$ ${cmd}` }])
+
+    setTerminalHistory(prev => [...prev, { type: 'user', text: `$ ${cmd} ` }])
 
     if (command === 'clear') {
       setTerminalHistory([])
@@ -68,28 +71,28 @@ export default function Terminal() {
     if (command === 'exit') {
       setShowTerminal(false)
       setTerminalHistory([
-        { type: 'system', text: 'Welcome to Portfolio Terminal v1.0' },
-        { type: 'system', text: 'Type "help" for available commands or "puns" for ML humor!' }
+        { type: 'system', text: 'root@kali:~# Portfolio Terminal v2.0 — Security Edition' },
+        { type: 'system', text: 'Type "help" for available commands or "puns" for hacker humor!' }
       ])
       return
     }
 
     if (command === 'puns') {
-      const randomPun = ML_PUNS[Math.floor(Math.random() * ML_PUNS.length)]
-      setTerminalHistory(prev => [...prev, 
-        { type: 'output', text: COMMANDS.puns },
-        { type: 'pun', text: randomPun }
+      const randomPun = SECURITY_PUNS[Math.floor(Math.random() * SECURITY_PUNS.length)]
+      setTerminalHistory(prev => [...prev,
+      { type: 'output', text: COMMANDS.puns },
+      { type: 'pun', text: randomPun }
       ])
       return
     }
 
-    if (command === 'train') {
-      setTerminalHistory(prev => [...prev, 
-        { type: 'output', text: COMMANDS.train },
-        { type: 'loading', text: 'Epoch 1/3... Loss: 0.95' },
-        { type: 'loading', text: 'Epoch 2/3... Loss: 0.42' },
-        { type: 'loading', text: 'Epoch 3/3... Loss: 0.01' },
-        { type: 'success', text: '✓ Training complete! Humor level: Maximum' }
+    if (command === 'scan' || command === 'nmap') {
+      setTerminalHistory(prev => [...prev,
+      { type: 'output', text: COMMANDS[command] },
+      { type: 'loading', text: 'Scanning ports... 22/tcp open ssh' },
+      { type: 'loading', text: '80/tcp open http' },
+      { type: 'loading', text: '443/tcp open https' },
+      { type: 'success', text: '✓ Scan complete! 3 open ports found. System secure.' }
       ])
       return
     }
@@ -97,9 +100,9 @@ export default function Terminal() {
     if (COMMANDS[command]) {
       setTerminalHistory(prev => [...prev, { type: 'output', text: COMMANDS[command] }])
     } else {
-      setTerminalHistory(prev => [...prev, { 
-        type: 'error', 
-        text: `Command not found: ${command}. Type "help" for available commands.` 
+      setTerminalHistory(prev => [...prev, {
+        type: 'error',
+        text: `Command not found: ${command}. Type "help" for available commands.`
       }])
     }
   }
@@ -153,7 +156,7 @@ export default function Terminal() {
                       ${entry.type === 'system' ? 'text-reasoning' : ''}
                       ${entry.type === 'output' ? 'text-gray-300' : ''}
                       ${entry.type === 'loading' ? 'text-gray-400' : ''}
-                    `}
+`}
                   >
                     {entry.text}
                   </motion.div>
