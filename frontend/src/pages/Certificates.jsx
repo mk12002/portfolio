@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import { FaMicrosoft, FaAws, FaCode, FaCloud, FaLightbulb, FaExternalLinkAlt, FaCalendarAlt, FaCertificate, FaShieldAlt } from 'react-icons/fa'
-import { SiOracle, SiIbm } from 'react-icons/si'
+import { SiOracle } from 'react-icons/si'
 import { useCertificates } from '../hooks/useApi'
 
 const categoryIcons = {
@@ -15,7 +15,7 @@ const issuerIcons = {
   Microsoft: FaMicrosoft,
   Oracle: SiOracle,
   AWS: FaAws,
-  IBM: SiIbm
+  IBM: FaCertificate
 }
 
 const categoryColors = {
