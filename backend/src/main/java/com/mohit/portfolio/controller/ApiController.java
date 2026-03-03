@@ -2,11 +2,9 @@ package com.mohit.portfolio.controller;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.mohit.portfolio.model.ContactMessage;
-import com.mohit.portfolio.service.ChatService;
 import com.mohit.portfolio.service.ContentService;
 import com.mohit.portfolio.service.EmailService;
 import jakarta.validation.Valid;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,9 +23,6 @@ public class ApiController {
 
     @Autowired
     private EmailService emailService;
-
-    @Autowired
-    private ChatService chatService;
 
     @GetMapping("/profile")
     public ResponseEntity<JsonNode> getProfile() throws IOException {
@@ -93,7 +88,6 @@ public class ApiController {
         System.out.println("Time: " + LocalDateTime.now());
 
         try {
-            // Send email notification
             emailService.sendContactEmail(
                     message.getName(),
                     message.getEmail(),
@@ -110,43 +104,6 @@ public class ApiController {
             Map<String, Object> response = new HashMap<>();
             response.put("success", false);
             response.put("message", "Failed to send message. Please try again or email directly.");
-            return ResponseEntity.status(500).body(response);
-        }
-    }
-
-    @PostMapping("/chat")
-    public ResponseEntity<Map<String, Object>> chat(@RequestBody Map<String, String> body, HttpServletRequest request) {
-        Map<String, Object> response = new HashMap<>();
-
-        if (!chatService.isConfigured()) {
-            response.put("success", false);
-            response.put("reply", "Chat is currently unavailable.");
-            return ResponseEntity.status(503).body(response);
-        }
-
-        String clientIp = request.getRemoteAddr();
-        if (chatService.isRateLimited(clientIp)) {
-            response.put("success", false);
-            response.put("reply", "Too many requests. Please wait a moment.");
-            return ResponseEntity.status(429).body(response);
-        }
-
-        String message = body.getOrDefault("message", "").trim();
-        if (message.isEmpty()) {
-            response.put("success", false);
-            response.put("reply", "Please enter a message.");
-            return ResponseEntity.badRequest().body(response);
-        }
-
-        try {
-            String reply = chatService.chat(message);
-            response.put("success", true);
-            response.put("reply", reply);
-            return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            System.err.println("Chat error: " + e.getMessage());
-            response.put("success", false);
-            response.put("reply", "Sorry, I encountered an error. Please try again.");
             return ResponseEntity.status(500).body(response);
         }
     }

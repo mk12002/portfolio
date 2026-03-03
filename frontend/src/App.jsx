@@ -10,7 +10,6 @@ import Footer from './components/Footer'
 import ParticleBackground from './components/ParticleBackground'
 import LoadingScreen from './components/LoadingScreen'
 import Terminal from './components/Terminal'
-import ChatBot from './components/ChatBot'
 import ThemeSwitcher from './components/ThemeSwitcher'
 import ScrollToTop from './components/ScrollToTop'
 import { useProfile } from './hooks/useApi'
@@ -76,7 +75,6 @@ function App() {
         <LoadingScreen isLoading={isLoading} />
         <ParticleBackground />
         <Terminal />
-        <ChatBot />
         <ThemeSwitcher />
         <ScrollToTop />
         <Navbar />
