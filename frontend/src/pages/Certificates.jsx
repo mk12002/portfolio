@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
-import { FaMicrosoft, FaAws, FaCode, FaCloud, FaLightbulb, FaExternalLinkAlt, FaCalendarAlt, FaCertificate } from 'react-icons/fa'
-import { SiOracle } from 'react-icons/si'
+import { FaMicrosoft, FaAws, FaCode, FaCloud, FaLightbulb, FaExternalLinkAlt, FaCalendarAlt, FaCertificate, FaShieldAlt } from 'react-icons/fa'
+import { SiOracle, SiIbm } from 'react-icons/si'
 import { useCertificates } from '../hooks/useApi'
 
 const categoryIcons = {
   Cloud: FaCloud,
+  Cybersecurity: FaShieldAlt,
   Programming: FaCode,
   Design: FaLightbulb,
   Innovation: FaLightbulb
@@ -13,11 +14,13 @@ const categoryIcons = {
 const issuerIcons = {
   Microsoft: FaMicrosoft,
   Oracle: SiOracle,
-  AWS: FaAws
+  AWS: FaAws,
+  IBM: SiIbm
 }
 
 const categoryColors = {
   Cloud: 'vision',
+  Cybersecurity: 'audio',
   Programming: 'reasoning',
   Design: 'audio',
   Innovation: 'audio'
@@ -76,8 +79,9 @@ export default function Certificates() {
 
               <div className="grid md:grid-cols-2 gap-6">
                 {certs.map((cert, i) => {
-                  const IssuerIcon = issuerIcons[cert.issuer] || FaCode
-                  
+                  const issuerKey = Object.keys(issuerIcons).find(k => cert.issuer?.includes(k))
+                  const IssuerIcon = issuerKey ? issuerIcons[issuerKey] : FaCode
+
                   return (
                     <motion.div
                       key={i}
@@ -111,9 +115,51 @@ export default function Certificates() {
 
                         <h3 className="font-semibold text-lg mb-2">{cert.name}</h3>
                         <p className="text-sm text-gray-500 mb-3">{cert.issuer}</p>
-                        
+
                         {cert.description && (
                           <p className="text-sm text-gray-400 mb-4 flex-grow">{cert.description}</p>
+                        )}
+
+                        {cert.programStructure && (
+                          <p className={`text-xs font-medium text-${color} mb-3`}>
+                            📋 {cert.programStructure}
+                          </p>
+                        )}
+
+                        {cert.skills && cert.skills.length > 0 && (
+                          <div className="mb-4">
+                            <p className="text-xs font-semibold text-gray-300 mb-2">Key Competencies</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {cert.skills.map((skill, si) => (
+                                <span
+                                  key={si}
+                                  className={`
+                                    text-[10px] px-2 py-0.5 rounded-full
+                                    bg-${color}/15 text-${color}
+                                    border border-${color}/20
+                                  `}
+                                >
+                                  {skill}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {cert.careerRelevance && cert.careerRelevance.length > 0 && (
+                          <div className="mb-4">
+                            <p className="text-xs font-semibold text-gray-300 mb-2">Career Relevance</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {cert.careerRelevance.map((role, ri) => (
+                                <span
+                                  key={ri}
+                                  className="text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-gray-400 border border-white/10"
+                                >
+                                  {role}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
                         )}
 
                         <div className="space-y-2 text-sm">

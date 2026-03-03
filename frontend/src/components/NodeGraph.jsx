@@ -160,9 +160,9 @@ export default function NodeGraph() {
   const handleNodeClick = (domain) => {
     if (domain) {
       const categoryMap = {
-        'Offensive': 'Reasoning',
+        'Offensive': 'Vision',
         'Defensive': 'Reasoning',
-        'AI-Sec': 'All'
+        'AI-Sec': 'Audio'
       }
       navigate(`/projects?category=${categoryMap[domain] || 'All'}`)
     }

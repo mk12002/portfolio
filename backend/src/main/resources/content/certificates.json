@@ -1,6 +1,44 @@
 {
   "certificates": [
     {
+      "name": "IBM Cybersecurity Analyst Professional Certificate",
+      "issuer": "IBM (Delivered via Coursera)",
+      "category": "Cybersecurity",
+      "icon": "shield",
+      "credentialId": "RKIJVQMBZ3N5",
+      "earnedDate": "March 2026",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/RKIJVQMBZ3N5",
+      "description": "A comprehensive 14-course professional certificate program providing a foundation for entry-level cybersecurity analyst roles. Covers defensive and offensive security practices, security operations, governance, and real-world case studies aligned with industry standards. Aligned with CompTIA Security+ (SY0-601) and CompTIA CySA+ fundamentals.",
+      "programStructure": "14-course professional certificate program",
+      "skills": [
+        "Cybersecurity Fundamentals",
+        "Threat Landscape Analysis",
+        "Linux & Windows Security",
+        "OS Hardening",
+        "TCP/IP & Network Protocols",
+        "Firewalls, IDS/IPS",
+        "Secure Network Architecture",
+        "Database Security & SQL Injection Prevention",
+        "Defense-in-Depth Strategy",
+        "NIST & ISO Compliance",
+        "Penetration Testing",
+        "Vulnerability Assessment",
+        "Incident Response",
+        "Digital Forensics",
+        "SOC Operations",
+        "Cyber Threat Intelligence",
+        "Log Analysis",
+        "Threat Hunting"
+      ],
+      "careerRelevance": [
+        "SOC Analyst",
+        "Cybersecurity Analyst",
+        "Security Operations Associate",
+        "Incident Response Analyst (Entry-Level)",
+        "Threat Intelligence Analyst (Junior)"
+      ]
+    },
+    {
       "name": "Cyber Security Fundamentals",
       "issuer": "University of London via Coursera",
       "category": "Cybersecurity",
