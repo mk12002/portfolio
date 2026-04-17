@@ -2554,6 +2554,303 @@
       "liveUrl": "https://machine-consciousness-emergence-tra.vercel.app/",
       "status": "active",
       "type": "independent"
+    },
+    {
+      "slug": "study-os",
+      "title": "Cybersecurity Study OS: Data-Driven Learning Planner and Global Certification Intelligence Platform",
+      "category": "Reasoning",
+      "tagline": "A local-first cybersecurity learning operating system that combines execution tracking, adaptive recommendations, and a country-aware certification intelligence engine to help learners make high-ROI career decisions.",
+      "metric": "12-Week Planner + 38 Certs + 15 Countries",
+      "tags": [
+        "Cybersecurity",
+        "Learning OS",
+        "Certification Planning",
+        "Decision Intelligence",
+        "Career Strategy",
+        "Local-First",
+        "Data-Driven Product"
+      ],
+      "description": "Cybersecurity Study OS is a local-first execution and intelligence product for cybersecurity upskilling. It unifies daily study tracking, adaptive recommendation logic, and country-aware certification decision support so learners can move from intent to measurable outcomes.",
+      "overview": "Most cybersecurity learners struggle with three connected gaps: an execution gap (inconsistent study evidence), a strategy gap (certification choices based on hype, not ROI), and a translation gap (weak conversion of goals into weekly deliverables). This project solves all three in one workflow by connecting planning, execution, and market intelligence.",
+      "problem": "Learners often plan aggressively but fail to sustain disciplined execution, select expensive certifications that are weakly aligned with role-market demand, and cannot convert high-level goals into actionable weekly work that improves interview readiness. A fragmented tooling landscape amplifies this issue because planners, trackers, and decision support are usually isolated products.",
+      "motivation": [
+        "Students, switchers, and early-career professionals need one practical operating system, not disconnected templates.",
+        "Certification decisions should be role-aware, country-aware, and budget-aware to avoid low-impact spending.",
+        "Execution evidence matters for portfolio and interviews, so study behavior must be measurable and reviewable."
+      ],
+      "keyMetrics": [
+        {"name": "Certifications Covered", "value": "38"},
+        {"name": "Countries Covered", "value": "15"},
+        {"name": "Integrated Product Pages", "value": "5"},
+        {"name": "Plan Horizon", "value": "12-week adaptive planner"},
+        {"name": "Architecture", "value": "Static, local-first, zero backend runtime"}
+      ],
+      "approach": "The product vision is a closed loop: define a profile and plan, execute and log work, compute KPI and behavior signals, generate adaptive recommendations, select cert strategy by market context, and translate strategy into a tactical weekly brief that feeds back into execution.",
+      "approachSteps": [
+        {
+          "step": 1,
+          "name": "Main Study OS Execution Layer",
+          "description": "Profile capture, auto-generated 12-week plan, daily tracker logging, KPI board, filtering, local import/export, and completion tracking."
+        },
+        {
+          "step": 2,
+          "name": "Recommendation and Prioritization Layer",
+          "description": "Adaptive recommendations ranked by urgency and impact, schedule drift checks, pacing checks, burnout and balance checks, and 7-day execution queue generation."
+        },
+        {
+          "step": 3,
+          "name": "Certification Intelligence Module",
+          "description": "Global dashboard with country-role-stage-budget filters, country deep-dive, compare tool, and weekly brief generator for tactical execution."
+        },
+        {
+          "step": 4,
+          "name": "Data Foundation and Quality Controls",
+          "description": "JSON-driven rendering with expanded role profiles, learning tracks, weekly templates, and matrix consistency checks across cert IDs and country coverage."
+        },
+        {
+          "step": 5,
+          "name": "Resilience and Data Integrity",
+          "description": "Fallback country-role selection for stale URL state, fallback score derivation for partial matrix updates, and cross-file validation to prevent orphan rows and missing mappings."
+        }
+      ],
+      "algorithmDetails": [
+        {
+          "name": "Certification Ranking Strategy",
+          "description": "The certification rank blends country value, role relevance, ROI base, global recognition, and cost penalty into a weighted score, then normalizes to a five-point compare scale.",
+          "steps": [
+            "score = round(34c + 30r + 22i + 18g - p)",
+            "c = country utility score",
+            "r = role relevance score",
+            "i = base ROI signal",
+            "g = global recognition signal",
+            "p = capped cost penalty"
+          ]
+        },
+        {
+          "name": "Reliability and Consistency Checks",
+          "description": "Internal validations ensure dataset integrity across cert and country intelligence layers.",
+          "steps": [
+            "cert count must equal score row count",
+            "all country keys must exist in every score row",
+            "no orphan score rows",
+            "no missing cert score rows"
+          ]
+        }
+      ],
+      "architecture": [
+        {
+          "tier": "Application Model",
+          "description": "Static frontend architecture using HTML, CSS, and JavaScript with local storage and JSON intelligence datasets. No runtime backend required."
+        },
+        {
+          "tier": "Separation of Concerns",
+          "description": "Operational learning workflow and strategic certification intelligence are separated while sharing a consistent data contract."
+        },
+        {
+          "tier": "Resilience Layer",
+          "description": "Fallback selection logic and score derivation prevent stale state and partial-data failures."
+        },
+        {
+          "tier": "Privacy and Security Posture",
+          "description": "Local-first user data handling, no external auth dependency, and import/export control for user-owned tracking records."
+        }
+      ],
+      "architectureComponents": [
+        {
+          "name": "Main Execution Engine",
+          "description": "Profile setup, 12-week planner, tracker, KPI computation, recommendation ranking, and 7-day queue generation."
+        },
+        {
+          "name": "Certification Intelligence Engine",
+          "description": "Country-role-stage-budget filters, ranked cert cards, deep-dive analytics, compare matrix, and weekly brief planning."
+        },
+        {
+          "name": "Data Layer Files",
+          "description": "certifications.json, countries.json, cert_country_scores.json, and learning_paths.json drive rendering and logic without UI rewrites."
+        },
+        {
+          "name": "UX and Accessibility Decisions",
+          "description": "Cyber-themed but structured layout, explicit dropdown styling for readability, and responsive grouping across desktop and mobile."
+        }
+      ],
+      "datasetInfo": {
+        "description": "Certification Intelligence is fully data-driven and designed for maintainability with explicit consistency checks and refresh guidance.",
+        "highlights": [
+          "Expanded datasets to cover major global cybersecurity job regions",
+          "Module-level metadata and maintenance guidance included",
+          "Quarterly refresh expectation documented for volatile pricing and renewal attributes"
+        ],
+        "details": [
+          "38 certifications with detailed attributes",
+          "15 high-opportunity security markets",
+          "Full cert-country matrix coverage across listed certs and countries",
+          "Role profiles, learning tracks, milestone paths, and weekly templates"
+        ]
+      },
+      "results": [
+        "Built a complete static intelligence product with zero backend dependency.",
+        "Implemented an operational and strategic learning loop in one integrated workflow.",
+        "Created a maintainable cert-country-role data layer with resilience and consistency checks.",
+        "Delivered a portfolio artifact that is directly useful to learners, switchers, and practitioners targeting global opportunities."
+      ],
+      "resultsHighlights": [
+        {"label": "Execution Gap Coverage", "value": "Planner + tracker + KPI + recommendations"},
+        {"label": "Strategy Gap Coverage", "value": "Country-role-budget aware certification ranking"},
+        {"label": "Translation Gap Coverage", "value": "Weekly brief to day-wise deliverables"},
+        {"label": "Privacy Model", "value": "Local-first, no account required"}
+      ],
+      "useCases": [
+        {
+          "title": "Students and Early-Career Professionals",
+          "description": "Build measurable cybersecurity progression with evidence-backed weekly execution and certification pathing."
+        },
+        {
+          "title": "Career Switchers",
+          "description": "Optimize certification investments using market relevance, role fit, and cost-to-value logic."
+        },
+        {
+          "title": "Global Opportunity Seekers",
+          "description": "Validate relocation or remote target markets using country-level demand and pathway intelligence."
+        },
+        {
+          "title": "Portfolio-Focused Learners",
+          "description": "Produce interview-relevant, evidence-driven outputs from daily execution and weekly planning."
+        }
+      ],
+      "toolLinks": [
+        {
+          "label": "Main Study OS",
+          "url": "/projects/study-os/index.html",
+          "description": "Execution engine for profile setup, 12-week planning, daily logging, KPI tracking, and adaptive recommendations."
+        },
+        {
+          "label": "Certification Intelligence Dashboard",
+          "url": "/projects/study-os/cert-intel/index.html",
+          "description": "Fast strategic decision support across country, role, stage, and budget filters."
+        },
+        {
+          "label": "Country Deep-Dive",
+          "url": "/projects/study-os/cert-intel/country.html",
+          "description": "Market validation with hiring signals, salary context, domain demand, and country-calibrated cert pathways."
+        },
+        {
+          "label": "Compare Tool",
+          "url": "/projects/study-os/cert-intel/compare.html",
+          "description": "Shortlist optimization for 2-4 certifications with role relevance, effort, cost, renewal, and country value context."
+        },
+        {
+          "label": "Weekly Brief Generator",
+          "url": "/projects/study-os/cert-intel/weekly-brief.html",
+          "description": "Tactical bridge from strategy to day-wise execution plan with time allocation and expected deliverables."
+        }
+      ],
+      "resourceLinks": [
+        {
+          "label": "Main App",
+          "url": "/projects/study-os/index.html",
+          "pathHint": "index.html",
+          "description": "Main Study OS web application"
+        },
+        {
+          "label": "Main App Logic",
+          "url": "/projects/study-os/app.js",
+          "pathHint": "app.js",
+          "description": "Operational execution and recommendation logic"
+        },
+        {
+          "label": "Main App Styling",
+          "url": "/projects/study-os/styles.css",
+          "pathHint": "styles.css",
+          "description": "Core visual styling for the Study OS"
+        },
+        {
+          "label": "Cert Dashboard",
+          "url": "/projects/study-os/cert-intel/index.html",
+          "pathHint": "cert-intel/index.html",
+          "description": "Market and role-aware cert ranking page"
+        },
+        {
+          "label": "Country Deep-Dive",
+          "url": "/projects/study-os/cert-intel/country.html",
+          "pathHint": "cert-intel/country.html",
+          "description": "Country-level demand and salary intelligence page"
+        },
+        {
+          "label": "Compare Tool",
+          "url": "/projects/study-os/cert-intel/compare.html",
+          "pathHint": "cert-intel/compare.html",
+          "description": "Side-by-side certification comparison page"
+        },
+        {
+          "label": "Weekly Brief Generator",
+          "url": "/projects/study-os/cert-intel/weekly-brief.html",
+          "pathHint": "cert-intel/weekly-brief.html",
+          "description": "Weekly tactical planning output page"
+        },
+        {
+          "label": "Cert Intelligence Engine",
+          "url": "/projects/study-os/cert-intel/app.js",
+          "pathHint": "cert-intel/app.js",
+          "description": "Dashboard, deep-dive, compare, and weekly-brief logic"
+        },
+        {
+          "label": "Certifications Dataset",
+          "url": "/projects/study-os/cert-intel/data/certifications.json",
+          "pathHint": "cert-intel/data/certifications.json",
+          "description": "Certification catalog and attributes"
+        },
+        {
+          "label": "Countries Dataset",
+          "url": "/projects/study-os/cert-intel/data/countries.json",
+          "pathHint": "cert-intel/data/countries.json",
+          "description": "Country-level market and context data"
+        },
+        {
+          "label": "Cert-Country Score Matrix",
+          "url": "/projects/study-os/cert-intel/data/cert_country_scores.json",
+          "pathHint": "cert-intel/data/cert_country_scores.json",
+          "description": "Country utility scores per certification"
+        },
+        {
+          "label": "Learning Paths Dataset",
+          "url": "/projects/study-os/cert-intel/data/learning_paths.json",
+          "pathHint": "cert-intel/data/learning_paths.json",
+          "description": "Role tracks, milestones, and weekly templates"
+        }
+      ],
+      "techStack": [
+        "HTML5",
+        "CSS3",
+        "JavaScript",
+        "LocalStorage",
+        "JSON Data Layer",
+        "Static Hosting",
+        "Vercel"
+      ],
+      "suggestedOutcomes": [
+        "Built a complete static intelligence product with zero backend dependency.",
+        "Implemented an operational plus strategic learning loop in a single workflow.",
+        "Created a maintainable data layer covering certifications, countries, and role pathways.",
+        "Improved reliability through fallback handling for stale state and missing score resilience.",
+        "Delivered a portfolio artifact directly useful to learners and career switchers."
+      ],
+      "knownLimitations": [
+        "Certification pricing and renewal details can change; quarterly refresh is required.",
+        "Country-level market data is strategic and high-level, not city-level granular in all cases.",
+        "Scores are relative ranking aids and not absolute hiring guarantees.",
+        "No user account sync across devices since the architecture is local-first by design."
+      ],
+      "roadmap": [
+        "Add city-level demand and salary overlays.",
+        "Add quarter-over-quarter trend snapshots for demand shifts.",
+        "Add CSV and Markdown export from compare and weekly-brief pages.",
+        "Add confidence scoring per recommendation based on data freshness.",
+        "Add optional backend sync for multi-device continuity."
+      ],
+      "githubUrl": "https://github.com/mk12002/cybersec_studies",
+      "liveUrl": "/projects/study-os/index.html",
+      "status": "active",
+      "type": "independent"
     }
   ]
 }

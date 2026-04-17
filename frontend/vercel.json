@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/projects/study-os",
+      "destination": "/projects/study-os/index.html"
+    },
+    {
+      "source": "/projects/study-os/(.*)",
+      "destination": "/projects/study-os/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

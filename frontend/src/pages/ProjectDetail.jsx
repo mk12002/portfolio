@@ -97,6 +97,60 @@ export default function ProjectDetail() {
                 </motion.a>
               )}
             </div>
+
+            {Array.isArray(project.toolLinks) && project.toolLinks.length > 0 && (
+              <div className="mt-6 p-4 bg-white/5 border border-white/10 rounded-xl">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-3">
+                  Public Tool Modules
+                </h3>
+                <div className="flex gap-3 flex-wrap mb-4">
+                  {project.toolLinks.map((tool) => (
+                    <motion.a
+                      key={tool.url}
+                      href={tool.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-vision/20 to-reasoning/20 border border-vision/30 rounded-lg hover:border-vision/60 transition-all"
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
+                    >
+                      <FaExternalLinkAlt /> {tool.label}
+                    </motion.a>
+                  ))}
+                </div>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {project.toolLinks.map((tool) => (
+                    <div key={`${tool.url}-desc`} className="p-3 rounded-lg bg-dark-900/50 border border-white/10">
+                      <p className="text-sm text-gray-200 font-medium mb-1">{tool.label}</p>
+                      <p className="text-xs text-gray-400">{tool.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {Array.isArray(project.resourceLinks) && project.resourceLinks.length > 0 && (
+              <div className="mt-4 p-4 bg-white/5 border border-white/10 rounded-xl">
+                <h3 className="text-sm font-semibold uppercase tracking-wide text-gray-300 mb-3">
+                  Project File Links
+                </h3>
+                <div className="grid md:grid-cols-2 gap-3">
+                  {project.resourceLinks.map((resource) => (
+                    <a
+                      key={resource.url}
+                      href={resource.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-3 rounded-lg bg-dark-900/50 border border-white/10 hover:border-vision/50 transition-colors"
+                    >
+                      <p className="text-sm text-gray-200 font-medium mb-1">{resource.label}</p>
+                      <p className="text-xs text-gray-500 mb-1">{resource.pathHint}</p>
+                      <p className="text-xs text-gray-400">{resource.description}</p>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {project.metric && (
@@ -1238,6 +1292,57 @@ export default function ProjectDetail() {
                       </div>
                     ))}
                   </div>
+                </section>
+              )}
+
+              {/* Suggested Outcomes */}
+              {Array.isArray(project.suggestedOutcomes) && project.suggestedOutcomes.length > 0 && (
+                <section className="mb-10">
+                  <h2 className="text-3xl font-bold mb-6 text-white border-b border-vision/30 pb-3">
+                    Suggested Outcomes
+                  </h2>
+                  <ul className="space-y-3">
+                    {project.suggestedOutcomes.map((outcome, i) => (
+                      <li key={i} className="flex items-start gap-3 text-gray-300">
+                        <span className="text-vision font-bold">-></span>
+                        <span>{outcome}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {/* Known Limitations */}
+              {Array.isArray(project.knownLimitations) && project.knownLimitations.length > 0 && (
+                <section className="mb-10">
+                  <h2 className="text-3xl font-bold mb-6 text-white border-b border-threat/30 pb-3">
+                    Known Limitations
+                  </h2>
+                  <ul className="space-y-3">
+                    {project.knownLimitations.map((limitation, i) => (
+                      <li key={i} className="flex items-start gap-3 text-gray-300">
+                        <span className="text-threat font-bold">!</span>
+                        <span>{limitation}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              )}
+
+              {/* Roadmap */}
+              {Array.isArray(project.roadmap) && project.roadmap.length > 0 && (
+                <section className="mb-10">
+                  <h2 className="text-3xl font-bold mb-6 text-white border-b border-audio/30 pb-3">
+                    Roadmap
+                  </h2>
+                  <ul className="space-y-3">
+                    {project.roadmap.map((item, i) => (
+                      <li key={i} className="flex items-start gap-3 text-gray-300">
+                        <span className="text-audio font-bold">+</span>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </section>
               )}
             </article>
