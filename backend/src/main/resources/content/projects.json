@@ -1,6 +1,20 @@
 {
   "projects": [
     {
+      "slug": "tara-email-security",
+      "title": "TARA: Agentic Email Security",
+      "category": "Security",
+      "categories": ["Security", "AI/ML"],
+      "tagline": "Production-grade cybersecurity platform neutralizing advanced email threats via multi-agent AI architecture",
+      "metric": "7 Agents · 30GB RAM Optimized",
+      "tags": ["Agentic AI", "LangGraph", "Zero-day Phishing", "Cybersecurity", "XGBoost", "TinyBERT", "FastAPI", "RabbitMQ"],
+      "description": "A sophisticated multi-agent AI architecture designed to neutralize polymorphic email threats without human intervention. Features a LangGraph-based Orchestrator, 7 independent AI agents, combinatorial threat correlation, and advanced XAI (Explainable AI) operating within a strict 30GB RAM constraint.",
+      "githubUrl": "https://github.com/mk12002/email_security",
+      "liveUrl": "",
+      "status": "active",
+      "type": "toolkit"
+    },
+    {
       "slug": "security-tools",
       "title": "Security Engineering Toolkit",
       "category": "Security",
