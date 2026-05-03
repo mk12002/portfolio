@@ -18,6 +18,7 @@ import { useProfile } from './hooks/useApi'
 const Home = lazy(() => import('./pages/Home'))
 const Resume = lazy(() => import('./pages/Resume'))
 const Projects = lazy(() => import('./pages/Projects'))
+const SecurityTools = lazy(() => import('./pages/SecurityTools'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
 const Posts = lazy(() => import('./pages/Posts'))
 const Experiences = lazy(() => import('./pages/Experiences'))
@@ -89,6 +90,7 @@ function App() {
                 <Route path="/" element={<PageTransition><Home /></PageTransition>} />
                 <Route path="/resume" element={<PageTransition><Resume /></PageTransition>} />
                 <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
+                <Route path="/projects/security-tools" element={<PageTransition><SecurityTools /></PageTransition>} />
                 <Route path="/projects/:slug" element={<PageTransition><ProjectDetail /></PageTransition>} />
                 <Route path="/posts" element={<PageTransition><Posts /></PageTransition>} />
                 <Route path="/experiences" element={<PageTransition><Experiences /></PageTransition>} />

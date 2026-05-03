@@ -6,9 +6,10 @@ import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { useProjects } from '../hooks/useApi'
 
-const categories = ['All', 'Vision', 'Audio', 'Reasoning', 'Legal AI', 'Healthcare', 'AgriTech']
+const categories = ['All', 'Security', 'Vision', 'Audio', 'Reasoning', 'Legal AI', 'Healthcare', 'AgriTech']
 
 const categoryColors = {
+  'Security': 'vision',
   'Vision': 'vision',
   'Audio': 'audio',
   'Reasoning': 'reasoning',

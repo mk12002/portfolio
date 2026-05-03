@@ -1,6 +1,20 @@
 {
   "projects": [
     {
+      "slug": "security-tools",
+      "title": "Security Engineering Toolkit",
+      "category": "Security",
+      "categories": ["Security"],
+      "tagline": "14 CLI-driven security assessment tools across AppSec, IAM, Cloud, and Detection Engineering",
+      "metric": "14 Tools · 4 Domains",
+      "tags": ["AppSec", "Blue Team", "Cloud Security", "IAM", "Python", "CLI", "Detection Engineering", "MITRE ATT&CK"],
+      "description": "A comprehensive, engineering-focused security toolkit demonstrating both offensive awareness and defensive maturity. 14 standalone CLI tools covering web security, identity and access, cloud misconfiguration, and detection engineering — each designed for CI pipelines, security audits, and interview demonstrations.",
+      "githubUrl": "https://github.com/mk12002/Security-tools",
+      "liveUrl": "",
+      "status": "active",
+      "type": "toolkit"
+    },
+    {
       "slug": "hybex-law",
       "title": "HybEx-Law: Hybrid Legal AI Engine",
       "category": "Legal AI",
