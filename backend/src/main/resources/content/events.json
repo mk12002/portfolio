@@ -1,6 +1,18 @@
 {
   "events": [
     {
+      "title": "ITC Infotech Leadership Presentations",
+      "year": 2026,
+      "description": "Recognized for outstanding technical contributions by being repeatedly shortlisted to present the Agentic Email Security architecture to executive leadership. Conducted comprehensive technical deep-dives and strategic overview sessions for the VP of Cybersecurity, VP of Workforce Management, Director of Learning & Development, President of Business Excellence, and the CHRO. Successfully articulated the business value of transitioning from traditional SOC alert mechanisms to autonomous multi-agent threat neutralization, demonstrating the ability to bridge complex AI-security concepts with overarching corporate strategy.",
+      "type": "presentation"
+    },
+    {
+      "title": "AI Impact-Elite Agents Hackathon 2026",
+      "year": 2026,
+      "description": "Spearheaded the end-to-end organization and execution of the 'AI Impact-Elite Agents' hackathon for the entire 2026 intern cohort at ITC Infotech. Designed the core technical theme around 'Agentic AI for Resource Management' to drive innovation in autonomous workflows. Served as a lead technical judge, evaluating complex multi-agent architectures developed by peers based on system viability, codebase scalability, and business impact. Mentored teams throughout the event, fostering a culture of collaborative engineering and establishing best practices for AI development.",
+      "type": "leadership"
+    },
+    {
       "title": "IEEE IC Hackathon 2.0 - Finals",
       "year": 2024,
       "description": "Qualified with AIR 7 out of 600 teams",

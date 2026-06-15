@@ -58,8 +58,8 @@ export default function Projects() {
     <>
       <SEO
         title="Projects | Mohit Kumar - Cybersecurity & AI/ML Projects Portfolio"
-        description="Explore cybersecurity and AI/ML projects: TARA Email Security (7-Agent System), Security Toolkit (14 Tools), HybEx-Law (98.5% F1 Legal AI), Parking Detection (98.99% mAP). PyTorch, Transformers, GNN."
-        keywords="Cybersecurity Projects, AI Security Projects, VAPT Tools, ML Projects, Multi-Agent Systems, PyTorch Projects, Deep Learning Portfolio, TARA, HybEx-Law, Security Toolkit"
+        description="Explore cybersecurity and AI/ML projects: Agentic Email Security (7-Agent System), Security Toolkit (14 Tools), HybEx-Law (98.5% F1 Legal AI), Parking Detection (98.99% mAP). PyTorch, Transformers, GNN."
+        keywords="Cybersecurity Projects, AI Security Projects, VAPT Tools, ML Projects, Multi-Agent Systems, PyTorch Projects, Deep Learning Portfolio, Agentic Email Security, HybEx-Law, Security Toolkit"
         pathname="/projects"
       />
       <div className="min-h-screen pt-24 pb-20">

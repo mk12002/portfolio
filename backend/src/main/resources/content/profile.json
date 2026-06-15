@@ -1,8 +1,8 @@
 {
   "name": "Mohit Kumar",
-  "tagline": "Cybersecurity Engineer | AI for Security & Security for AI",
-  "shortIntro": "Cybersecurity Engineer building AI-powered defense systems. Currently at ITC Infotech — engineering multi-agentic email threat neutralization, conducting VAPT, and running SOC operations. Deep ML background across adversarial robustness, multi-agent systems, and neural-symbolic reasoning.",
-  "longIntro": "I'm a Cybersecurity Engineer at ITC Infotech, focused on AI for Security and Security for AI. I specialize in building intelligent defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack. My security toolkit spans VAPT (Burp Suite, Nmap, sqlmap, Nessus), SOC operations (Splunk, Microsoft Sentinel, Defender EDR/XDR), cloud security (AWS Shared Responsibility, IAM hardening), and DevSecOps. Before pivoting to security, I built production-grade ML systems — Legal AI (HybEx-Law, 98.5% F1), multi-agent research platforms (Nexus), lung surgery digital twins (LUNA), and computer vision systems (98.99% mAP). I believe the future of security is AI-native — and the future of AI must be secure.",
+  "tagline": "Cybersecurity & AI Engineer",
+  "shortIntro": "Cybersecurity & AI Engineer building intelligent defense systems. Currently at ITC Infotech — engineering multi-agentic email threat neutralization, conducting VAPT, and running SOC operations. Deep ML background across adversarial robustness, multi-agent systems, and neural-symbolic reasoning.",
+  "longIntro": "I'm a Cybersecurity & AI Engineer at ITC Infotech, blending deep AI/ML expertise with security operations. I specialize in building intelligent defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack. My security toolkit spans VAPT (Burp Suite, Nmap, sqlmap, Nessus), SOC operations (Splunk, Microsoft Sentinel, Defender EDR/XDR), cloud security, and DevSecOps. Before pivoting to security, I built production-grade ML systems — Legal AI (HybEx-Law, 98.5% F1), multi-agent research platforms, and computer vision systems (98.99% mAP). I believe the future of security is AI-native — and the future of AI must be secure.",
   "interests": [
     "AI for Security",
     "Security for AI",
@@ -20,6 +20,7 @@
     "github": "https://github.com/mk12002",
     "linkedin": "https://www.linkedin.com/in/mohitkumar111/",
     "instagram": "https://www.instagram.com/mohit__kr_/",
+    "twitter": "https://x.com/mohitkr111",
     "email": "mailto:mohit.kr1103@gmail.com",
     "resumeDownload": "/resume/Mohit_Kumar.pdf"
   }

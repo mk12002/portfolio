@@ -1,13 +1,16 @@
+import { lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaGithub, FaLinkedin, FaInstagram, FaEnvelope, FaDownload, FaArrowRight, FaUser, FaShieldAlt, FaLock, FaBrain, FaRobot, FaEye, FaNetworkWired, FaProjectDiagram, FaSearch, FaTerminal, FaBug, FaServer } from 'react-icons/fa'
-import NodeGraph from '../components/NodeGraph'
+import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaEnvelope, FaDownload, FaArrowRight, FaUser, FaShieldAlt, FaLock, FaBrain, FaRobot, FaEye, FaNetworkWired, FaProjectDiagram, FaSearch, FaTerminal, FaBug, FaServer } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
-import TechStackGraph from '../components/TechStackGraph'
 import TerminalHero from '../components/TerminalHero'
 import StatsCounter from '../components/StatsCounter'
 import SEO from '../components/SEO'
 import { useProfile } from '../hooks/useApi'
+
+// Lazy load heavy Three.js components
+const NodeGraph = lazy(() => import('../components/NodeGraph'))
+const TechStackGraph = lazy(() => import('../components/TechStackGraph'))
 
 // Expertise area details for richer cards
 const expertiseDetails = {
@@ -26,7 +29,7 @@ const expertiseDetails = {
 const featuredProjects = [
   {
     slug: 'tara-email-security',
-    title: 'TARA: Agentic Email Security',
+    title: 'Agentic Email Security',
     description: 'Production-grade cybersecurity platform neutralizing advanced email threats via multi-agent AI architecture',
     metric: '7 Agents · 30GB RAM Optimized',
     tags: ['Agentic AI', 'LangGraph', 'Cybersecurity', 'XGBoost'],
@@ -100,7 +103,7 @@ function ProfilePicture({ profilePicture }) {
         {profilePicture ? (
           <img
             src={profilePicture}
-            alt="Mohit Kumar — Cybersecurity Engineer"
+            alt="Mohit Kumar — Cybersecurity & AI Engineer"
             className="w-full h-full object-cover"
           />
         ) : (
@@ -153,7 +156,7 @@ function AboutMe({ profile }) {
           viewport={{ once: true }}
         >
           <p className="text-gray-300 text-base leading-relaxed">
-            {profile?.longIntro || "I'm a Cybersecurity Engineer at ITC Infotech, focused on AI for Security and Security for AI. I specialize in building intelligent defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack."}
+            {profile?.longIntro || "I'm a Cybersecurity & AI Engineer at ITC Infotech, blending deep AI/ML expertise with security operations. I specialize in building intelligent defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack."}
           </p>
 
           <div className="p-5 bg-white/5 rounded-xl border border-white/10">
@@ -298,9 +301,9 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Mohit Kumar | Cybersecurity Engineer — AI for Security & Security for AI"
-        description="Cybersecurity Engineer specializing in AI for Security, Security for AI, VAPT, SOC Operations, and Multi-Agent Systems. Deep ML background in PyTorch, Transformers, and GNN."
-        keywords="Cybersecurity Engineer, AI for Security, Security for AI, Adversarial ML, VAPT, SOC, Threat Detection, PyTorch, ML Security, Mohit Kumar"
+        title="Mohit Kumar | Cybersecurity & AI Engineer"
+        description="Cybersecurity & AI Engineer specializing in AI for Security, Security for AI, VAPT, SOC Operations, and Multi-Agent Systems. Deep ML background in PyTorch, Transformers, and GNN."
+        keywords="Cybersecurity Engineer, AI Engineer, AI for Security, Security for AI, Adversarial ML, VAPT, SOC, Threat Detection, PyTorch, ML Security, Mohit Kumar"
         pathname="/"
       />
       <div className="min-h-screen pt-20 relative overflow-hidden">
@@ -337,7 +340,7 @@ export default function Home() {
                   animate={{ boxShadow: ['0 0 0 rgba(239, 68, 68, 0)', '0 0 20px rgba(239, 68, 68, 0.3)', '0 0 0 rgba(239, 68, 68, 0)'] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  Cybersecurity Engineer
+                  Cybersecurity & AI Engineer
                 </motion.span>
               </motion.div>
 
@@ -352,7 +355,7 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                {profile?.shortIntro || 'Cybersecurity Engineer building AI-powered defense systems. Currently at ITC Infotech — engineering multi-agentic email threat neutralization, conducting VAPT, and running SOC operations.'}
+                {profile?.shortIntro || 'Cybersecurity & AI Engineer building intelligent defense systems. Currently at ITC Infotech — engineering multi-agentic email threat neutralization, conducting VAPT, and running SOC operations.'}
               </motion.p>
 
               <motion.p
@@ -397,6 +400,7 @@ export default function Home() {
                 {[
                   { href: profile?.socialLinks?.github || '#', icon: FaGithub, color: 'hover:text-vision', label: 'GitHub' },
                   { href: profile?.socialLinks?.linkedin || '#', icon: FaLinkedin, color: 'hover:text-vision', label: 'LinkedIn' },
+                  { href: profile?.socialLinks?.twitter || 'https://x.com/mohitkr111', icon: FaTwitter, color: 'hover:text-vision', label: 'X (Twitter)' },
                   { href: profile?.socialLinks?.instagram || '#', icon: FaInstagram, color: 'hover:text-reasoning', label: 'Instagram' },
                   { href: profile?.socialLinks?.email || 'mailto:mohit.kr1103@gmail.com', icon: FaEnvelope, color: 'hover:text-audio', label: 'Email' }
                 ].map((social) => (
@@ -453,7 +457,15 @@ export default function Home() {
             </h2>
             <p className="text-gray-400">Click on a node to explore projects in that domain</p>
           </motion.div>
-          <NodeGraph />
+          <div className="h-[500px] w-full rounded-xl overflow-hidden border border-white/10 relative">
+            <Suspense fallback={
+              <div className="absolute inset-0 flex items-center justify-center bg-secondary/30">
+                <div className="w-10 h-10 border-4 border-vision border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            }>
+              <NodeGraph />
+            </Suspense>
+          </div>
         </section>
 
         {/* Tech Stack Neural Graph */}
@@ -481,8 +493,15 @@ export default function Home() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="h-[600px] w-full rounded-xl overflow-hidden border border-white/10 relative"
           >
-            <TechStackGraph />
+            <Suspense fallback={
+              <div className="absolute inset-0 flex items-center justify-center bg-secondary/30">
+                <div className="w-10 h-10 border-4 border-reasoning border-t-transparent rounded-full animate-spin"></div>
+              </div>
+            }>
+              <TechStackGraph />
+            </Suspense>
           </motion.div>
         </section>
 

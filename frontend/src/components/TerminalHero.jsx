@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 
 const terminalLines = [
     { type: 'command', text: 'root@kali:~# whoami' },
-    { type: 'result', text: '→ Mohit Kumar — Cybersecurity Engineer' },
+    { type: 'result', text: '→ Mohit Kumar — Cybersecurity & AI Engineer' },
     { type: 'command', text: 'root@kali:~# cat /etc/mission' },
     { type: 'result', text: '→ AI for Security. Security for AI.' },
     { type: 'command', text: 'root@kali:~# nmap -sV --script=vuln portfolio' },

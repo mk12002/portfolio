@@ -1,6 +1,28 @@
 {
   "certificates": [
     {
+      "name": "Machine Learning Specialization",
+      "issuer": "DeepLearning.AI • Stanford University",
+      "category": "Data Science",
+      "icon": "brain",
+      "credentialId": "AAXPQV21SC8M",
+      "earnedDate": "March 2026",
+      "link": "https://www.coursera.org/account/accomplishments/specialization/AAXPQV21SC8M",
+      "description": "Foundational Machine Learning program covering supervised learning (linear regression, logistic regression, neural networks, decision trees, random forests, and boosted trees), unsupervised learning (clustering, dimensionality reduction, recommender systems), and reinforcement learning. Emphasizes building production-ready ML systems.",
+      "skills": ["Machine Learning", "Neural Networks", "Supervised Learning", "Unsupervised Learning", "Reinforcement Learning", "Python"]
+    },
+    {
+      "name": "Python Data Structures",
+      "issuer": "University of Michigan",
+      "category": "Programming",
+      "icon": "python",
+      "credentialId": "HB5ZGUHXPTD4",
+      "earnedDate": "April 2026",
+      "link": "https://www.coursera.org/account/accomplishments/verify/HB5ZGUHXPTD4",
+      "description": "Introduction to the core data structures of the Python programming language. Explores how to use the Python built-in data structures such as lists, dictionaries, and tuples to perform increasingly complex data analysis.",
+      "skills": ["Python Programming", "Data Structures", "Tuple", "List", "Dictionary"]
+    },
+    {
       "name": "IBM Cybersecurity Analyst Professional Certificate",
       "issuer": "IBM (Delivered via Coursera)",
       "category": "Cybersecurity",

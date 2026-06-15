@@ -2,7 +2,7 @@
   "projects": [
     {
       "slug": "tara-email-security",
-      "title": "TARA: Agentic Email Security",
+      "title": "Agentic Email Security",
       "category": "Cybersecurity",
       "categories": ["Cybersecurity", "AI/ML"],
       "tagline": "Production-grade cybersecurity platform neutralizing advanced email threats via multi-agent AI architecture",

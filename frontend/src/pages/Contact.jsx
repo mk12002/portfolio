@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'react-toastify'
-import { FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa'
+import { FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaGithub, FaLinkedin, FaInstagram, FaTwitter } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import { useContactInfo, submitContactForm } from '../hooks/useApi'
 
@@ -155,6 +155,16 @@ export default function Contact() {
                 >
                   <FaLinkedin size={24} />
                 </a>
+                <motion.a
+                  href={contactInfo?.twitter || "https://x.com/mohitkr111"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all border border-white/10 hover:border-vision/30"
+                  whileHover={{ scale: 1.1, rotate: 5 }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <FaTwitter size={20} />
+                </motion.a>
                 <a
                   href="https://www.instagram.com/mohit__kr_/"
                   target="_blank"

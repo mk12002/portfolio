@@ -36,8 +36,8 @@ export default function Resume() {
   return (
     <>
       <SEO 
-        title="Resume | Mohit Kumar - Cybersecurity Engineer CV & Skills"
-        description="Mohit Kumar's professional resume: Cybersecurity Engineer specializing in AI for Security, VAPT, SOC Operations. Skilled in Burp Suite, Nmap, Splunk, PyTorch, Transformers. Download CV PDF."
+        title="Resume | Mohit Kumar - Cybersecurity & AI Engineer CV & Skills"
+        description="Mohit Kumar's professional resume: Cybersecurity & AI Engineer specializing in AI for Security, VAPT, SOC Operations. Skilled in Burp Suite, Nmap, Splunk, PyTorch, Transformers. Download CV PDF."
         keywords="Cybersecurity Engineer Resume, AI Security CV, VAPT, SOC Analyst, Burp Suite, Nmap, Splunk, PyTorch Developer, ML Security Engineer"
         pathname="/resume"
       />

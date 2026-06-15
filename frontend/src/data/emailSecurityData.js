@@ -1,5 +1,5 @@
 export const heroData = {
-  title: "TARA: Agentic Email Security",
+  title: "Agentic Email Security",
   subtitle: "A production-grade cybersecurity platform neutralizing advanced, polymorphic email threats via a highly distributed multi-agent AI architecture.",
   stats: [
     { label: "AI Agents", value: "7" },
