@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaGithub, FaLinkedin, FaEnvelope, FaCoffee } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaEnvelope, FaCoffee, FaTwitter } from 'react-icons/fa'
 
 export default function Footer() {
   return (
@@ -40,6 +40,10 @@ export default function Footer() {
               <a href="https://www.linkedin.com/in/mohitkumar111/" target="_blank" rel="noopener noreferrer"
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all">
                 <FaLinkedin size={20} />
+              </a>
+              <a href="https://x.com/mohitkr111" target="_blank" rel="noopener noreferrer"
+                className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all border border-transparent hover:border-vision/30">
+                <FaTwitter size={20} />
               </a>
               <a href="mailto:mohit.kr1103@gmail.com"
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-audio hover:bg-white/10 transition-all">
