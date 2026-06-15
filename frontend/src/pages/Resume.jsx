@@ -1,10 +1,11 @@
 import { motion } from 'framer-motion'
-import { FaDownload, FaGraduationCap, FaCode, FaCloud, FaTools, FaBrain, FaTrophy, FaLanguage } from 'react-icons/fa'
+import { FaDownload, FaGraduationCap, FaCode, FaCloud, FaTools, FaBrain, FaTrophy, FaLanguage, FaShieldAlt } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { useResume } from '../hooks/useApi'
 
 const skillIcons = {
+  cybersecurity: FaShieldAlt,
   machineLearning: FaBrain,
   frameworks: FaCode,
   tools: FaTools,
@@ -13,11 +14,12 @@ const skillIcons = {
 }
 
 const skillColors = {
-  machineLearning: 'vision',
-  frameworks: 'reasoning',
-  tools: 'audio',
-  cloud: 'vision',
-  languages: 'reasoning'
+  cybersecurity: 'vision',
+  machineLearning: 'reasoning',
+  frameworks: 'audio',
+  tools: 'vision',
+  cloud: 'reasoning',
+  languages: 'audio'
 }
 
 export default function Resume() {
@@ -34,9 +36,9 @@ export default function Resume() {
   return (
     <>
       <SEO 
-        title="Resume | Mohit Kumar - ML Systems Engineer CV & Skills"
-        description="Mohit Kumar's professional resume: ML Systems Engineer with expertise in PyTorch (95%), Python (98%), Transformers, GNN, Computer Vision. Download CV PDF."
-        keywords="ML Engineer Resume, Machine Learning CV, PyTorch Developer, Python Developer, AI Engineer CV, Deep Learning Resume, Computer Vision Engineer, NLP Engineer"
+        title="Resume | Mohit Kumar - Cybersecurity Engineer CV & Skills"
+        description="Mohit Kumar's professional resume: Cybersecurity Engineer specializing in AI for Security, VAPT, SOC Operations. Skilled in Burp Suite, Nmap, Splunk, PyTorch, Transformers. Download CV PDF."
+        keywords="Cybersecurity Engineer Resume, AI Security CV, VAPT, SOC Analyst, Burp Suite, Nmap, Splunk, PyTorch Developer, ML Security Engineer"
         pathname="/resume"
       />
       <div className="min-h-screen pt-24 pb-20">

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { FaBriefcase, FaMapMarkerAlt, FaCalendar, FaCertificate, FaTimes } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
+import SEO from '../components/SEO'
 import { useExperiences } from '../hooks/useApi'
 
 export default function Experiences() {
@@ -26,6 +27,13 @@ export default function Experiences() {
   }
 
   return (
+    <>
+      <SEO
+        title="Experience | Mohit Kumar - Cybersecurity & ML Research Internships"
+        description="Professional experience: Cybersecurity Intern at ITC Infotech, Research Intern at Samsung PRISM, Shantou University, Annam.AI, and CCPS VIT Chennai."
+        keywords="Cybersecurity Intern, ITC Infotech, Samsung PRISM, Research Intern, ML Experience, Security Operations, VAPT"
+        pathname="/experiences"
+      />
     <div className="min-h-screen pt-24 pb-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -36,7 +44,7 @@ export default function Experiences() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Work <span className="gradient-text">Experience</span>
           </h1>
-          <p className="text-gray-400">Research internships and professional experience in ML/AI</p>
+          <p className="text-gray-400">Security internships, research, and professional experience in cybersecurity & AI/ML</p>
         </motion.div>
 
         <div className="flex flex-wrap gap-2 justify-center mb-8">
@@ -195,5 +203,6 @@ export default function Experiences() {
         </AnimatePresence>
       </div>
     </div>
+    </>
   )
 }

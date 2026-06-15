@@ -14,7 +14,7 @@ export default function Footer() {
               <span className="font-semibold text-lg">Mohit Kumar</span>
             </div>
             <p className="text-gray-400 text-sm">
-              Cybersecurity Engineer exploring AI for Security & Security for AI. Deep ML background across vision, reasoning, and multi-agent systems.
+              Cybersecurity Engineer building AI-powered defense systems. Deep ML background across adversarial robustness, multi-agent systems, and threat detection.
             </p>
           </div>
 

@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 const terminalLines = [
     { type: 'command', text: 'root@kali:~# whoami' },
-    { type: 'result', text: '→ Mohit Kumar — Cybersecurity × ML Engineer' },
-    { type: 'command', text: 'root@kali:~# cat mission.txt' },
+    { type: 'result', text: '→ Mohit Kumar — Cybersecurity Engineer' },
+    { type: 'command', text: 'root@kali:~# cat /etc/mission' },
     { type: 'result', text: '→ AI for Security. Security for AI.' },
-    { type: 'command', text: 'root@kali:~# nmap -sV portfolio' },
-    { type: 'result', text: '→ 12+ projects | 4 publications | 15+ certifications' },
+    { type: 'command', text: 'root@kali:~# nmap -sV --script=vuln portfolio' },
+    { type: 'result', text: '→ PORT 443/tcp OPEN — 12+ projects | 4 publications | 15+ certs' },
+    { type: 'command', text: 'root@kali:~# cat focus.conf' },
+    { type: 'result', text: '→ [ACTIVE] VAPT | SOC Ops | Adversarial ML | Multi-Agent Threat Systems' },
 ]
 
 export default function TerminalHero() {
@@ -75,7 +77,7 @@ export default function TerminalHero() {
                 </div>
 
                 {/* Terminal body */}
-                <div className="p-5 font-mono text-sm leading-relaxed min-h-[200px]">
+                <div className="p-5 font-mono text-sm leading-relaxed min-h-[240px]">
                     {/* Already typed lines */}
                     {displayedLines.map((line, idx) => (
                         <div

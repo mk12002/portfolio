@@ -6,16 +6,13 @@ import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { useProjects } from '../hooks/useApi'
 
-const categories = ['All', 'Security', 'Vision', 'Audio', 'Reasoning', 'Legal AI', 'Healthcare', 'AgriTech']
+const categories = ['All', 'Cybersecurity', 'AI/ML', 'Research', 'Full-Stack']
 
 const categoryColors = {
-  'Security': 'vision',
-  'Vision': 'vision',
-  'Audio': 'audio',
-  'Reasoning': 'reasoning',
-  'Legal AI': 'reasoning',
-  'Healthcare': 'vision',
-  'AgriTech': 'audio'
+  'Cybersecurity': 'vision',
+  'AI/ML': 'reasoning',
+  'Research': 'audio',
+  'Full-Stack': 'vision'
 }
 
 export default function Projects() {
@@ -60,9 +57,9 @@ export default function Projects() {
   return (
     <>
       <SEO
-        title="Projects | Mohit Kumar - ML & AI Projects Portfolio"
-        description="Explore ML/AI projects: HybEx-Law (95% F1 Legal AI), Nexus (75% reduction Multi-Agent), Parking Detection (98.99% mAP Computer Vision). PyTorch, Transformers, GNN implementations."
-        keywords="ML Projects, AI Projects, Computer Vision Projects, NLP Projects, Legal AI, Multi-Agent Systems, PyTorch Projects, Deep Learning Portfolio, HybEx-Law, Nexus, Parking Detection"
+        title="Projects | Mohit Kumar - Cybersecurity & AI/ML Projects Portfolio"
+        description="Explore cybersecurity and AI/ML projects: TARA Email Security (7-Agent System), Security Toolkit (14 Tools), HybEx-Law (98.5% F1 Legal AI), Parking Detection (98.99% mAP). PyTorch, Transformers, GNN."
+        keywords="Cybersecurity Projects, AI Security Projects, VAPT Tools, ML Projects, Multi-Agent Systems, PyTorch Projects, Deep Learning Portfolio, TARA, HybEx-Law, Security Toolkit"
         pathname="/projects"
       />
       <div className="min-h-screen pt-24 pb-20">
@@ -76,7 +73,7 @@ export default function Projects() {
               My <span className="gradient-text">Projects</span>
             </h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Explore my work across vision, audio, reasoning, and hybrid AI systems
+              Cybersecurity tools, AI/ML systems, and research across security, intelligence, and automation
             </p>
           </motion.div>
 

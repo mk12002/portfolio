@@ -1,10 +1,10 @@
 {
   "name": "Mohit Kumar",
-  "title": "Machine Learning Engineer | Electronics and Computer Engineering @ VIT Chennai",
+  "title": "Cybersecurity Engineer | AI for Security & Security for AI | VIT Chennai",
   "email": "mohit.kr1103@gmail.com",
   "phone": "9973395247",
   "location": "Bengaluru, India",
-  "summary": "B.Tech Electronics and Computer Engineering student specializing in hybrid legal AI, multi-agent systems, digital twin prototyping, applied machine learning, computer vision, audio processing, and intelligent automation. Experienced in building production-grade AI systems with research internships at Shantou University, Samsung PRISM, Annam.AI, and Center for Cyber Physical Systems (CCPS) and Centre for Healthcare Advancement, Innovation and Research (CHAIR) at  VIT Chennai.",
+  "summary": "Cybersecurity Engineer specializing in AI-powered defense systems, VAPT, and SOC operations. Currently building multi-agentic email threat neutralization at ITC Infotech. Deep ML background with 4 research publications, expertise in adversarial robustness, multi-agent systems, and neural-symbolic reasoning. Production experience across PyTorch, Transformers, GNN, and computer vision. Research internships at Shantou University, Samsung PRISM, Annam.AI, CCPS and CHAIR at VIT Chennai.",
   "education": [
     {
       "degree": "B.Tech in Electronics and Computer Engineering",
@@ -29,6 +29,22 @@
     }
   ],
   "skills": {
+    "cybersecurity": [
+      "Burp Suite",
+      "Nmap",
+      "sqlmap",
+      "Nessus",
+      "Metasploit",
+      "Wireshark",
+      "Splunk",
+      "Microsoft Sentinel",
+      "Defender EDR/XDR",
+      "OWASP Top 10",
+      "VAPT",
+      "SOC Operations",
+      "Incident Response",
+      "Cloud Security (AWS)"
+    ],
     "machineLearning": [
       "Neural Networks",
       "Transformers",

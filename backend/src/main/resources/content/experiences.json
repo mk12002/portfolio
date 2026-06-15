@@ -5,7 +5,7 @@
       "organization": "ITC Infotech",
       "role": "Cybersecurity Intern",
       "duration": "February 2026 – Present",
-      "location": "Bnagalore, India (On-Site)",
+      "location": "Bangalore, India (On-Site)",
       "project": "Email Security Evolution",
       "problem": "Combat sophisticated email-borne exploits that evade traditional security controls, requiring advanced threat intelligence and behavioral analysis.",
       "approach": "Completed intensive cybersecurity training covering OSI model, TCP/IP, DMZ design, VAPT (Burp Suite, Nmap, sqlmap, Nessus), OWASP Top 10 remediation (SQLi, XSS, Broken Access Control), SOC operations (Microsoft Sentinel, Splunk SPL, Defender EDR/XDR), AWS Shared Responsibility Model, MFA/SSO (SAML/OAuth 2.0), DevSecOps Shift-Left practices, and OS hardening. Engineering a multi-agentic AI system to autonomously orchestrate real-time threat intelligence and behavioral analysis.",

@@ -1,19 +1,19 @@
 {
   "name": "Mohit Kumar",
-  "tagline": "Cybersecurity Engineer × ML — AI for Security & Security for AI",
-  "shortIntro": "Cybersecurity intern at ITC Infotech working at the intersection of AI and security. I build ML-powered defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack.",
-  "longIntro": "I'm a Cybersecurity Intern at ITC Infotech, focused on AI for Security and Security for AI. My journey started in deep ML — building Legal AI systems (HybEx-Law), multi-agent research platforms (Nexus), lung surgery digital twins (LUNA), vision-based parking systems, and healthcare audio pipelines. Now I'm applying that ML depth to cybersecurity: conducting VAPT with Burp Suite, Nmap, and sqlmap, running SOC operations with Splunk and Microsoft Sentinel, hardening cloud environments on AWS, and engineering a multi-agentic AI system for autonomous email threat neutralization. I believe the future of security is AI-native — and the future of AI must be secure.",
+  "tagline": "Cybersecurity Engineer | AI for Security & Security for AI",
+  "shortIntro": "Cybersecurity Engineer building AI-powered defense systems. Currently at ITC Infotech — engineering multi-agentic email threat neutralization, conducting VAPT, and running SOC operations. Deep ML background across adversarial robustness, multi-agent systems, and neural-symbolic reasoning.",
+  "longIntro": "I'm a Cybersecurity Engineer at ITC Infotech, focused on AI for Security and Security for AI. I specialize in building intelligent defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack. My security toolkit spans VAPT (Burp Suite, Nmap, sqlmap, Nessus), SOC operations (Splunk, Microsoft Sentinel, Defender EDR/XDR), cloud security (AWS Shared Responsibility, IAM hardening), and DevSecOps. Before pivoting to security, I built production-grade ML systems — Legal AI (HybEx-Law, 98.5% F1), multi-agent research platforms (Nexus), lung surgery digital twins (LUNA), and computer vision systems (98.99% mAP). I believe the future of security is AI-native — and the future of AI must be secure.",
   "interests": [
     "AI for Security",
     "Security for AI",
     "Cybersecurity",
-    "Machine Learning",
     "Adversarial ML",
     "Threat Detection",
     "Multi-Agent Systems",
+    "Machine Learning",
     "Computer Vision",
-    "Healthcare AI",
-    "Neural-Symbolic Reasoning"
+    "Deep Learning",
+    "NLP"
   ],
   "profilePicture": "/assets/profile.jpg",
   "socialLinks": {

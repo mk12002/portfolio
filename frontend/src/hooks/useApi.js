@@ -1,176 +1,91 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import {
+  fallbackProfile,
+  fallbackResume,
+  fallbackProjects,
+  fallbackExperiences,
+  fallbackCertificates,
+  fallbackEvents,
+  fallbackPublications,
+  fallbackContactInfo,
+  fallbackBuyMeACoffee,
+  fallbackReads,
+  fallbackPosts,
+} from '../data/fallbackData'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:8080/api',
   headers: {
     'Content-Type': 'application/json'
-  }
+  },
+  timeout: 5000 // 5-second timeout — fall back to static data if exceeded
 })
 
-export function useProfile() {
+/**
+ * Generic hook: tries API, falls back to static data on error/timeout.
+ * Guarantees the site always renders even without the backend.
+ */
+function useApiWithFallback(endpoint, fallbackData) {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    api.get('/profile')
+    api.get(endpoint)
       .then(res => setData(res.data))
-      .catch(err => setError(err))
+      .catch(() => {
+        // Silently fall back — no console errors for recruiters
+        setData(fallbackData)
+      })
       .finally(() => setLoading(false))
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   return { data, loading, error }
+}
+
+export function useProfile() {
+  return useApiWithFallback('/profile', fallbackProfile)
 }
 
 export function useResume() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/resume')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/resume', fallbackResume)
 }
 
 export function useProjects() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/projects')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/projects', fallbackProjects)
 }
 
 export function useExperiences() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/experiences')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/experiences', fallbackExperiences)
 }
 
 export function useCertificates() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/certificates')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/certificates', fallbackCertificates)
 }
 
 export function useEvents() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/events')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/events', fallbackEvents)
 }
 
 export function usePublications() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/publications')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/publications', fallbackPublications)
 }
 
 export function useContactInfo() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/contact-info')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/contact-info', fallbackContactInfo)
 }
 
 export function useBuyMeACoffee() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/buymeacoffee')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/buymeacoffee', fallbackBuyMeACoffee)
 }
 
 export function useReads() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/reads')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/reads', fallbackReads)
 }
 
 export function usePosts() {
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    api.get('/posts')
-      .then(res => setData(res.data))
-      .catch(err => setError(err))
-      .finally(() => setLoading(false))
-  }, [])
-
-  return { data, loading, error }
+  return useApiWithFallback('/posts', fallbackPosts)
 }
 
 export async function submitContactForm(data) {

@@ -26,9 +26,9 @@ function CountUp({ end, duration = 2, suffix = '', isInView }) {
 }
 
 const stats = [
-    { label: 'Projects Built', icon: FaProjectDiagram, value: 12, suffix: '+', color: '#00ff41' },
-    { label: 'Security Tools', icon: FaTools, value: 6, suffix: '+', color: '#3b82f6' },
-    { label: 'Publications', icon: FaFileAlt, value: 4, suffix: '', color: '#ef4444' },
+    { label: 'Security & AI Projects', icon: FaProjectDiagram, value: 12, suffix: '+', color: '#00ff41' },
+    { label: 'Security Tools Built', icon: FaTools, value: 6, suffix: '+', color: '#3b82f6' },
+    { label: 'Research Papers', icon: FaFileAlt, value: 4, suffix: '', color: '#ef4444' },
     { label: 'Certifications', icon: FaCertificate, value: 15, suffix: '+', color: '#fbbf24' },
 ]
 
