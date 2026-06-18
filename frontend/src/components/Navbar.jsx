@@ -3,20 +3,38 @@ import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiMenu, HiX } from 'react-icons/hi'
 import { FaChevronDown } from 'react-icons/fa'
+import { FiSun, FiMoon } from 'react-icons/fi'
+import { useTheme } from '../contexts/ThemeContext'
+
+function ThemeToggle({ className = '' }) {
+  const { isDark, toggleMode } = useTheme()
+  return (
+    <button
+      onClick={toggleMode}
+      aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+      title={isDark ? 'Light mode' : 'Dark mode'}
+      className={`p-2 rounded-lg text-gray-400 hover:text-accent hover:bg-white/5 transition-colors ${className}`}
+    >
+      {isDark ? <FiSun size={18} /> : <FiMoon size={18} />}
+    </button>
+  )
+}
 
 const primaryLinks = [
   { name: 'Home', path: '/' },
-  { name: 'Resume', path: '/resume' },
   { name: 'Projects', path: '/projects' },
+  { name: 'Playground', path: '/playground' },
   { name: 'Experience', path: '/experiences' },
-  { name: 'Certificates', path: '/certificates' },
-  { name: 'Publications', path: '/publications' },
   { name: 'Blog', path: '/posts' },
+  { name: 'Resume', path: '/resume' },
   { name: 'Contact', path: '/contact' },
 ]
 
 const moreLinks = [
+  { name: 'Certificates', path: '/certificates' },
+  { name: 'Publications', path: '/publications' },
   { name: 'Reads', path: '/reads' },
+  { name: 'Uses', path: '/uses' },
   { name: 'Events', path: '/events' },
   { name: 'Support', path: '/support' },
 ]
@@ -142,12 +160,17 @@ export default function Navbar() {
             </div>
           </div>
 
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"
-          >
-            {isOpen ? <HiX size={24} /> : <HiMenu size={24} />}
-          </button>
+          <div className="flex items-center gap-1">
+            <ThemeToggle />
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={isOpen}
+              className="lg:hidden p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10"
+            >
+              {isOpen ? <HiX size={24} /> : <HiMenu size={24} />}
+            </button>
+          </div>
         </div>
       </div>
 

@@ -1,0 +1,211 @@
+{
+  "books": [
+    {
+      "title": "Deep Learning",
+      "author": "Ian Goodfellow, Yoshua Bengio, Aaron Courville",
+      "category": "Academic/Technical",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Foundational deep learning textbook covering neural networks, optimization, and practical applications."
+    },
+    {
+      "title": "Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow",
+      "author": "Aurélien Géron",
+      "category": "Academic/Technical",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Practical guide to machine learning with real-world examples and production tips."
+    },
+    {
+      "title": "Pattern Recognition and Machine Learning",
+      "author": "Christopher Bishop",
+      "category": "Academic/Technical",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Comprehensive coverage of statistical pattern recognition and machine learning fundamentals."
+    },
+    {
+      "title": "Designing Data-Intensive Applications",
+      "author": "Martin Kleppmann",
+      "category": "Academic/Technical",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Essential reading for understanding distributed systems and data architecture."
+    },
+    {
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "category": "Academic/Technical",
+      "status": "completed",
+      "rating": 4,
+      "notes": "Principles for writing maintainable and readable code."
+    },
+    {
+      "title": "The Pragmatic Programmer",
+      "author": "David Thomas, Andrew Hunt",
+      "category": "Academic/Technical",
+      "status": "reading",
+      "rating": null,
+      "notes": "Currently reading - timeless advice for software development."
+    },
+    {
+      "title": "Artificial Intelligence: A Modern Approach",
+      "author": "Stuart Russell, Peter Norvig",
+      "category": "Academic/Technical",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Comprehensive textbook covering the breadth of AI from search algorithms to neural networks."
+    },
+    {
+      "title": "The Master Algorithm",
+      "author": "Pedro Domingos",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 4,
+      "notes": "Accessible overview of the five tribes of machine learning and the quest for a universal learner."
+    },
+    {
+      "title": "Life 3.0: Being Human in the Age of Artificial Intelligence",
+      "author": "Max Tegmark",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 4,
+      "notes": "Explores the future of AI and its impact on consciousness, work, and society."
+    },
+    {
+      "title": "Superintelligence: Paths, Dangers, Strategies",
+      "author": "Nick Bostrom",
+      "category": "Non-Fiction",
+      "status": "reading",
+      "rating": null,
+      "notes": "Examines the existential risks and challenges of artificial superintelligence."
+    },
+    {
+      "title": "The Code Breaker",
+      "author": "Walter Isaacson",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 4,
+      "notes": "Biography of Jennifer Doudna and the story of CRISPR gene editing."
+    },
+    {
+      "title": "Atomic Habits",
+      "author": "James Clear",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Practical framework for building good habits and breaking bad ones."
+    },
+    {
+      "title": "Thinking, Fast and Slow",
+      "author": "Daniel Kahneman",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Groundbreaking insights into human decision-making and cognitive biases."
+    },
+    {
+      "title": "The Lean Startup",
+      "author": "Eric Ries",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 4,
+      "notes": "Methodology for developing businesses and products through validated learning."
+    },
+    {
+      "title": "Zero to One",
+      "author": "Peter Thiel",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 4,
+      "notes": "Notes on startups and building the future through innovation."
+    },
+    {
+      "title": "Sapiens: A Brief History of Humankind",
+      "author": "Yuval Noah Harari",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Sweeping narrative of human evolution, culture, and civilization."
+    },
+    {
+      "title": "1984",
+      "author": "George Orwell",
+      "category": "Fiction",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Classic dystopian novel about surveillance, totalitarianism, and truth."
+    },
+    {
+      "title": "Neuromancer",
+      "author": "William Gibson",
+      "category": "Fiction",
+      "status": "completed",
+      "rating": 4,
+      "notes": "Cyberpunk classic that defined the genre and predicted the internet age."
+    },
+    {
+      "title": "The Phoenix Project",
+      "author": "Gene Kim, Kevin Behr, George Spafford",
+      "category": "Fiction",
+      "status": "reading",
+      "rating": null,
+      "notes": "Novel about IT, DevOps, and helping businesses win through technology."
+    },
+    {
+      "title": "Algorithms to Live By",
+      "author": "Brian Christian, Tom Griffiths",
+      "category": "Non-Fiction",
+      "status": "completed",
+      "rating": 5,
+      "notes": "Applies computer science concepts to everyday life decisions."
+    }
+  ],
+  "papers": [
+    {
+      "title": "Attention Is All You Need",
+      "authors": "Vaswani et al.",
+      "year": 2017,
+      "venue": "NeurIPS",
+      "category": "NLP/Transformers",
+      "link": "https://arxiv.org/abs/1706.03762",
+      "notes": "The foundational transformer paper that revolutionized NLP and beyond."
+    },
+    {
+      "title": "BERT: Pre-training of Deep Bidirectional Transformers",
+      "authors": "Devlin et al.",
+      "year": 2018,
+      "venue": "NAACL",
+      "category": "NLP/Transformers",
+      "link": "https://arxiv.org/abs/1810.04805",
+      "notes": "Bidirectional pre-training for language understanding."
+    },
+    {
+      "title": "You Only Look Once: Unified, Real-Time Object Detection",
+      "authors": "Redmon et al.",
+      "year": 2016,
+      "venue": "CVPR",
+      "category": "Computer Vision",
+      "link": "https://arxiv.org/abs/1506.02640",
+      "notes": "Revolutionary approach to real-time object detection."
+    },
+    {
+      "title": "Generative Adversarial Networks",
+      "authors": "Goodfellow et al.",
+      "year": 2014,
+      "venue": "NeurIPS",
+      "category": "Generative Models",
+      "link": "https://arxiv.org/abs/1406.2661",
+      "notes": "Introduced the GAN framework for generative modeling."
+    },
+    {
+      "title": "Wav2Vec 2.0: A Framework for Self-Supervised Learning of Speech Representations",
+      "authors": "Baevski et al.",
+      "year": 2020,
+      "venue": "NeurIPS",
+      "category": "Audio/Speech",
+      "link": "https://arxiv.org/abs/2006.11477",
+      "notes": "Self-supervised learning for speech recognition."
+    }
+  ]
+}

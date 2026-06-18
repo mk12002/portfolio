@@ -45,9 +45,9 @@ export default function BuyMeCoffee() {
                 whileHover={{ scale: 1.05, rotate: 2 }}
                 className="relative inline-block"
               >
-                <div className="w-64 h-64 mx-auto bg-white rounded-2xl p-4 shadow-lg shadow-audio/20">
+                <div className="w-64 h-64 mx-auto bg-[#ffffff] rounded-2xl p-4 shadow-lg shadow-audio/20">
                   {coffeeData?.qrCodeImage ? (
-                    <img 
+                    <img loading="lazy" decoding="async"
                       src={coffeeData.qrCodeImage} 
                       alt="Payment QR Code" 
                       className="w-full h-full object-contain rounded-lg"

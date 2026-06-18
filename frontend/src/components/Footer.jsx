@@ -33,23 +33,23 @@ export default function Footer() {
           <div>
             <h3 className="font-semibold mb-4 text-reasoning">Connect</h3>
             <div className="flex space-x-4">
-              <a href="https://github.com/mk12002" target="_blank" rel="noopener noreferrer"
+              <a href="https://github.com/mk12002" target="_blank" rel="noopener noreferrer" aria-label="GitHub"
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all">
                 <FaGithub size={20} />
               </a>
-              <a href="https://www.linkedin.com/in/mohitkumar111/" target="_blank" rel="noopener noreferrer"
+              <a href="https://www.linkedin.com/in/mohitkumar111/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all">
                 <FaLinkedin size={20} />
               </a>
-              <a href="https://x.com/mohitkr111" target="_blank" rel="noopener noreferrer"
+              <a href="https://x.com/mohitkr111" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)"
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all border border-transparent hover:border-vision/30">
                 <FaTwitter size={20} />
               </a>
-              <a href="mailto:mohit.kr1103@gmail.com"
+              <a href="mailto:mohit.kr1103@gmail.com" aria-label="Email"
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-audio hover:bg-white/10 transition-all">
                 <FaEnvelope size={20} />
               </a>
-              <Link to="/support"
+              <Link to="/support" aria-label="Support me"
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-reasoning hover:bg-white/10 transition-all">
                 <FaCoffee size={20} />
               </Link>

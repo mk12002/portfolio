@@ -20,21 +20,37 @@ const SECURITY_PUNS = [
 ]
 
 const COMMANDS = {
-  help: "Available commands: help, puns, scan, nmap, exploit, defend, whois, ctf, clear, exit",
+  help: "Commands: about, skills, projects, playground, blog, resume, experience, contact, uses, ctf  ·  fun: puns, scan, nmap, whoami, matrix  ·  clear, exit",
   puns: "Generating security humor...",
   scan: "Scanning target network...",
   nmap: "Starting Nmap 7.94 — https://nmap.org",
   exploit: "Launching exploit payload...",
   defend: "Activating defense protocols...",
-  whois: "Querying WHOIS database... mohitkumar.dev → Cybersecurity × ML Engineer",
-  ctf: "🏴 CTF Challenge detected! Navigate to /ctf to test your skills. 3 levels await...",
+  whois: "Querying WHOIS database... → Mohit Kumar, Cybersecurity × AI Engineer",
   clear: "",
   exit: "Connection terminated.",
-  whoami: "You are: A curious explorer of portfolio easter eggs 🎉",
-  ls: "projects/ certificates/ tools/ exploits/ resume.pdf .secrets/",
-  pwd: "/root/portfolio/terminal",
+  whoami: "mohit — Cybersecurity & AI Engineer @ ITC Infotech. Securing systems with AI; securing AI from attack.",
+  about: "Cybersecurity & AI Engineer blending ML (PyTorch, Transformers, GNN) with security ops (VAPT, SOC, multi-agent defense).",
+  skills: "Security: VAPT, Burp, Nmap, Splunk, Sentinel · ML: PyTorch, LangGraph, GNN, Adversarial ML · Cloud: AWS, Azure, Docker",
+  ls: "about  projects  playground  blog  resume  experience  certificates  contact  uses  ctf",
+  pwd: "/home/mohit/portfolio",
   sudo: "[sudo] Nice try! Root access denied. 🔒",
   matrix: "There is no spoon... but there IS a buffer overflow."
+}
+
+// Commands that navigate to a real route
+const NAV = {
+  projects: '/projects',
+  playground: '/playground',
+  blog: '/posts',
+  posts: '/posts',
+  resume: '/resume',
+  experience: '/experiences',
+  experiences: '/experiences',
+  certificates: '/certificates',
+  contact: '/contact',
+  uses: '/uses',
+  home: '/',
 }
 
 export default function Terminal() {
@@ -107,6 +123,16 @@ export default function Terminal() {
         setShowTerminal(false)
         navigate('/ctf')
       }, 1000)
+      return
+    }
+
+    // Real navigation commands (e.g. "projects", "playground", "contact")
+    if (NAV[command]) {
+      setTerminalHistory(prev => [...prev, { type: 'success', text: `→ Opening ${command}...` }])
+      setTimeout(() => {
+        setShowTerminal(false)
+        navigate(NAV[command])
+      }, 600)
       return
     }
 
@@ -209,9 +235,10 @@ export default function Terminal() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 2 }}
-        className="fixed bottom-4 right-4 z-50 text-xs text-gray-600 font-mono pointer-events-none"
+        className="fixed bottom-4 right-4 z-50 text-xs text-gray-600 font-mono pointer-events-none text-right"
       >
         <div>Press / for terminal</div>
+        <div>⌘/Ctrl K to search</div>
       </motion.div>
     </>
   )

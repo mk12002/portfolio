@@ -1,10 +1,15 @@
 /**
  * Fallback data for when the backend API is unavailable.
  * This ensures the portfolio is always viewable by recruiters,
- * even if the Java backend isn't running.
+ * even if the Java backend isn't running (or is cold-starting).
  *
- * IMPORTANT: Keep this in sync with backend JSON content files.
+ * Projects & reads are imported as snapshots of the backend content JSON
+ * (frontend/src/data/*Content.json). Re-copy them when the backend changes:
+ *   cp backend/src/main/resources/content/projects.json frontend/src/data/projectsContent.json
+ *   cp backend/src/main/resources/content/reads.json     frontend/src/data/readsContent.json
  */
+import projectsContent from './projectsContent.json'
+import readsContent from './readsContent.json'
 
 export const fallbackProfile = {
   name: "Mohit Kumar",
@@ -42,7 +47,7 @@ export const fallbackResume = {
   location: "Bengaluru, India",
   summary: "Cybersecurity & AI Engineer specializing in AI-powered defense systems, VAPT, and SOC operations. Currently building multi-agentic email threat neutralization at ITC Infotech. Deep ML background with 4 research publications, expertise in adversarial robustness, multi-agent systems, and neural-symbolic reasoning. Production experience across PyTorch, Transformers, GNN, and computer vision. Research internships at Shantou University, Samsung PRISM, Annam.AI, CCPS and CHAIR at VIT Chennai.",
   education: [
-    { degree: "B.Tech in Electronics and Computer Engineering", institution: "VIT Chennai", cgpa: "9.09 / 10.0", duration: "2022 – 2026", location: "Chennai, India" },
+    { degree: "B.Tech in Electronics and Computer Engineering", institution: "VIT Chennai", cgpa: "9.12 / 10.0", duration: "2022 – 2026", location: "Chennai, India" },
     { degree: "Higher Secondary Education (Class XII)", institution: "Radiant International School", percentage: "95.6%", duration: "2021", location: "Patna, India" },
     { degree: "Secondary Education (Class X)", institution: "Radiant International School", percentage: "94.2%", duration: "2019", location: "Patna, India" }
   ],
@@ -139,9 +144,7 @@ export const fallbackBuyMeACoffee = {
   buttonText: "Buy Me a Coffee"
 }
 
-// Reads data omitted from fallback for size — will show empty state gracefully
-export const fallbackReads = { books: [], papers: [] }
-
-// Projects fallback contains only minimal data for listing — full project detail
-// will show a "connect to backend for full details" message
-export const fallbackProjects = { projects: [] }
+// Full reading list + projects (incl. deep detail for /projects/:slug pages),
+// imported from the backend content snapshots so the site works offline.
+export const fallbackReads = readsContent
+export const fallbackProjects = projectsContent

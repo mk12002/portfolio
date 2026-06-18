@@ -4,36 +4,24 @@ import { motion } from 'framer-motion'
 import { FaArrowRight, FaClock, FaCalendar } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
-import { usePosts } from '../hooks/useApi'
+import { posts as localPosts, postCategories } from '../data/postsData'
 
-const categories = ['All', 'AI Architecture', 'Multi-Agent Systems', 'Computer Vision', 'NLP']
+const categories = postCategories
 
 const categoryColors = {
   'AI Architecture': 'reasoning',
   'Multi-Agent Systems': 'vision',
   'Computer Vision': 'vision',
+  'Security': 'reasoning',
   'NLP': 'audio'
 }
 
 export default function Posts() {
-  const { data, loading } = usePosts()
   const [selectedCategory, setSelectedCategory] = useState('All')
 
-  const filteredPosts = selectedCategory === 'All' 
-    ? data?.posts || []
-    : data?.posts?.filter(post => post.category === selectedCategory) || []
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center pt-20">
-        <motion.div
-          className="w-16 h-16 border-4 border-vision border-t-transparent rounded-full"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-        />
-      </div>
-    )
-  }
+  const filteredPosts = selectedCategory === 'All'
+    ? localPosts
+    : localPosts.filter(post => post.category === selectedCategory)
 
   return (
     <>
@@ -113,7 +101,7 @@ export default function Posts() {
                 >
                   {/* Post Image Placeholder */}
                   <div className="w-full h-48 bg-gradient-to-br from-vision/20 via-reasoning/20 to-audio/20 rounded-lg mb-4 flex items-center justify-center">
-                    <span className="text-6xl opacity-30">📝</span>
+                    <span className="text-6xl">{post.cover || '📝'}</span>
                   </div>
 
                   {/* Category & Date */}

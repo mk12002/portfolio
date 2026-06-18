@@ -12,33 +12,125 @@ html {
   scroll-behavior: smooth;
 }
 
+/* ---- Theme tokens -------------------------------------------------------- */
+/* Dark is the default (no class needed), so first paint matches the brand.   */
+:root {
+  /* surfaces */
+  --c-bg: 10 14 23;        /* #0a0e17 */
+  --c-surface: 13 19 33;   /* #0d1321 */
+  --c-surface-2: 17 24 39; /* #111827 */
+  /* elevation + hairline (back bg-white/* and border-white/*) */
+  --c-elev: 255 255 255;
+  --c-line: 255 255 255;
+  /* text */
+  --c-text: 237 237 237;
+  --c-muted: 203 213 225;
+  --c-muted-2: 148 163 184;
+  --c-faint: 100 116 139;
+  /* borders */
+  --c-border: 237 237 237;
+  /* accent family — cohesive teal / emerald */
+  --color-vision: 16 185 129;    /* emerald-500 */
+  --color-reasoning: 20 184 166; /* teal-500 */
+  --color-audio: 6 182 212;      /* cyan-500 */
+}
+
+/* Light mode overrides */
+html.light {
+  --c-bg: 224 230 238;     /* cooler slate-200 — more contrast so white cards pop */
+  --c-surface: 255 255 255;
+  --c-surface-2: 241 245 249; /* slate-100 */
+  --c-elev: 255 255 255;      /* raised white card surface */
+  --c-line: 100 116 139;      /* slate-500 — visible hairline */
+  --c-text: 15 23 42;      /* slate-900 */
+  --c-muted: 51 65 85;     /* slate-700 */
+  --c-muted-2: 71 85 105;  /* slate-600 */
+  --c-faint: 100 116 139;  /* slate-500 */
+  --c-border: 100 116 139;
+  /* slightly deeper accents for contrast on light surfaces */
+  --color-vision: 5 150 105;     /* emerald-600 */
+  --color-reasoning: 13 148 136; /* teal-600 */
+  --color-audio: 8 145 178;      /* cyan-600 */
+}
+
 body {
   font-family: 'Inter', system-ui, sans-serif;
-  background-color: #0a0e17;
-  color: #ffffff;
+  background-color: rgb(var(--c-bg));
+  color: rgb(var(--c-text));
   overflow-x: hidden;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-:root {
-  --color-vision: 0 255 65;
-  --color-audio: 34 197 94;
-  --color-reasoning: 16 185 129;
-  --color-primary: 0 255 65;
+/* Characterful light canvas: faint emerald/cyan wash + the brand grid show
+   through, so it reads as a technical "blueprint" surface, not flat white. */
+html.light body {
+  background:
+    radial-gradient(1100px 560px at 8% -10%, rgb(16 185 129 / 0.20), transparent 58%),
+    radial-gradient(950px 520px at 100% -2%, rgb(8 145 178 / 0.16), transparent 55%),
+    radial-gradient(800px 640px at 92% 100%, rgb(20 184 166 / 0.13), transparent 60%),
+    radial-gradient(700px 500px at 0% 105%, rgb(99 102 241 / 0.08), transparent 60%),
+    rgb(var(--c-bg));
+  background-attachment: fixed;
 }
 
+/* Accent hairline on card hover — adds a touch of life to the light theme. */
+html.light [class*="bg-white/"]:hover,
+html.light .card-gradient:hover {
+  border-color: rgb(var(--color-vision) / 0.45);
+}
+
+/* Card elevation in light mode — translucent surfaces gain real depth so the
+   page no longer reads as one flat sheet. */
+html.light [class*="bg-white/"],
+html.light [class*="bg-secondary"],
+html.light .card-gradient {
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.06), 0 6px 16px rgb(15 23 42 / 0.05);
+}
+
+/* ---- Scrollbar ----------------------------------------------------------- */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0d1321;
+  background: rgb(var(--c-surface));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #00ff41, #ef4444);
+  background: rgb(var(--color-vision) / 0.6);
   border-radius: 4px;
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--color-vision) / 0.85);
+}
+
+/* ---- Accessibility ------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid rgb(var(--color-vision));
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: 50%;
+  top: -60px;
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: rgb(var(--color-vision));
+  color: rgb(var(--c-bg));
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ---- Brand utilities ----------------------------------------------------- */
 .gradient-text {
   background: linear-gradient(90deg, rgb(var(--color-vision)), rgb(var(--color-reasoning)));
   -webkit-background-clip: text;
@@ -57,22 +149,22 @@ body {
   background: linear-gradient(90deg, rgb(var(--color-vision)), rgb(var(--color-reasoning)), rgb(var(--color-audio)));
   border-radius: inherit;
   z-index: -1;
-  opacity: 0.7;
+  opacity: 0.5;
   filter: blur(8px);
   transition: opacity 0.3s ease;
 }
 
 .glow-border:hover::before {
-  opacity: 1;
+  opacity: 0.85;
 }
 
 .card-gradient {
-  background: linear-gradient(135deg, rgba(13, 19, 33, 0.9) 0%, rgba(10, 14, 23, 0.95) 100%);
-  border: 1px solid rgba(0, 255, 65, 0.15);
+  background: linear-gradient(135deg, rgb(var(--c-surface) / 0.9) 0%, rgb(var(--c-bg) / 0.95) 100%);
+  border: 1px solid rgb(var(--color-vision) / 0.15);
 }
 
 .card-gradient:hover {
-  border-color: rgba(239, 68, 68, 0.5);
+  border-color: rgb(var(--color-vision) / 0.4);
 }
 
 .particle-bg {
@@ -85,110 +177,21 @@ body {
   z-index: 0;
 }
 
-/* CRT scanline effect (very subtle) */
-.scanline-overlay::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 255, 65, 0.02) 2px,
-      rgba(0, 255, 65, 0.02) 4px);
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Glitch text effect */
-.glitch-text {
-  position: relative;
-  display: inline-block;
-}
-
-.glitch-text::before,
-.glitch-text::after {
-  content: attr(data-text);
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: inherit;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.glitch-text::before {
-  left: 2px;
-  text-shadow: -2px 0 #ef4444;
-  animation: glitch-1 3s infinite linear alternate-reverse;
-}
-
-.glitch-text::after {
-  left: -2px;
-  text-shadow: 2px 0 #3b82f6;
-  animation: glitch-2 2.5s infinite linear alternate-reverse;
-}
-
-@keyframes glitch-1 {
-
-  0%,
-  85% {
-    clip-path: inset(0 0 0 0);
-  }
-
-  86% {
-    clip-path: inset(40% 0 20% 0);
-  }
-
-  88% {
-    clip-path: inset(10% 0 60% 0);
-  }
-
-  90% {
-    clip-path: inset(80% 0 5% 0);
-  }
-
-  92% {
-    clip-path: inset(0 0 0 0);
-  }
-
-  100% {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
-@keyframes glitch-2 {
-
-  0%,
-  80% {
-    clip-path: inset(0 0 0 0);
-  }
-
-  82% {
-    clip-path: inset(60% 0 10% 0);
-  }
-
-  84% {
-    clip-path: inset(20% 0 40% 0);
-  }
-
-  86% {
-    clip-path: inset(5% 0 70% 0);
-  }
-
-  88% {
-    clip-path: inset(0 0 0 0);
-  }
-
-  100% {
-    clip-path: inset(0 0 0 0);
-  }
-}
-
 @layer utilities {
   .text-balance {
     text-wrap: balance;
+  }
+}
+
+/* ---- Reduced motion ------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
   }
 }

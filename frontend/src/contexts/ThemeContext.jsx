@@ -1,127 +1,41 @@
-import { createContext, useContext, useState, useEffect } from 'react'
-
-const themes = {
-  offensive: {
-    name: 'Offensive Security',
-    colors: {
-      primary: '#ef4444',    // red
-      secondary: '#f97316',  // orange
-      accent: '#dc2626',     // red-600
-      vision: '#ef4444',
-      audio: '#f97316',
-      reasoning: '#dc2626',
-    },
-    particles: {
-      type: 'attack',
-      count: 60,
-      speed: 1.2,
-      pattern: 'directional'
-    },
-    description: 'Red team operations, penetration testing & exploit development'
-  },
-  defensive: {
-    name: 'Defensive Security',
-    colors: {
-      primary: '#3b82f6',    // blue
-      secondary: '#06b6d4',  // cyan
-      accent: '#0ea5e9',     // sky
-      vision: '#3b82f6',
-      audio: '#06b6d4',
-      reasoning: '#0ea5e9',
-    },
-    particles: {
-      type: 'shield',
-      count: 80,
-      speed: 0.5,
-      pattern: 'layered'
-    },
-    description: 'Blue team SOC monitoring, incident response & threat hunting'
-  },
-  forensics: {
-    name: 'Digital Forensics',
-    colors: {
-      primary: '#00ff41',    // neon green
-      secondary: '#22c55e',  // green-500
-      accent: '#10b981',     // emerald
-      vision: '#00ff41',
-      audio: '#22c55e',
-      reasoning: '#10b981',
-    },
-    particles: {
-      type: 'trace',
-      count: 50,
-      speed: 0.8,
-      pattern: 'sequential'
-    },
-    description: 'Evidence analysis, malware reverse engineering & log forensics'
-  },
-  adversarial: {
-    name: 'Adversarial ML',
-    colors: {
-      primary: '#a855f7',    // purple
-      secondary: '#ec4899',  // pink
-      accent: '#8b5cf6',     // violet
-      vision: '#a855f7',
-      audio: '#ec4899',
-      reasoning: '#8b5cf6',
-    },
-    particles: {
-      type: 'adversarial',
-      count: 70,
-      speed: 1.5,
-      pattern: 'opposing'
-    },
-    description: 'AI for Security & Security for AI — adversarial robustness'
-  }
-}
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 
 const ThemeContext = createContext()
+const STORAGE_KEY = 'portfolio-theme-mode'
 
-// Convert hex color to space-separated RGB channels
-function hexToRgbChannels(hex) {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-  if (!result) return '0 0 0'
-  return `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`
+// Dark is the brand default — always. Light mode is opt-in via the toggle and
+// then remembered. We deliberately do NOT auto-switch based on OS preference.
+function getInitialMode() {
+  if (typeof window === 'undefined') return 'dark'
+  const saved = localStorage.getItem(STORAGE_KEY)
+  return saved === 'light' ? 'light' : 'dark'
+}
+
+function applyMode(mode) {
+  const root = document.documentElement
+  root.classList.toggle('light', mode === 'light')
+  root.classList.toggle('dark', mode === 'dark')
+  root.style.colorScheme = mode
 }
 
 export function ThemeProvider({ children }) {
-  const [currentTheme, setCurrentTheme] = useState('forensics')
+  const [mode, setModeState] = useState(getInitialMode)
 
   useEffect(() => {
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('security-portfolio-theme')
-    if (savedTheme && themes[savedTheme]) {
-      setCurrentTheme(savedTheme)
-    }
+    applyMode(mode)
+    localStorage.setItem(STORAGE_KEY, mode)
+  }, [mode])
+
+  const setMode = useCallback((next) => {
+    if (next === 'light' || next === 'dark') setModeState(next)
   }, [])
 
-  const changeTheme = (themeName) => {
-    if (themes[themeName]) {
-      setCurrentTheme(themeName)
-      localStorage.setItem('security-portfolio-theme', themeName)
-
-      // Update CSS variables with RGB channel values
-      const theme = themes[themeName]
-      const root = document.documentElement
-      root.style.setProperty('--color-vision', hexToRgbChannels(theme.colors.vision))
-      root.style.setProperty('--color-audio', hexToRgbChannels(theme.colors.audio))
-      root.style.setProperty('--color-reasoning', hexToRgbChannels(theme.colors.reasoning))
-      root.style.setProperty('--color-primary', hexToRgbChannels(theme.colors.primary))
-    }
-  }
-
-  useEffect(() => {
-    // Initialize CSS variables
-    changeTheme(currentTheme)
-  }, [currentTheme])
+  const toggleMode = useCallback(() => {
+    setModeState((m) => (m === 'dark' ? 'light' : 'dark'))
+  }, [])
 
   return (
-    <ThemeContext.Provider value={{
-      currentTheme,
-      theme: themes[currentTheme],
-      themes,
-      changeTheme
-    }}>
+    <ThemeContext.Provider value={{ mode, isDark: mode === 'dark', toggleMode, setMode }}>
       {children}
     </ThemeContext.Provider>
   )

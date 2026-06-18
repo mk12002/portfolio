@@ -8,9 +8,8 @@ import StatsCounter from '../components/StatsCounter'
 import SEO from '../components/SEO'
 import { useProfile } from '../hooks/useApi'
 
-// Lazy load heavy Three.js components
+// Lazy load the single heavy Three.js component
 const NodeGraph = lazy(() => import('../components/NodeGraph'))
-const TechStackGraph = lazy(() => import('../components/TechStackGraph'))
 
 // Expertise area details for richer cards
 const expertiseDetails = {
@@ -101,7 +100,7 @@ function ProfilePicture({ profilePicture }) {
         whileHover={{ scale: 1.05 }}
       >
         {profilePicture ? (
-          <img
+          <img loading="lazy" decoding="async"
             src={profilePicture}
             alt="Mohit Kumar — Cybersecurity & AI Engineer"
             className="w-full h-full object-cover"
@@ -283,6 +282,71 @@ function FeaturedProjects() {
   )
 }
 
+const skillGroups = [
+  {
+    title: 'Cybersecurity',
+    icon: FaShieldAlt,
+    skills: ['VAPT', 'Burp Suite', 'Nmap', 'sqlmap', 'Nessus', 'Splunk', 'Microsoft Sentinel', 'Defender EDR/XDR', 'OWASP Top 10', 'Incident Response'],
+  },
+  {
+    title: 'AI / Machine Learning',
+    icon: FaBrain,
+    skills: ['PyTorch', 'TensorFlow', 'Transformers', 'LangGraph', 'LangChain', 'GNN', 'Computer Vision', 'NLP', 'Adversarial ML', 'Multi-Agent Systems'],
+  },
+  {
+    title: 'Cloud, Tools & Languages',
+    icon: FaServer,
+    skills: ['AWS', 'Azure', 'Docker', 'Git', 'FastAPI', 'Streamlit', 'Python', 'Java', 'C/C++', 'SQL'],
+  },
+]
+
+function SkillsSection() {
+  return (
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center mb-10"
+      >
+        <h2 className="text-3xl md:text-4xl font-bold mb-3">
+          Skills & <span className="gradient-text">Toolset</span>
+        </h2>
+        <p className="text-gray-400 max-w-xl mx-auto">
+          The security, ML, and engineering stack I build and defend with.
+        </p>
+      </motion.div>
+
+      <div className="grid md:grid-cols-3 gap-6">
+        {skillGroups.map((group, i) => (
+          <motion.div
+            key={group.title}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.1 }}
+            className="p-6 bg-white/5 rounded-xl border border-white/10 hover:border-accent/30 transition-colors"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center">
+                <group.icon className="text-accent text-lg" />
+              </div>
+              <h3 className="font-semibold text-lg">{group.title}</h3>
+            </div>
+            <ul className="flex flex-wrap gap-2">
+              {group.skills.map((skill) => (
+                <li key={skill} className="px-2.5 py-1 bg-white/5 rounded-md text-xs text-gray-300 border border-white/5">
+                  {skill}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        ))}
+      </div>
+    </section>
+  )
+}
+
 export default function Home() {
   const { data: profile, loading } = useProfile()
 
@@ -335,18 +399,15 @@ export default function Home() {
                 transition={{ delay: 0.2 }}
                 className="mb-6"
               >
-                <motion.span
-                  className="px-4 py-2 rounded-full bg-red-500/20 text-red-400 text-sm font-medium inline-block"
-                  animate={{ boxShadow: ['0 0 0 rgba(239, 68, 68, 0)', '0 0 20px rgba(239, 68, 68, 0.3)', '0 0 0 rgba(239, 68, 68, 0)'] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  Cybersecurity & AI Engineer
-                </motion.span>
+                <span className="px-4 py-1.5 rounded-full bg-accent/10 text-accent border border-accent/20 text-sm font-medium inline-flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-accent" aria-hidden="true" />
+                  Cybersecurity &amp; AI Engineer
+                </span>
               </motion.div>
 
               <h1 className="text-4xl md:text-6xl font-bold mb-6">
                 Hi, I'm{' '}
-                <span className="gradient-text glitch-text" data-text={profile?.name || 'Mohit Kumar'}>{profile?.name || 'Mohit Kumar'}</span>
+                <span className="gradient-text">{profile?.name || 'Mohit Kumar'}</span>
               </h1>
 
               <motion.p
@@ -359,12 +420,12 @@ export default function Home() {
               </motion.p>
 
               <motion.p
-                className="text-base text-vision/80 font-medium mb-8 italic"
+                className="text-base text-gray-300 font-medium mb-8 pl-3 border-l-2 border-accent"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
               >
-                "Securing systems with AI. Securing AI from attack."
+                Securing systems with AI. Securing AI from attack.
               </motion.p>
 
               <motion.div
@@ -468,42 +529,8 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Tech Stack Neural Graph */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">
-              <span className="gradient-text">Security Arsenal</span> & Skills
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto mb-2">
-              Interactive graph of security tools, ML frameworks, and technologies I work with.
-              Node size and glow intensity represent proficiency level.
-            </p>
-            <p className="text-gray-500 text-sm">
-              Click any technology to see connections • Glow intensity = proficiency level
-            </p>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="h-[600px] w-full rounded-xl overflow-hidden border border-white/10 relative"
-          >
-            <Suspense fallback={
-              <div className="absolute inset-0 flex items-center justify-center bg-secondary/30">
-                <div className="w-10 h-10 border-4 border-reasoning border-t-transparent rounded-full animate-spin"></div>
-              </div>
-            }>
-              <TechStackGraph />
-            </Suspense>
-          </motion.div>
-        </section>
+        {/* Skills */}
+        <SkillsSection />
 
         {/* CTA */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -512,43 +539,21 @@ export default function Home() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <GlowCard glowColor="mixed" className="text-center py-12 relative overflow-hidden">
-              <motion.div
-                className="absolute inset-0 opacity-30"
-                animate={{
-                  background: [
-                    'radial-gradient(circle at 20% 50%, rgba(0, 255, 65, 0.1) 0%, transparent 50%)',
-                    'radial-gradient(circle at 80% 50%, rgba(239, 68, 68, 0.1) 0%, transparent 50%)',
-                    'radial-gradient(circle at 50% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%)',
-                    'radial-gradient(circle at 20% 50%, rgba(0, 255, 65, 0.1) 0%, transparent 50%)',
-                  ],
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-              <div className="relative z-10">
-                <motion.h2
-                  className="text-2xl md:text-3xl font-bold mb-4"
-                  animate={{ scale: [1, 1.02, 1] }}
-                  transition={{ duration: 3, repeat: Infinity }}
+            <GlowCard glowColor="mixed" className="text-center py-12">
+              <h2 className="text-2xl md:text-3xl font-bold mb-4">
+                Let's build secure, intelligent systems
+              </h2>
+              <p className="text-gray-400 mb-6 max-w-xl mx-auto">
+                Open to cybersecurity & AI engineering roles, security research, and red/blue team collaborations.
+              </p>
+              <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="inline-block">
+                <Link
+                  to="/contact"
+                  className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-vision to-reasoning text-primary rounded-lg font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-accent/20"
                 >
-                  Let's Build Something Amazing Together
-                </motion.h2>
-                <p className="text-gray-400 mb-6 max-w-xl mx-auto">
-                  Open for cybersecurity roles, security research, and red/blue team projects.
-                </p>
-                <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    to="/contact"
-                    className="inline-flex items-center gap-2 px-8 py-3 bg-gradient-to-r from-reasoning to-audio rounded-lg font-medium hover:opacity-90 transition-opacity shadow-lg shadow-reasoning/25"
-                  >
-                    Get in Touch <FaArrowRight />
-                  </Link>
-                </motion.div>
-              </div>
+                  Get in Touch <FaArrowRight />
+                </Link>
+              </motion.div>
             </GlowCard>
           </motion.div>
         </section>

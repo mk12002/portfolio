@@ -191,7 +191,7 @@ export default function Experiences() {
                     className="w-full h-[80vh]"
                   />
                 ) : (
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={selectedCertificate}
                     alt="Certificate"
                     className="w-full h-auto"

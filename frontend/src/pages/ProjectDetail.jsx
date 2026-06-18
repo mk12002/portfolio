@@ -181,7 +181,7 @@ export default function ProjectDetail() {
                 )}
                 {project.homepageUI && (
                   <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                    <img 
+                    <img loading="lazy" decoding="async"
                       src={project.homepageUI.src} 
                       alt={project.homepageUI.alt}
                       className="w-full h-auto rounded-lg"
@@ -193,7 +193,7 @@ export default function ProjectDetail() {
                 )}
                 {project.systemArchitectureDiagram && (
                   <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                    <img 
+                    <img loading="lazy" decoding="async"
                       src={project.systemArchitectureDiagram.src} 
                       alt={project.systemArchitectureDiagram.alt}
                       className="w-full h-auto rounded-lg"
@@ -205,7 +205,7 @@ export default function ProjectDetail() {
                 )}
                 {project.systemWorkflowDiagram && (
                   <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                    <img 
+                    <img loading="lazy" decoding="async"
                       src={project.systemWorkflowDiagram.src} 
                       alt={project.systemWorkflowDiagram.alt}
                       className="w-full h-auto rounded-lg"
@@ -242,7 +242,7 @@ export default function ProjectDetail() {
                   </div>
                   {project.backboneArchitectureDiagram && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.backboneArchitectureDiagram.src} 
                         alt={project.backboneArchitectureDiagram.alt}
                         className="w-full h-auto rounded-lg"
@@ -351,7 +351,7 @@ export default function ProjectDetail() {
                   )}
                   {project.researchProcessingUI && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.researchProcessingUI.src} 
                         alt={project.researchProcessingUI.alt}
                         className="w-full h-auto rounded-lg"
@@ -363,7 +363,7 @@ export default function ProjectDetail() {
                   )}
                   {project.structuredResultsUI && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.structuredResultsUI.src} 
                         alt={project.structuredResultsUI.alt}
                         className="w-full h-auto rounded-lg"
@@ -375,7 +375,7 @@ export default function ProjectDetail() {
                   )}
                   {project.methodologyDiagram && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.methodologyDiagram.src} 
                         alt={project.methodologyDiagram.alt}
                         className="w-full h-auto rounded-lg"
@@ -387,7 +387,7 @@ export default function ProjectDetail() {
                   )}
                   {project.flowDiagram && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.flowDiagram.src} 
                         alt={project.flowDiagram.alt}
                         className="w-full h-auto rounded-lg"
@@ -437,7 +437,7 @@ export default function ProjectDetail() {
                   )}
                   {project.fullPipelineDiagram && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.fullPipelineDiagram.src} 
                         alt={project.fullPipelineDiagram.alt}
                         className="w-full h-auto rounded-lg"
@@ -449,7 +449,7 @@ export default function ProjectDetail() {
                   )}
                   {project.architectureDiagram && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.architectureDiagram.src} 
                         alt={project.architectureDiagram.alt}
                         className="w-full h-auto rounded-lg"
@@ -461,7 +461,7 @@ export default function ProjectDetail() {
                   )}
                   {project.settingsPageUI && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.settingsPageUI.src} 
                         alt={project.settingsPageUI.alt}
                         className="w-full h-auto rounded-lg"
@@ -493,7 +493,7 @@ export default function ProjectDetail() {
                     ) : null}
                     {project.modelArchitectureDiagram && (
                       <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                        <img 
+                        <img loading="lazy" decoding="async"
                           src={project.modelArchitectureDiagram.src} 
                           alt={project.modelArchitectureDiagram.alt}
                           className="w-full h-auto rounded-lg"
@@ -505,7 +505,7 @@ export default function ProjectDetail() {
                     )}
                     {project.modelArchitectureDiagram1 && (
                       <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                        <img 
+                        <img loading="lazy" decoding="async"
                           src={project.modelArchitectureDiagram1.src} 
                           alt={project.modelArchitectureDiagram1.alt}
                           className="w-full h-auto rounded-lg"
@@ -517,7 +517,7 @@ export default function ProjectDetail() {
                     )}
                     {project.modelArchitectureDiagram2 && (
                       <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                        <img 
+                        <img loading="lazy" decoding="async"
                           src={project.modelArchitectureDiagram2.src} 
                           alt={project.modelArchitectureDiagram2.alt}
                           className="w-full h-auto rounded-lg"
@@ -529,7 +529,7 @@ export default function ProjectDetail() {
                     )}
                     {project.modelArchitectureDiagram3 && (
                       <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                        <img 
+                        <img loading="lazy" decoding="async"
                           src={project.modelArchitectureDiagram3.src} 
                           alt={project.modelArchitectureDiagram3.alt}
                           className="w-full h-auto rounded-lg"
@@ -541,7 +541,7 @@ export default function ProjectDetail() {
                     )}
                     {project.generatorArchitectureDiagram && (
                       <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                        <img 
+                        <img loading="lazy" decoding="async"
                           src={project.generatorArchitectureDiagram.src} 
                           alt={project.generatorArchitectureDiagram.alt}
                           className="w-full h-auto rounded-lg"
@@ -553,7 +553,7 @@ export default function ProjectDetail() {
                     )}
                     {project.discriminatorArchitectureDiagram && (
                       <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                        <img 
+                        <img loading="lazy" decoding="async"
                           src={project.discriminatorArchitectureDiagram.src} 
                           alt={project.discriminatorArchitectureDiagram.alt}
                           className="w-full h-auto rounded-lg"
@@ -620,7 +620,7 @@ export default function ProjectDetail() {
                         <>
                           <div className="flex flex-wrap justify-center gap-4 mb-4">
                             {project.datasetExamplesFigure.images.slice(0, 3).map((img, idx) => (
-                              <img 
+                              <img loading="lazy" decoding="async"
                                 key={idx}
                                 src={img.src} 
                                 alt={img.alt}
@@ -632,7 +632,7 @@ export default function ProjectDetail() {
                           {project.datasetExamplesFigure.images.length > 3 && (
                             <div className="flex flex-wrap justify-center gap-4">
                               {project.datasetExamplesFigure.images.slice(3).map((img, idx) => (
-                                <img 
+                                <img loading="lazy" decoding="async"
                                   key={idx + 3}
                                   src={img.src} 
                                   alt={img.alt}
@@ -648,7 +648,7 @@ export default function ProjectDetail() {
                         </>
                       ) : (
                         <>
-                          <img 
+                          <img loading="lazy" decoding="async"
                             src={project.datasetExamplesFigure.src} 
                             alt={project.datasetExamplesFigure.alt}
                             className="w-full h-auto rounded-lg"
@@ -701,7 +701,7 @@ export default function ProjectDetail() {
                   {/* Training Pipeline Diagram */}
                   {project.trainingPipelineDiagram && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.trainingPipelineDiagram.src} 
                         alt={project.trainingPipelineDiagram.alt}
                         className="w-full h-auto rounded-lg"
@@ -751,7 +751,7 @@ export default function ProjectDetail() {
                   {/* Paired Result Figure */}
                   {project.pairedResultFigure && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.pairedResultFigure.src} 
                         alt={project.pairedResultFigure.alt}
                         className="w-full h-auto rounded-lg"
@@ -764,7 +764,7 @@ export default function ProjectDetail() {
                   {/* Unpaired Result Figure */}
                   {project.unpairedResultFigure && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.unpairedResultFigure.src} 
                         alt={project.unpairedResultFigure.alt}
                         className="w-full h-auto rounded-lg"
@@ -873,7 +873,7 @@ export default function ProjectDetail() {
                           <div className="flex gap-4 items-start">
                             {project.qualitativeResultsFigure.images.slice(0, 2).map((img, i) => (
                               <div key={i} style={{width: img.width}} className="flex-shrink-0">
-                                <img 
+                                <img loading="lazy" decoding="async"
                                   src={img.src} 
                                   alt={img.alt}
                                   className="w-full h-auto rounded-lg border border-white/10"
@@ -885,7 +885,7 @@ export default function ProjectDetail() {
                           <div className="flex gap-4 items-start">
                             {project.qualitativeResultsFigure.images.slice(2, 5).map((img, i) => (
                               <div key={i} style={{width: img.width}} className="flex-shrink-0">
-                                <img 
+                                <img loading="lazy" decoding="async"
                                   src={img.src} 
                                   alt={img.alt}
                                   className="w-full h-auto rounded-lg border border-white/10"
@@ -895,7 +895,7 @@ export default function ProjectDetail() {
                           </div>
                         </div>
                       ) : (
-                        <img 
+                        <img loading="lazy" decoding="async"
                           src={project.qualitativeResultsFigure.src} 
                           alt={project.qualitativeResultsFigure.alt}
                           className="w-full h-auto rounded-lg"
@@ -1050,7 +1050,7 @@ export default function ProjectDetail() {
                     <div className="space-y-6 mb-6">
                       {project.performanceMetrics.figures.map((fig, i) => (
                         <div key={i} className="p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                          <img 
+                          <img loading="lazy" decoding="async"
                             src={fig.src} 
                             alt={fig.alt}
                             className="w-full h-auto rounded-lg"
@@ -1178,7 +1178,7 @@ export default function ProjectDetail() {
                   </div>
                   {project.comparisonFigure && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.comparisonFigure.src} 
                         alt={project.comparisonFigure.alt}
                         className="w-full h-auto rounded-lg"
@@ -1214,7 +1214,7 @@ export default function ProjectDetail() {
                   {/* Ablation Table Image */}
                   {project.ablationStudies.tableImage && (
                     <div className="mt-8 p-6 bg-dark-900/50 rounded-lg border border-white/20">
-                      <img 
+                      <img loading="lazy" decoding="async"
                         src={project.ablationStudies.tableImage.src} 
                         alt={project.ablationStudies.tableImage.alt}
                         className="w-full h-auto rounded-lg"

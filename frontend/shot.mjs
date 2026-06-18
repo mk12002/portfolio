@@ -1,0 +1,15 @@
+import { chromium } from 'playwright'
+const BASE = 'http://localhost:4173'
+const browser = await chromium.launch()
+const ctx = await browser.newContext({ viewport: { width: 1000, height: 760 } })
+await ctx.addInitScript(() => localStorage.setItem('portfolio-theme-mode', 'dark'))
+const page = await ctx.newPage()
+await page.goto(BASE + '/', { waitUntil: 'networkidle' })
+await page.waitForTimeout(1200)
+await page.keyboard.press('Control+k')
+await page.waitForTimeout(400)
+await page.getByPlaceholder(/Jump to a page/).fill('sec')
+await page.waitForTimeout(300)
+await page.screenshot({ path: 'shots/palette.png' })
+await browser.close()
+console.log('done')

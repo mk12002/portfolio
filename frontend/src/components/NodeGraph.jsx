@@ -15,7 +15,7 @@ const killChainStages = [
 const domainColors = {
   'Offensive': { color: '#ef4444', glow: 'rgba(239, 68, 68, 0.4)', icon: FaCrosshairs },
   'Defensive': { color: '#3b82f6', glow: 'rgba(59, 130, 246, 0.4)', icon: FaShieldAlt },
-  'AI-Sec': { color: '#00ff41', glow: 'rgba(0, 255, 65, 0.4)', icon: FaBolt }
+  'AI-Sec': { color: '#10b981', glow: 'rgba(16, 185, 129, 0.4)', icon: FaBolt }
 }
 
 // Node in the kill chain
@@ -246,8 +246,8 @@ export default function NodeGraph() {
             <stop offset="100%" stopColor="#2563eb" stopOpacity="0.7" />
           </radialGradient>
           <radialGradient id="gradient-AI-Sec" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#00ff41" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#22c55e" stopOpacity="0.7" />
+            <stop offset="0%" stopColor="#10b981" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#059669" stopOpacity="0.7" />
           </radialGradient>
           <radialGradient id="gradient-default" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#4b5563" stopOpacity="0.6" />

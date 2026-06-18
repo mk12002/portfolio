@@ -50,8 +50,22 @@
   <link rel="canonical" href="https://mohitkumar-mu.vercel.app/" />
 
   <!-- Additional SEO -->
-  <meta name="theme-color" content="#00ff41" />
+  <meta name="theme-color" content="#10b981" />
   <meta name="format-detection" content="telephone=no" />
+
+  <!-- Apply saved/preferred color mode before paint to avoid a flash -->
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('portfolio-theme-mode');
+        var mode = saved === 'light' ? 'light' : 'dark';
+        document.documentElement.classList.add(mode);
+        document.documentElement.style.colorScheme = mode;
+      } catch (e) {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
 
   <!-- Performance & Loading -->
   <link rel="dns-prefetch" href="https://fonts.googleapis.com">
