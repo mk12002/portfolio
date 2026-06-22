@@ -182,9 +182,16 @@ export default function Certificates() {
                             </div>
                           )}
                           {cert.expiryDate && (
-                            <div className="flex items-center gap-2 text-gray-400">
-                              <FaCalendarAlt className={`text-${color}`} size={14} />
-                              <span className="text-xs">Expires: {cert.expiryDate}</span>
+                            <div className="flex items-center gap-2 text-gray-400 flex-wrap">
+                              <FaCalendarAlt className={`text-${cert.expired ? 'red-400' : color}`} size={14} />
+                              <span className={`text-xs ${cert.expired ? 'text-red-400' : ''}`}>
+                                {cert.expired ? 'Expired' : 'Expires'}: {cert.expiryDate}
+                              </span>
+                              {cert.expired && (
+                                <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/15 text-red-400 border border-red-500/30">
+                                  Expired
+                                </span>
+                              )}
                             </div>
                           )}
                         </div>

@@ -98,6 +98,19 @@
       "description": "Foundational certification demonstrating the ability to write Python scripts and perform hands-on data analysis using IBM's Jupyter-based lab environment."
     },
     {
+      "name": "Microsoft Certified: Azure AI Apps and Agents Developer Associate",
+      "issuer": "Microsoft",
+      "category": "Cloud",
+      "icon": "microsoft",
+      "credentialId": "F22D515FB88750A5",
+      "certificationNumber": "4C2150-EHE2B4",
+      "earnedDate": "June 20, 2026",
+      "expiryDate": "June 21, 2027",
+      "link": "https://learn.microsoft.com/en-us/users/mohitkumar-5451/credentials/f22d515fb88750a5",
+      "description": "Validates the skills to plan and manage Azure AI solutions and build generative AI and agentic applications using Azure AI services — spanning computer vision, text analysis, and information extraction.",
+      "skills": ["Plan and manage an Azure AI solution", "Generative AI & Agentic Solutions", "Computer Vision", "Text Analysis", "Information Extraction"]
+    },
+    {
       "name": "Microsoft Certified: Azure AI Engineer Associate",
       "issuer": "Microsoft",
       "category": "Cloud",
@@ -118,6 +131,7 @@
       "certificationNumber": "D55VCB-2845B8",
       "earnedDate": "June 18, 2025",
       "expiryDate": "June 19, 2026",
+      "expired": true,
       "link": "https://learn.microsoft.com/en-us/users/mohitkumar-5451/credentials/2117bf954dcdc5a5",
       "description": "Validates skills in applying machine learning techniques to train, evaluate, and deploy models using Azure Machine Learning and MLflow."
     },
