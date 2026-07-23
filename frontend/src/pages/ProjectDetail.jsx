@@ -3,7 +3,26 @@ import { motion } from 'framer-motion'
 import { FaArrowLeft, FaCode, FaChartLine, FaLightbulb, FaCogs, FaGithub, FaExternalLinkAlt, FaBookOpen, FaShieldAlt } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import TableBlock from '../components/TableBlock'
+import SEO from '../components/SEO'
 import { useProjects } from '../hooks/useApi'
+
+// Pick the first raster (non-SVG) image in a project for a social-share card;
+// SVGs don't render in OG/Twitter previews, so fall back to the site default.
+function firstRasterImage(project) {
+  const exts = ['.png', '.jpg', '.jpeg', '.webp']
+  let found = null
+  const walk = (o) => {
+    if (found || !o || typeof o !== 'object') return
+    if (Array.isArray(o)) return o.forEach(walk)
+    if (typeof o.src === 'string' && exts.some((e) => o.src.toLowerCase().endsWith(e))) {
+      found = o.src
+      return
+    }
+    Object.values(o).forEach(walk)
+  }
+  walk(project)
+  return found
+}
 
 export default function ProjectDetail() {
   const { slug } = useParams()
@@ -30,7 +49,22 @@ export default function ProjectDetail() {
     )
   }
 
+  const rawDesc = project.tagline || project.description || `${project.title} — a project by Mohit Kumar.`
+  const metaDesc = rawDesc.length > 200 ? `${rawDesc.slice(0, 197)}…` : rawDesc
+  const metaKeywords = [project.category, ...(project.categories || []), ...(project.tags || []), 'Mohit Kumar']
+    .filter(Boolean)
+    .join(', ')
+  const ogImage = firstRasterImage(project) || '/og-image.png'
+
   return (
+    <>
+      <SEO
+        title={`${project.title} | Mohit Kumar`}
+        description={metaDesc}
+        keywords={metaKeywords}
+        ogImage={ogImage}
+        pathname={`/projects/${project.slug}`}
+      />
     <div className="min-h-screen pt-24 pb-20">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -1411,5 +1445,6 @@ export default function ProjectDetail() {
         </motion.div>
       </div>
     </div>
+    </>
   )
 }

@@ -1,0 +1,8 @@
+{
+  "title": "Contact Me",
+  "description": "Feel free to reach out for collaborations, internships, research discussions, or project inquiries. I'm always excited to connect!",
+  "fields": ["name", "email", "message"],
+  "successMessage": "Thanks for reaching out! I'll get back to you soon.",
+  "email": "mohit.kr1103@gmail.com",
+  "location": "Bengaluru, India"
+}

@@ -16,20 +16,22 @@ export const posts = [
     tags: ['AI', 'Cybersecurity', 'Agents', 'Supply Chain'],
     cover: '📦',
     url: 'https://dev.to/mohit_kumar1/your-ai-assistant-downloads-code-from-strangers-heres-why-thats-a-problem-2cpf',
-    relatedProject: { slug: 'stowaway', title: 'Stowaway' },
+    source: 'dev.to · originally on Hashnode',
+    relatedProject: { slug: 'bulwark', title: 'Bulwark' },
   },
   {
     slug: 'ai-control-of-a-stadium-on-a-leash',
     title: "I Gave an AI Control of an 80,000-Seat Stadium — Here's How I Kept It on a Leash",
     excerpt:
-      "What happens when you hand an autonomous AI agent real authority over a critical system — an 80,000-seat stadium's operations — and how to bound that authority so one bad decision can't cascade. A practical take on agent guardrails, least privilege, and keeping excessive agency in check.",
+      "Built for the Hack2skill PromptWars Virtual Challenge: what happens when you hand an autonomous AI agent real authority over a critical system — an 80,000-seat stadium's operations — and how to bound that authority so one bad decision can't cascade. A practical take on agent guardrails, least privilege, and keeping excessive agency in check.",
     category: 'AI Security',
     date: '2026-07-14',
     readTime: '9 min read',
     tags: ['AI', 'Agents', 'Python', 'Cybersecurity'],
     cover: '🏟️',
     url: 'https://dev.to/mohit_kumar1/i-gave-an-ai-control-of-an-80000-seat-stadium-heres-how-i-kept-it-on-a-leash-384d',
-    relatedProject: { slug: 'bulwark', title: 'Bulwark (Warden)' },
+    source: 'dev.to · originally on Hashnode',
+    challenge: 'Hack2skill PromptWars Virtual Challenge',
   },
   {
     slug: 'inside-a-7-agent-email-security-system',
@@ -166,6 +168,7 @@ Go try it: [/ctf](/ctf). Writeups are built into the page once you're done (or s
     tags: ['Multi-Agent', 'LangGraph', 'Research Automation'],
     cover: '🔬',
     url: 'https://app.readytensor.ai/publications/nexus-a-three-pronged-agentic-ai-system-for-intelligent-research-and-analysis-Y06tMJMVmNjI',
+    source: 'ReadyTensor',
   },
   {
     slug: 'sanchalak-rural-welfare',
@@ -178,6 +181,7 @@ Go try it: [/ctf](/ctf). Writeups are built into the page once you're done (or s
     tags: ['Social Impact', 'Government Tech', 'Rural Development', 'AI for Good'],
     cover: '🌾',
     url: 'https://annam.ai/2025/08/11/sanchalak-revolutionizing-rural-welfare-access/',
+    source: 'Annam.ai',
   },
 ]
 

@@ -182,6 +182,13 @@ export default function SecurityTools() {
                 <div className="flex gap-3 mt-6">
                   <a href="https://github.com/mk12002/Security-tools" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-5 py-2.5 bg-white/5 hover:bg-white/10 border border-white/20 rounded-lg transition-all"><FaGithub /> View on GitHub</a>
                 </div>
+                <p className="mt-6 text-sm text-gray-400">
+                  This is my learning-focused assessment toolkit. For standalone, production-grade open-source scanners with test suites and benchmarks, see{' '}
+                  <Link to="/projects/bulwark" className="text-green-400 hover:underline">Bulwark</Link>,{' '}
+                  <Link to="/projects/lattice" className="text-green-400 hover:underline">Lattice</Link>,{' '}
+                  <Link to="/projects/portcullis" className="text-green-400 hover:underline">Portcullis</Link>, and{' '}
+                  <Link to="/projects/stowaway" className="text-green-400 hover:underline">Stowaway</Link>.
+                </p>
               </div>
             </div>
           </motion.section>

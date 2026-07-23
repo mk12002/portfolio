@@ -15,6 +15,14 @@ const frontend = resolve(here, '../src/data')
 const files = [
   ['projects.json', 'projectsContent.json'],
   ['reads.json', 'readsContent.json'],
+  ['profile.json', 'profileContent.json'],
+  ['resume.json', 'resumeContent.json'],
+  ['experiences.json', 'experiencesContent.json'],
+  ['certificates.json', 'certificatesContent.json'],
+  ['events.json', 'eventsContent.json'],
+  ['publications.json', 'publicationsContent.json'],
+  ['contact.json', 'contactContent.json'],
+  ['buymeacoffee.json', 'buymeacoffeeContent.json'],
 ]
 
 let synced = 0

@@ -2,41 +2,41 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <!-- Core pages -->
-  <url><loc>https://mohitkumar-mu.vercel.app/</loc><lastmod>2026-06-22</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects</loc><lastmod>2026-06-22</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/playground</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/resume</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/posts</loc><lastmod>2026-06-22</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/experiences</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/publications</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/certificates</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/reads</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/uses</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/events</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/contact</loc><lastmod>2026-06-22</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/support</loc><lastmod>2026-06-22</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/</loc><lastmod>2026-07-24</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects</loc><lastmod>2026-07-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/playground</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/resume</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/posts</loc><lastmod>2026-07-24</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/experiences</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/publications</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/certificates</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/reads</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/uses</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/events</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/contact</loc><lastmod>2026-07-24</lastmod><changefreq>yearly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/support</loc><lastmod>2026-07-24</lastmod><changefreq>yearly</changefreq><priority>0.5</priority></url>
 
   <!-- Project detail pages -->
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/bulwark</loc><lastmod>2026-07-23</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/lattice</loc><lastmod>2026-07-23</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/portcullis</loc><lastmod>2026-07-23</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/stowaway</loc><lastmod>2026-07-23</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/ir-siem-kql</loc><lastmod>2026-07-23</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/agentic-email-security</loc><lastmod>2026-07-23</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/security-tools</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/hybex-law</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/nexus</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/parking-detection</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/sanchalak</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/luna</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/har-gcnn</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/medical-audio</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/agricure</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/xray-normalization</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/projects/machine-consciousness</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/bulwark</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/lattice</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/portcullis</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/stowaway</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/ir-siem-kql</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/agentic-email-security</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/security-tools</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/hybex-law</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/nexus</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/parking-detection</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/sanchalak</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/luna</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/har-gcnn</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/medical-audio</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/agricure</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/xray-normalization</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/projects/machine-consciousness</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
 
   <!-- Blog posts -->
-  <url><loc>https://mohitkumar-mu.vercel.app/posts/inside-a-7-agent-email-security-system</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://mohitkumar-mu.vercel.app/posts/base64-is-not-encryption</loc><lastmod>2026-06-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/posts/inside-a-7-agent-email-security-system</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://mohitkumar-mu.vercel.app/posts/base64-is-not-encryption</loc><lastmod>2026-07-24</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
 
 </urlset>

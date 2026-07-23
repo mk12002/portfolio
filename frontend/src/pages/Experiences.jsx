@@ -29,9 +29,9 @@ export default function Experiences() {
   return (
     <>
       <SEO
-        title="Experience | Mohit Kumar - Cybersecurity & ML Research Internships"
-        description="Professional experience: Cybersecurity Intern at ITC Infotech, Research Intern at Samsung PRISM, Shantou University, Annam.AI, and CCPS VIT Chennai."
-        keywords="Cybersecurity Intern, ITC Infotech, Samsung PRISM, Research Intern, ML Experience, Security Operations, VAPT"
+        title="Experience | Mohit Kumar - Security Engineer & ML Research"
+        description="Professional experience: Security Engineer (IS2) at ITC Infotech (converted from a cybersecurity internship), Research Intern at Samsung PRISM, Shantou University, Annam.AI, and CCPS VIT Chennai."
+        keywords="Security Engineer, ITC Infotech, Cybersecurity, Samsung PRISM, Research Intern, ML Experience, Security Operations, VAPT"
         pathname="/experiences"
       />
     <div className="min-h-screen pt-24 pb-20">

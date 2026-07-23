@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaArrowRight, FaClock, FaCalendar, FaLink } from 'react-icons/fa'
+import { FaArrowRight, FaClock, FaCalendar, FaLink, FaTrophy, FaGlobe } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { posts as localPosts, postCategories } from '../data/postsData'
@@ -142,6 +142,20 @@ export default function Posts() {
                     >
                       <FaLink size={10} /> Related project: {post.relatedProject.title}
                     </Link>
+                  )}
+
+                  {/* Challenge / hackathon badge */}
+                  {post.challenge && (
+                    <span className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-lg text-xs font-medium bg-audio/10 text-audio border border-audio/20 w-fit">
+                      <FaTrophy size={10} /> {post.challenge}
+                    </span>
+                  )}
+
+                  {/* Source / where it's published */}
+                  {post.source && (
+                    <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
+                      <FaGlobe size={10} /> Published on {post.source}
+                    </div>
                   )}
 
                   {/* Read Time & Link */}
