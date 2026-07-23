@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 470" font-family="'SF Mono','Cascadia Code','Consolas',monospace" font-size="13.5">
+  <rect width="780" height="470" rx="10" fill="#1b1f27"/>
+  <rect width="780" height="34" rx="10" fill="#2b3240"/>
+  <rect y="24" width="780" height="10" fill="#2b3240"/>
+  <circle cx="20" cy="17" r="6" fill="#ec6a5f"/>
+  <circle cx="40" cy="17" r="6" fill="#f4bf50"/>
+  <circle cx="60" cy="17" r="6" fill="#61c554"/>
+  <text x="390" y="21" fill="#8b95a5" text-anchor="middle" font-size="12">stowaway — supply-chain scan</text>
+
+  <text x="18" y="62" fill="#61c554">$</text>
+  <text x="34" y="62" fill="#e6e9ef">stowaway scan . --format all --fail-on P0 --internal-prefix mycorp-</text>
+
+  <text x="18" y="90" fill="#c9d1dc">stowaway v0.1.0 — scanned .</text>
+  <text x="34" y="112" fill="#8b95a5">ecosystems: <tspan fill="#c9d1dc">npm</tspan></text>
+
+  <text x="34" y="134" fill="#8b95a5">score <tspan fill="#ec6a5f" font-weight="bold">0/100</tspan> |
+    <tspan fill="#ec6a5f">P0:2</tspan> <tspan fill="#e08a4b">P1:2</tspan>
+    <tspan fill="#d6a840">P2:2</tspan> <tspan fill="#7a869a">P3:1</tspan> |
+    <tspan fill="#c9d1dc">12 finding(s)</tspan></text>
+
+  <text x="34" y="156" fill="#7a869a">wrote stowaway-report/stowaway-report.json</text>
+  <text x="34" y="176" fill="#7a869a">wrote stowaway-report/stowaway-report.html</text>
+  <text x="34" y="196" fill="#7a869a">wrote stowaway-report/stowaway-report.sarif</text>
+
+  <text x="18" y="224" fill="#ec6a5f">  FAIL: 2 package(s) at or above P0</text>
+
+  <text x="18" y="256" fill="#61c554">$</text>
+  <text x="34" y="256" fill="#e6e9ef">echo $?  <tspan fill="#5a6474"># non-zero exit blocks the merge</tspan></text>
+  <text x="34" y="278" fill="#c9d1dc">1</text>
+
+  <rect x="18" y="300" width="744" height="150" rx="6" fill="#232833"/>
+  <text x="34" y="326" fill="#8b95a5" font-size="12">Two P0 packages found:</text>
+  <text x="34" y="350" fill="#ec6a5f" font-weight="bold">● example-fixture-app</text>
+  <text x="52" y="370" fill="#a9b3c4" font-size="12">R3-B1 + R3-B2 in one install hook → escalated to CRITICAL (R3-B7)</text>
+  <text x="52" y="388" fill="#a9b3c4" font-size="12">R3-B5 embedded literal decodes to a Linux ELF executable</text>
+  <text x="34" y="414" fill="#ec6a5f" font-weight="bold">● mycorp-auth</text>
+  <text x="52" y="434" fill="#a9b3c4" font-size="12">R2 internal namespace resolves from the public registry (dependency confusion)</text>
+</svg>

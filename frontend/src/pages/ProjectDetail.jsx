@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaArrowLeft, FaCode, FaChartLine, FaLightbulb, FaCogs, FaGithub, FaExternalLinkAlt } from 'react-icons/fa'
+import { FaArrowLeft, FaCode, FaChartLine, FaLightbulb, FaCogs, FaGithub, FaExternalLinkAlt, FaBookOpen, FaShieldAlt } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import TableBlock from '../components/TableBlock'
 import { useProjects } from '../hooks/useApi'
@@ -70,6 +70,18 @@ export default function ProjectDetail() {
                   whileTap={{ scale: 0.95 }}
                 >
                   <FaExternalLinkAlt /> Read Article
+                </motion.a>
+              )}
+              {project.writeupUrl && (
+                <motion.a
+                  href={project.writeupUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-audio/20 to-vision/20 border border-audio/30 rounded-lg hover:border-audio/60 transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <FaBookOpen /> Read the Writeup
                 </motion.a>
               )}
               {project.githubUrl && (
@@ -162,6 +174,22 @@ export default function ProjectDetail() {
                 )}
               </div>
             </GlowCard>
+          )}
+
+          {Array.isArray(project.engineeringRigor) && project.engineeringRigor.length > 0 && (
+            <div className="mb-8">
+              <h3 className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wide text-gray-300 mb-3">
+                <FaShieldAlt className="text-vision" /> Engineering Rigor
+              </h3>
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                {project.engineeringRigor.map((stat, i) => (
+                  <div key={i} className="p-3 bg-white/5 rounded-lg border border-white/10 text-center">
+                    <div className="text-lg font-bold gradient-text leading-tight">{stat.value}</div>
+                    <div className="text-xs text-gray-400 mt-1">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           )}
 
           <GlowCard glowColor="mixed" className="mb-8">

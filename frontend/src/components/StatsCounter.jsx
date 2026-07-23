@@ -26,10 +26,10 @@ function CountUp({ end, duration = 2, suffix = '', isInView }) {
 }
 
 const stats = [
-    { label: 'Security & AI Projects', icon: FaProjectDiagram, value: 12, suffix: '+', color: '#10b981' },
+    { label: 'Security & AI Projects', icon: FaProjectDiagram, value: 17, suffix: '+', color: '#10b981' },
     { label: 'Security Tools Built', icon: FaTools, value: 14, suffix: '', color: '#0891b2' },
     { label: 'Research Papers', icon: FaFileAlt, value: 4, suffix: '', color: '#0d9488' },
-    { label: 'Certifications', icon: FaCertificate, value: 13, suffix: '+', color: '#d97706' },
+    { label: 'Certifications', icon: FaCertificate, value: 14, suffix: '', color: '#d97706' },
 ]
 
 export default function StatsCounter() {

@@ -58,8 +58,8 @@ export default function Projects() {
     <>
       <SEO
         title="Projects | Mohit Kumar - Cybersecurity & AI/ML Projects Portfolio"
-        description="Explore cybersecurity and AI/ML projects: Agentic Email Security (7-Agent System), Security Toolkit (14 Tools), HybEx-Law (98.5% F1 Legal AI), Parking Detection (98.99% mAP). PyTorch, Transformers, GNN."
-        keywords="Cybersecurity Projects, AI Security Projects, VAPT Tools, ML Projects, Multi-Agent Systems, PyTorch Projects, Deep Learning Portfolio, Agentic Email Security, HybEx-Law, Security Toolkit"
+        description="Explore security tooling and AI/ML projects: Bulwark (agentic-AI supply-chain scanner), Lattice (post-quantum readiness), Portcullis (CI/CD security), Stowaway (supply-chain integrity), Schema-Grounded NL→KQL for SIEM, Agentic Email Security, and HybEx-Law (98.5% F1). Python, PyTorch, SARIF, CycloneDX."
+        keywords="Cybersecurity Projects, AI Security Projects, AI Supply Chain, Post-Quantum Cryptography, CI/CD Security, Supply-Chain Security, SIEM, KQL, VAPT Tools, Multi-Agent Systems, Bulwark, Lattice, Portcullis, Stowaway"
         pathname="/projects"
       />
       <div className="min-h-screen pt-24 pb-20">
@@ -75,6 +75,33 @@ export default function Projects() {
             <p className="text-gray-400 max-w-2xl mx-auto">
               Cybersecurity tools, AI/ML systems, and research across security, intelligence, and automation
             </p>
+          </motion.div>
+
+          {/* Security Tooling Suite band */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-4xl mx-auto mb-10 rounded-2xl border border-white/10 bg-gradient-to-br from-vision/5 via-transparent to-reasoning/5 p-5 sm:p-6"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1">
+                <h2 className="text-lg font-bold mb-1">🛡️ The <span className="gradient-text">Security Tooling Suite</span></h2>
+                <p className="text-sm text-gray-400">
+                  Four open-source scanners — <span className="text-gray-200">Bulwark</span>, <span className="text-gray-200">Lattice</span>, <span className="text-gray-200">Portcullis</span>, and <span className="text-gray-200">Stowaway</span> — that share one design DNA: offline, deterministic, SARIF output, <span className="font-mono text-xs">--fail-on</span> CI gates, and defensive-only. 580+ tests, 0–1 runtime deps.
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-2 sm:justify-end">
+                {[['bulwark', 'Bulwark'], ['lattice', 'Lattice'], ['portcullis', 'Portcullis'], ['stowaway', 'Stowaway']].map(([slug, name]) => (
+                  <Link
+                    key={slug}
+                    to={`/projects/${slug}`}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-white/5 text-gray-300 border border-white/10 hover:border-vision/40 hover:text-white transition-colors"
+                  >
+                    {name}
+                  </Link>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
           {/* Search Input */}

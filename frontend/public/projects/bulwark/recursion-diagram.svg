@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 560" font-family="'Segoe UI',Inter,system-ui,sans-serif">
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="60" y="50" font-size="28" font-weight="700" fill="#111827">Why the number climbed: the harness fed its own output back in</text>
+  <text x="60" y="80" font-size="16" fill="#6b7280">To scan one file in isolation, the benchmark copied it into a new folder — <tspan font-family="ui-monospace,Consolas,monospace" fill="#374151">inside the corpus it was scanning.</tspan></text>
+
+  <!-- folder tree (monospace) -->
+  <g font-family="ui-monospace,Consolas,'Courier New',monospace" font-size="16.5">
+    <text x="70" y="140" fill="#6b7280">datasets/corpus/</text>
+    <text x="94" y="170" fill="#374151">tiny-random-BertModel/</text>
+    <text x="122" y="200" fill="#111827">pytorch_model.bin        <tspan fill="#16a34a">the real artifact (scan this)</tspan></text>
+
+    <!-- nested _al copies, deepening -->
+    <text x="122" y="236" fill="#b91c1c">_al_pytorch_model/       <tspan fill="#9ca3af">← run 1 wrote a copy here</tspan></text>
+    <text x="150" y="266" fill="#b91c1c">_al_pytorch_model/     <tspan fill="#9ca3af">← run 2 re-scanned run 1, copied again</tspan></text>
+    <text x="178" y="296" fill="#b91c1c">_al_pytorch_model/   <tspan fill="#9ca3af">← run 3 …</tspan></text>
+    <text x="206" y="326" fill="#dc2626">_al_pytorch_model/ …</text>
+    <text x="234" y="352" fill="#dc2626" font-size="15">⋱  54 nested copy-dirs after 3 runs</text>
+  </g>
+
+  <!-- the feedback loop -->
+  <g>
+    <rect x="600" y="150" width="330" height="150" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5"/>
+    <text x="620" y="185" font-size="16" font-weight="700" fill="#b91c1c">The feedback loop</text>
+    <text x="620" y="214" font-size="14.5" fill="#7f1d1d">1. scan every pickle under corpus/</text>
+    <text x="620" y="240" font-size="14.5" fill="#7f1d1d">2. copy each into corpus/…/_al_*/</text>
+    <text x="620" y="266" font-size="14.5" fill="#7f1d1d">3. next run sees step-2 copies</text>
+    <text x="620" y="292" font-size="14.5" fill="#7f1d1d">→ back to 1, one level deeper</text>
+    <!-- loop arrow -->
+    <path d="M765,300 q0,44 -60,44 q-60,0 -60,-30" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+    <path d="M645,314 l0,10 8,-6 z" fill="#dc2626"/>
+  </g>
+
+  <!-- before / after fix -->
+  <g font-size="15.5">
+    <rect x="70" y="410" width="400" height="110" rx="12" fill="#fef2f2" stroke="#fecaca" stroke-width="1.5"/>
+    <text x="90" y="440" font-weight="700" fill="#b91c1c">Before</text>
+    <text x="90" y="468" font-family="ui-monospace,Consolas,monospace" font-size="13.5" fill="#7f1d1d">sub = path.parent / f"_al_{path.stem}"</text>
+    <text x="90" y="490" font-family="ui-monospace,Consolas,monospace" font-size="13.5" fill="#7f1d1d">sub.mkdir(); (sub/name).write_bytes(...)</text>
+    <text x="90" y="510" font-family="ui-monospace,Consolas,monospace" font-size="13.5" fill="#7f1d1d">scan(sub)   # writes into the corpus</text>
+
+    <rect x="530" y="410" width="400" height="110" rx="12" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1.5"/>
+    <text x="550" y="440" font-weight="700" fill="#15803d">After</text>
+    <text x="550" y="472" font-family="ui-monospace,Consolas,monospace" font-size="13.5" fill="#14532d">scan(path)   # the loader accepts a</text>
+    <text x="550" y="492" font-family="ui-monospace,Consolas,monospace" font-size="13.5" fill="#14532d">single file — nothing is written</text>
+    <text x="550" y="512" font-family="ui-monospace,Consolas,monospace" font-size="13.5" fill="#14532d"># into the corpus. Count stays 18.</text>
+  </g>
+</svg>

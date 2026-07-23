@@ -6,6 +6,32 @@
 
 export const posts = [
   {
+    slug: 'ai-assistant-downloads-code-from-strangers',
+    title: "Your AI Assistant Downloads Code From Strangers. Here's Why That's a Problem.",
+    excerpt:
+      "Your AI coding assistant installs packages, spins up MCP servers, and runs code it pulled from people you've never met — and almost none of it is ever inspected. Why the agentic supply chain is a genuine security problem, and what it takes to put a gate in front of it.",
+    category: 'AI Security',
+    date: '2026-07-20',
+    readTime: '7 min read',
+    tags: ['AI', 'Cybersecurity', 'Agents', 'Supply Chain'],
+    cover: '📦',
+    url: 'https://dev.to/mohit_kumar1/your-ai-assistant-downloads-code-from-strangers-heres-why-thats-a-problem-2cpf',
+    relatedProject: { slug: 'stowaway', title: 'Stowaway' },
+  },
+  {
+    slug: 'ai-control-of-a-stadium-on-a-leash',
+    title: "I Gave an AI Control of an 80,000-Seat Stadium — Here's How I Kept It on a Leash",
+    excerpt:
+      "What happens when you hand an autonomous AI agent real authority over a critical system — an 80,000-seat stadium's operations — and how to bound that authority so one bad decision can't cascade. A practical take on agent guardrails, least privilege, and keeping excessive agency in check.",
+    category: 'AI Security',
+    date: '2026-07-14',
+    readTime: '9 min read',
+    tags: ['AI', 'Agents', 'Python', 'Cybersecurity'],
+    cover: '🏟️',
+    url: 'https://dev.to/mohit_kumar1/i-gave-an-ai-control-of-an-80000-seat-stadium-heres-how-i-kept-it-on-a-leash-384d',
+    relatedProject: { slug: 'bulwark', title: 'Bulwark (Warden)' },
+  },
+  {
     slug: 'inside-a-7-agent-email-security-system',
     title: 'Inside a 7-Agent Email Security System',
     excerpt:

@@ -1,13 +1,1606 @@
 {
   "projects": [
     {
-      "slug": "tara-email-security",
+      "slug": "bulwark",
+      "title": "Bulwark: The Security Stack for Agentic AI",
+      "category": "Cybersecurity",
+      "categories": [
+        "Cybersecurity",
+        "AI/ML"
+      ],
+      "tagline": "Three composable scanners that audit the entire AI-agent supply chain — the parts, the assembly, and the governable whole.",
+      "metric": "3 Tools · 200+ Tests · 14/14 Adversarial",
+      "tags": [
+        "AI Supply Chain",
+        "CycloneDX AI-BOM",
+        "Pickle RCE",
+        "MCP Security",
+        "Least Privilege",
+        "OWASP LLM Top 10",
+        "MITRE ATLAS",
+        "SARIF"
+      ],
+      "description": "Bulwark is a defensive security suite for agentic AI systems. A modern AI agent is assembled from third-party parts nobody wrote and can't see inside — a model off the Hub, an MCP server from a gist, a pile of tools wired into an autonomous loop, an unaudited requirements.txt. Each is a trust boundary, and a system built entirely from individually benign parts can still be dangerous because of how they're wired together. Bulwark answers the three questions that actually matter, with three tools that share one engine, one finding taxonomy, and one report format.",
+      "overview": "The suite is three composable scanners. Airlock scans the parts — is this model / MCP server / tool-spec itself malicious or unsafe? Warden scans the assembly — given how the agent is wired, does it have more power than its job needs? Manifest inventories the whole system — what is my AI made of, and is it governable? They compose literally: `bulwark scan ./project --scan-risk --govern` builds a CycloneDX AI-BOM of a project, calls Airlock on each model/MCP component and Warden on each agent assembly, and folds their findings inline into one governance report mapped to NIST AI RMF and the EU AI Act. Every tool is deterministic-first (fully useful with zero AI), CI-friendly (--fail-on exit codes + SARIF for GitHub code scanning), and defensive-only — it detects and reports, and never executes or imports the artifacts it scans.",
+      "problem": "AI agents are now assembled from untrusted third-party components — pickled model weights that can execute arbitrary code on load, MCP servers whose tool descriptions can carry hidden prompt-injection, and autonomous tool loops that quietly acquire the ability to read secrets and reach the open internet in the same breath. Existing scanners look at one artifact type in isolation (a pickle scanner here, an SBOM tool there) and none of them reason about the assembled whole. The result is that the most dangerous property of an agent — emergent excessive agency from wiring benign parts together — is exactly the property nobody measures.",
+      "motivation": [
+        "Pickle-based model formats remain overwhelmingly common: in a study of 19 real public HuggingFace models, 95% shipped pickle weights and 100% carried at least one supply-chain finding. A pickle file is not data — it is a program that runs on deserialization, and the 2025 bypass wave (format/extension confusion in the CVE-2025-10155 class, Fickling-style import tricks) showed that naive scanners are easy to evade.",
+        "The Model Context Protocol (MCP) turned tool descriptions into a new injection surface: a poisoned tool spec, hidden unicode, an over-permissioned tool, or a cross-tool exfiltration path (one tool reads secrets, another sends network requests) can compromise an agent without a single line of malicious model code.",
+        "OWASP's LLM Top 10 names 'Excessive Agency' explicitly, but there was no tool that could take an agent definition, build its capability graph, and tell you it can reach a source→sink exfiltration path. Bulwark was built to make that governable — measured, explainable, and gate-able in CI."
+      ],
+      "keyMetrics": [
+        {
+          "name": "Airlock on evasive adversarial payloads",
+          "value": "14 / 14 caught"
+        },
+        {
+          "name": "Public HuggingFace models with a supply-chain finding",
+          "value": "100% (19/19)"
+        },
+        {
+          "name": "Models shipping executable pickle weights",
+          "value": "95%"
+        },
+        {
+          "name": "False alarms on benign models (all 4 tools)",
+          "value": "0 / 18"
+        },
+        {
+          "name": "Automated tests across 5 packages",
+          "value": "200+ passing"
+        },
+        {
+          "name": "Detection rules (Airlock M1–M7/P1–P9, Warden A1–A10, Manifest B1–B9)",
+          "value": "42+ across the suite"
+        }
+      ],
+      "approach": {
+        "description": "Bulwark is a uv-workspace monorepo built on one shared spine (bulwark-core: the Finding/Severity model, a YAML rule engine, and terminal/JSON/HTML/SARIF renderers). The three scanners depend on that spine and compose upward, so a finding means the same thing and renders the same way whether it came from a pickle opcode stream or an agent's capability graph. Detection lives in extensible YAML rule packs, not hardcoded logic. The optional AI layer (local Ollama by default, BYO OpenAI/Anthropic) is off by default, capped, keys-from-env-only, and never overrides a deterministic finding.",
+        "steps": [
+          "Airlock statically disassembles model artifacts (pickle · safetensors · GGUF · ONNX · Keras · numpy · TF SavedModel · Flax, incl. compressed/nested) — reading opcodes and metadata, never calling pickle.load / torch.load — and probes live MCP servers over stdio/SSE/HTTP for the P1–P9 risk classes.",
+          "Warden imports an agent from manifest YAML, MCP config, OpenAI Assistants, LangChain/LangGraph, or CrewAI, normalizes it to one model, builds a capability graph, and computes a transparent 0–100 agency score against the A1–A10 excessive-agency rules.",
+          "Warden's --recommend rewrites an over-privileged agent to least privilege and shows a before/after diff; --scan-parts runs Airlock on the MCP servers the agent wires.",
+          "Manifest discovers models, datasets, MCP servers, prompts, tools, deps, and notebooks, emits a CycloneDX and SPDX AI-BOM, runs OSV vulnerability lookups, and bridges risk into Airlock + Warden (control B5).",
+          "The `bulwark` meta-CLI is one front door over all three, and `--govern` maps every finding to NIST AI RMF and EU AI Act controls with a risk register."
+        ]
+      },
+      "architecture": [
+        {
+          "tier": "bulwark-core",
+          "description": "The shared spine — a unified Finding/Severity model, a YAML-driven rule engine, report renderers (terminal / JSON / HTML / SARIF), and an optional, off-by-default AI layer. Every tool speaks this one taxonomy."
+        },
+        {
+          "tier": "Airlock  →  bulwark-core",
+          "description": "Scans the parts: models, MCP servers, and tool-specs. M1–M7 model risks and P1–P9 MCP risks, across eight-plus model formats and OpenAI/Anthropic/Bedrock/LangChain tool definitions."
+        },
+        {
+          "tier": "Warden  →  bulwark-core (+ Airlock)",
+          "description": "Scans the assembly: A1–A10 excessive-agency checks over an agent's capability graph, an agency score, framework importers, least-privilege recommendation with a diff, and --scan-parts to Airlock the wired MCP servers."
+        },
+        {
+          "tier": "Manifest  →  bulwark-core, Airlock, Warden",
+          "description": "Inventories the whole system: CycloneDX + SPDX AI-BOM, B1–B9 governance checks, OSV vulns, risk bridges to Airlock/Warden, NIST AI RMF + EU AI Act mapping, and BOM drift between versions (manifest diff)."
+        },
+        {
+          "tier": "bulwark meta-CLI  →  all of the above",
+          "description": "One front door. `bulwark scan ./project --scan-risk --govern` runs inventory, per-component Airlock/Warden risk, and governance in a single command — the suite's thesis, made real."
+        }
+      ],
+      "architectureDescription": "Five packages, one contract. The dependency arrows only ever point toward bulwark-core, which keeps the taxonomy consistent and lets the community extend any tool with a YAML rule-pack PR rather than a code change. The whole quality gate runs from one command — `python check.py` (ruff + mypy + pytest across every package) — and is matrixed in CI.",
+      "algorithmDetails": [
+        {
+          "name": "Static pickle opcode disassembly (Airlock M-series)",
+          "description": "Detects pickle-based RCE without ever deserializing the file — the scanner must never become the attack it looks for.",
+          "steps": [
+            "Stream the pickle opcodes with a bounded reader (opcode/size/member/decompression-bomb caps) instead of pickle.load.",
+            "Flag dangerous reduce/global/inst opcodes and resolve the (module, name) import targets against a Fickling-style allowlist.",
+            "Detect format/extension confusion (the CVE-2025-10155 class) where a file's real container disagrees with its extension.",
+            "Emit an explainable finding: what opcode, where, why it matters, a severity, a remediation, and an OWASP-LLM/MITRE-ATLAS/CWE reference."
+          ]
+        },
+        {
+          "name": "Cross-tool exfiltration graph (Airlock P-series)",
+          "description": "Models an MCP server's tools as a capability graph and searches for source→sink paths that let one tool read sensitive data and another send it out.",
+          "steps": [
+            "Parse each tool's declared inputs, outputs, and side-effects.",
+            "Tag tools as sources (read secrets/files) or sinks (network egress).",
+            "Search for any path connecting a source to a sink, plus hidden-unicode, tool-poisoning, shadowing, and rug-pull signals."
+          ]
+        },
+        {
+          "name": "Agency score (Warden A-series)",
+          "description": "A transparent 0–100 score for how much power an agent has relative to its job, driven by the A1–A10 rules.",
+          "steps": [
+            "Build the agent's capability graph from its normalized tools, scopes, and prompt.",
+            "Detect toxic tool combinations (source→sink), missing human gates, unsandboxed exec, open egress, and runaway loops.",
+            "Score and, on request, rewrite the agent to least privilege with a before/after diff."
+          ]
+        }
+      ],
+      "results": "Bulwark is measured, not asserted. In a four-way benchmark asking every scanner the same question on every artifact — do you flag code execution? — Airlock catches 14/14 evasive payloads while picklescan gets 11/14 and modelscan and fickling each get 9/14; its edge is the gzip/zlib-compressed and base64-staged variants, which it decompresses and decodes one level before disassembling and every other tool misses. On 18 real benign models all four scanners agree at 0/18 code-execution false alarms — the true-negative parity that matters most, since not flagging 18 legitimate models as malware is the hard part. The corpus study over those 19 models found 100% carried a supply-chain finding and 95% shipped pickle weights.",
+      "resultsHighlights": [
+        {
+          "label": "Adversarial suite (Airlock)",
+          "value": "14/14 evasive payloads caught — the only scanner in the benchmark to do so"
+        },
+        {
+          "label": "Corpus study",
+          "value": "19 real HF models: 100% with a finding, 95% pickle-based"
+        },
+        {
+          "label": "Precision",
+          "value": "0/18 false alarms on benign models across all four scanners"
+        },
+        {
+          "label": "Standards",
+          "value": "CycloneDX ML-BOM + SPDX, SARIF, OWASP LLM Top 10 / MITRE ATLAS / CWE / NIST AI RMF / EU AI Act"
+        }
+      ],
+      "performanceMetrics": {
+        "description": "Four-way benchmark on the same evasive-payload and benign-model corpora. Airlock is the only scanner that catches every evasive payload while keeping false alarms at zero.",
+        "metricsTable": [
+          {
+            "metric": "Evasive payloads caught",
+            "value": "14/14",
+            "notes": "Airlock — picklescan/modelscan/fickling all miss evasive variants"
+          },
+          {
+            "metric": "False alarms on benign models",
+            "value": "0/18",
+            "notes": "All four tools clean here — Airlock adds no noise for its extra recall"
+          },
+          {
+            "metric": "Model formats supported",
+            "value": "8+",
+            "notes": "pickle · safetensors · GGUF · ONNX · Keras · numpy · TF SavedModel · Flax (+ nested/compressed)"
+          },
+          {
+            "metric": "Governance frameworks mapped",
+            "value": "2",
+            "notes": "NIST AI RMF + EU AI Act, with a generated risk register"
+          }
+        ],
+        "figures": [
+          {
+            "src": "/projects/bulwark/airlock-demo.svg",
+            "alt": "Airlock scan demo output",
+            "caption": "Airlock scanning a model artifact — flagging pickle code-execution surface with an explainable finding (what, where, why, severity, remediation, reference)."
+          },
+          {
+            "src": "/projects/bulwark/warden-demo.svg",
+            "alt": "Warden agent audit demo output",
+            "caption": "Warden auditing an agent — a 0–100 agency score with the A1–A10 excessive-agency findings and a least-privilege recommendation."
+          },
+          {
+            "src": "/projects/bulwark/manifest-demo.svg",
+            "alt": "Manifest AI-BOM demo output",
+            "caption": "Manifest inventorying a project into a CycloneDX AI-BOM with B1–B9 governance checks and inline Airlock/Warden risk."
+          }
+        ]
+      },
+      "comparativeAnalysis": [
+        {
+          "approach": "picklescan / modelscan / fickling",
+          "strength": "Fast, focused pickle/model scanning",
+          "weakness": "Single-artifact; miss evasive 2025-class payloads; no assembly- or system-level reasoning"
+        },
+        {
+          "approach": "SBOM / dependency tools (CycloneDX, Syft)",
+          "strength": "Mature software inventory",
+          "weakness": "Not AI-aware — no model risk, no MCP, no agent excessive-agency"
+        },
+        {
+          "approach": "Bulwark (Airlock + Warden + Manifest)",
+          "strength": "One taxonomy across parts, assembly, and whole system; 14/14 evasive recall; governance mapping; composes in one command",
+          "weakness": "Younger project; optional AI layer needs a local/BYO model to enable"
+        }
+      ],
+      "comparativeConclusion": "Airlock is the only scanner that catches all 14 evasions — its edge is the compressed and base64-staged payloads every other tool misses — while matching them at 0/18 false alarms on real models.",
+      "useCases": [
+        {
+          "title": "Pre-deployment model vetting",
+          "description": "Airlock-scan every HuggingFace model or GGUF before it enters your stack, catching pickle RCE and format-confusion payloads statically."
+        },
+        {
+          "title": "MCP server review",
+          "description": "Probe a third-party MCP server for tool poisoning, hidden unicode, over-permissioned tools, and cross-tool exfiltration paths before you wire it into an agent."
+        },
+        {
+          "title": "Least-privilege agent hardening",
+          "description": "Warden-audit a LangGraph/CrewAI/Assistants agent, get an agency score, and auto-rewrite it to least privilege with a reviewable diff."
+        },
+        {
+          "title": "AI governance & compliance",
+          "description": "Generate a CycloneDX/SPDX AI-BOM with inline risk and NIST AI RMF / EU AI Act control mapping for audit and procurement."
+        },
+        {
+          "title": "CI merge gates",
+          "description": "Run any tool with --fail-on and upload SARIF to GitHub code scanning so risky models, agents, or dependencies block a PR."
+        }
+      ],
+      "knownLimitations": [
+        "Static analysis of models cannot see logic that only manifests at runtime; Airlock raises the cost of the common evasive shapes but cannot prove a model is safe.",
+        "The optional AI layer is off by default and requires a local Ollama or a BYO OpenAI/Anthropic key; with it disabled, findings are purely deterministic (by design).",
+        "Warden's framework importers cover the major agent frameworks (LangChain/LangGraph, CrewAI, OpenAI Assistants, MCP, manifest YAML); exotic custom orchestrations may need a manifest adapter.",
+        "The corpus study (19 models) is a snapshot of hygiene, not an exhaustive census of the Hub."
+      ],
+      "roadmap": [
+        "PyPI publishing for all packages.",
+        "A larger cross-tool corpus study of AI-supply-chain hygiene.",
+        "A hosted BOM dashboard for tracking AI-BOM drift across releases."
+      ],
+      "techStack": [
+        "Python 3.11+",
+        "uv workspace monorepo",
+        "YAML rule engine",
+        "CycloneDX ML-BOM",
+        "SPDX",
+        "SARIF 2.1.0",
+        "OSV",
+        "Ollama (optional AI)",
+        "ruff",
+        "mypy",
+        "pytest",
+        "nox",
+        "GitHub Actions CI"
+      ],
+      "githubUrl": "https://github.com/mk12002/Bulwark",
+      "liveUrl": "",
+      "status": "active",
+      "type": "security-suite",
+      "systemArchitectureDiagram": {
+        "src": "/projects/bulwark/demo_suite.svg",
+        "alt": "bulwark scan output folding Airlock and Warden findings into one AI-BOM",
+        "caption": "Real output of `bulwark scan ./project --scan-risk --govern` — the whole suite in one command, folding Airlock and Warden findings into a single CycloneDX AI-BOM with a governance report."
+      },
+      "datasetInfo": {
+        "description": "Airlock's corpus study ran over 19 real public HuggingFace models (tiny/test variants of GPT-2, BERT, DistilBERT, RoBERTa, T5, BART, Albert, MobileBERT, Electra, Deberta, Llama, Mistral, GPT-NeoX, OPT, Bloom, CLIP) — a real mix of serialization formats: 18 pickle .bin, 14 Keras .h5, 15 ONNX, 4 safetensors. The adversarial suite is 14 evasive-but-benign pickle payloads, each referencing os.system but only echoing an inert marker; nothing is ever unpickled.",
+        "highlights": [
+          "Prevalence — models with at least one supply-chain finding: 100% (19/19)",
+          "Ship pickle-serialized weights: 95% (18/19); contain a REDUCE exec-surface opcode: 89% (17/19)",
+          "Ship pickle without a safetensors alternative: 74% (14/19)",
+          "No published hashes to verify integrity: 100% (19/19); no model card: 84% (16/19)",
+          "Adversarial suite probes pickle protocols 0–5, framed pickles, STACK_GLOBAL, gzip/zlib compression, base64 staging, object-dtype .npy, torch-zip nesting, and CVE-2025-10155 format-spoofing"
+        ]
+      },
+      "comparisonTable": {
+        "label": "Head-to-head: code-execution detection on identical pickle artifacts",
+        "caption": "Every scanner is asked the same question on every artifact — do you flag code execution? Reproduce with packages/airlock/scripts/benchmark.py. Airlock is the only tool that catches all 14 evasions, and all four stay at zero false alarms on real benign models.",
+        "columns": [
+          "Test group",
+          "Airlock",
+          "picklescan",
+          "modelscan",
+          "fickling"
+        ],
+        "rows": [
+          {
+            "group": "Adversarial (14 evasive payloads)",
+            "airlock": "14/14",
+            "picklescan": "11/14",
+            "modelscan": "9/14",
+            "fickling": "9/14"
+          },
+          {
+            "group": "Real benign models (18 pickle .bin)",
+            "airlock": "0/18",
+            "picklescan": "0/18",
+            "modelscan": "0/18",
+            "fickling": "0/18"
+          }
+        ]
+      },
+      "writeupUrl": "https://dev.to/mohit_kumar1/i-gave-an-ai-control-of-an-80000-seat-stadium-heres-how-i-kept-it-on-a-leash-384d",
+      "engineeringRigor": [
+        {
+          "value": "200+",
+          "label": "tests passing"
+        },
+        {
+          "value": "5",
+          "label": "packages"
+        },
+        {
+          "value": "14/14",
+          "label": "adversarial caught"
+        },
+        {
+          "value": "0/18",
+          "label": "false alarms"
+        },
+        {
+          "value": "Apache-2.0",
+          "label": "license"
+        }
+      ],
+      "architectureDiagram": {
+        "src": "/projects/bulwark/recursion-diagram.svg",
+        "alt": "Bulwark bounded-parsing hardening against malicious input",
+        "caption": "A scanner that ingests hostile files must not become the attack: Bulwark caps recursion, decompression, opcode, and member counts, and never imports or deserializes what it scans."
+      },
+      "qualitativeResultsFigure": {
+        "src": "/projects/bulwark/drift-chart.svg",
+        "alt": "Bulwark AI-BOM drift between versions",
+        "caption": "AI-BOM drift: `manifest diff` compares two CycloneDX BOMs so a review can see exactly which models, tools, or dependencies changed between releases."
+      }
+    },
+    {
+      "slug": "lattice",
+      "title": "Lattice: Post-Quantum Cryptography Readiness Scanner",
+      "category": "Cybersecurity",
+      "categories": [
+        "Cybersecurity"
+      ],
+      "tagline": "Statically inventories every cryptographic asset in a codebase, grades each for quantum and classical weakness, and emits a prioritized migration roadmap to the NIST post-quantum standards.",
+      "metric": "9 Languages · 153 Tests · 0 Runtime Deps",
+      "tags": [
+        "Post-Quantum",
+        "CBOM",
+        "Harvest-Now-Decrypt-Later",
+        "NIST FIPS 203/204/205",
+        "Crypto-Agility",
+        "SARIF",
+        "Static Analysis"
+      ],
+      "description": "Lattice is a crypto-agility and post-quantum-readiness scanner. It statically analyzes a codebase, produces a Cryptographic Bill of Materials (CBOM), grades every cryptographic usage for both quantum vulnerability and classical weakness, and emits a prioritized migration roadmap toward the NIST post-quantum standards. It is defensive and fully offline: it reads files locally, writes reports locally, makes no network calls, never attempts to break cryptography, and never writes key material into a report.",
+      "overview": "The post-quantum threat in three sentences: adversaries can record encrypted traffic today and decrypt it once a cryptographically relevant quantum computer exists — 'harvest now, decrypt later'. Shor's algorithm breaks RSA, Diffie-Hellman, and all elliptic-curve cryptography outright, while Grover's algorithm halves the effective strength of symmetric keys and hashes. NIST has standardized the replacements — ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) / SLH-DSA (FIPS 205) for signatures — and migrating to them starts with knowing what cryptography you actually have. Lattice builds that inventory, grades it, and turns it into an actionable, CI-gate-able roadmap.",
+      "problem": "Most organizations cannot answer a simple question: where is our vulnerable cryptography? RSA and ECC are woven through TLS configs, signing code, certificates, and dependency trees, and there is no single place that lists them. Without an inventory, a post-quantum migration is impossible to plan and impossible to prioritize — and every day of delay extends the window in which today's captured ciphertext can be decrypted later.",
+      "motivation": [
+        "The migration to post-quantum cryptography is the largest cryptographic transition in the history of computing, and it cannot begin without discovery. A Cryptographic Bill of Materials is to crypto-agility what an SBOM is to supply-chain security.",
+        "Harvest-now-decrypt-later makes this urgent rather than theoretical: data with a long confidentiality lifetime (health records, state secrets, financial data) captured today is already exposed to a future quantum adversary, so key-establishment crypto must be graded more severely than a signature that mostly cannot be retro-forged.",
+        "A security tool's own dependencies are an attack surface, so Lattice is standard-library only — zero runtime dependencies — and hardened against the hostile source trees it reads."
+      ],
+      "keyMetrics": [
+        {
+          "name": "Languages / detectors",
+          "value": "9"
+        },
+        {
+          "name": "Automated tests",
+          "value": "153"
+        },
+        {
+          "name": "Runtime dependencies",
+          "value": "0 (stdlib only)"
+        },
+        {
+          "name": "Output formats",
+          "value": "CBOM JSON · HTML · SARIF 2.1.0"
+        },
+        {
+          "name": "SAST posture",
+          "value": "Bandit-clean + pip-audit in CI"
+        },
+        {
+          "name": "Migration priorities",
+          "value": "P0–P3, per-asset justification"
+        }
+      ],
+      "approach": {
+        "description": "Lattice runs a family of language-aware detectors over a source tree, builds a CBOM of every cryptographic asset it can find, and grades each asset twice — once for quantum status and once for classical status — combining the two into a single migration priority with a one-line justification. It is built for the whole lifecycle of a migration, not just a one-shot scan.",
+        "steps": [
+          "Detect crypto across nine surfaces: Python (AST-based), Java/Kotlin (JCA), JS/TS (node:crypto, WebCrypto), Go (import map), C/C++ (OpenSSL/mbedTLS/libsodium), Rust (RustCrypto/openssl/ring), C#/.NET, config & key material (PEM/certs/keystores/TLS), and dependency manifests.",
+          "Grade each asset for quantum status (Shor-broken / Grover-weakened / safe) and classical status (broken / deprecated / secure) from a reviewed knowledge base.",
+          "Combine the two grades into a P0–P3 priority, raising quantum-broken key establishment to P0 whenever harvest-now-decrypt-later exposure applies.",
+          "Emit CBOM JSON for compliance tooling, a self-contained offline HTML report for humans, and SARIF for code-scanning UIs; gate merges with --fail-on P0.",
+          "Support the migration lifecycle: accepted-risk suppression with a mandatory reason + optional expiry (lattice.toml), deterministic drift detection (lattice diff), and compliance policy packs (--policy cnsa2)."
+        ]
+      },
+      "architectureComponents": [
+        {
+          "name": "Language detectors (9)",
+          "description": "One class each implementing applies_to + detect. Python is AST-based; the others are pattern-based over library idioms, each finding carrying an honest high/medium/low confidence."
+        },
+        {
+          "name": "Algorithm knowledge base",
+          "description": "A reviewed truth table (lattice/rules/algorithms.py, inspectable via `lattice rules list`) mapping every algorithm and its synonyms to quantum and classical status."
+        },
+        {
+          "name": "Risk / priority engine",
+          "description": "Combines the two orthogonal grades into P0–P3 with a documented precedence: broken-today outranks broken-later, and HNDL raises quantum-broken key establishment to P0."
+        },
+        {
+          "name": "Emitters",
+          "description": "CBOM JSON (CycloneDX-style), a single self-contained HTML report (offline, light+dark theme, CISO-readable executive summary), and SARIF 2.1.0 with standard suppressions."
+        },
+        {
+          "name": "Lifecycle tooling",
+          "description": "lattice.toml accepted-risks, `lattice diff` deterministic CBOM comparison with --fail-on-new, and compliance policy packs like CNSA 2.0."
+        }
+      ],
+      "algorithmDetails": [
+        {
+          "name": "Two-grade quantum/classical scoring",
+          "description": "Every asset gets two orthogonal grades that combine into one priority, so the model is transparent and auditable rather than a single opaque number.",
+          "steps": [
+            "Classically broken today (MD5, SHA-1, DES, RC4) or broken usage (ECB) → P0.",
+            "Quantum-broken WITH harvest-now-decrypt-later exposure (RSA/DH/ECDH key establishment) → P0.",
+            "Quantum-broken signatures (ECDSA, EdDSA, DSA, RSA-as-signature) → P1.",
+            "Deprecated (3DES, Blowfish, TLS 1.0/1.1) or Grover-weakened ciphers/KDFs (AES-128, PBKDF2) → P2.",
+            "Grover-weakened hashes still usable today (SHA-256) → P3; quantum-resistant + classically secure (AES-256-GCM, ChaCha20, ML-KEM, SHA-3) → none."
+          ]
+        },
+        {
+          "name": "Harvest-now-decrypt-later heuristic",
+          "description": "A usage-family heuristic that raises quantum-broken key establishment above signatures, because captured ciphertext keeps its value while a recorded signature mostly cannot be retro-forged.",
+          "steps": [
+            "Classify the algorithm's usage family (key establishment vs. signature vs. bulk encryption).",
+            "For quantum-broken key establishment, apply the HNDL escalation to P0.",
+            "Annotate the finding honestly: the heuristic reasons about usage families, not what data a specific call actually protects."
+          ]
+        },
+        {
+          "name": "Readiness score",
+          "description": "A single 0–100 summary of what the scanner could see, computed as 100 × (1 − severity-weighted share of findings) with weights P0=1.0, P1=0.6, P2=0.3, P3=0.1 — explicitly a composition summary, not a probability of compromise.",
+          "steps": []
+        }
+      ],
+      "results": "Run over its own Python test fixtures, Lattice scans 3 files and reports 4 findings — two P0s (a hashlib.md5 call, classically broken today; and an RSA-2048 key generation that is both quantum-broken and HNDL-exposed, with an ML-KEM/FIPS-203 remediation) and two compliant assets (AES-256-GCM and ChaCha20-Poly1305) — for a readiness score of 50/100 and a non-zero exit under --fail-on P0. Every finding carries its file, line, matched snippet, confidence, and a one-line justification. Output is byte-deterministic, which is what makes lattice diff meaningful in CI.",
+      "resultsHighlights": [
+        {
+          "label": "Coverage",
+          "value": "9 languages + config/key-material + dependency manifests in one pass"
+        },
+        {
+          "label": "Honesty",
+          "value": "Every finding carries high/medium/low confidence; low-confidence rows say 'verify'"
+        },
+        {
+          "label": "CI-ready",
+          "value": "SARIF 2.1.0 with suppressions + --fail-on P0 merge gate + deterministic diff"
+        },
+        {
+          "label": "Hardened",
+          "value": "No network, no imports, symlink-skipping, per-file size caps, never writes key material"
+        }
+      ],
+      "performanceMetrics": {
+        "description": "Real depth-1 public-repo audits (v0.2.0, 2026-07-14), with a sample of P0/P1 findings hand-verified against each project's known design. No crashes, deterministic output across repeat runs.",
+        "metricsTable": [
+          {
+            "metric": "paramiko — Python SSH",
+            "value": "Score 54 · 43 findings (13 P0)",
+            "notes": "ECDSA/ECDH/RSA kex + host keys, SHA-1 host hashing, MD5 fingerprints, bcrypt KDF — spot-checks matched real design"
+          },
+          {
+            "metric": "FiloSottile/age — Go encryption",
+            "value": "Score 62 · 30 findings (9 P0)",
+            "notes": "ChaCha20-Poly1305 ×8, X25519 ×5, scrypt, HMAC — matches age's published design precisely"
+          },
+          {
+            "metric": "auth0/node-jsonwebtoken — JS JWT",
+            "value": "Score 26 · 25 findings (12 P0)",
+            "notes": "RSA ×11 / ECDSA ×7 (RS256/ES256), SHA-1-signed test certs via the DER parser"
+          },
+          {
+            "metric": "CPython 3.11 stdlib (~5,800 files)",
+            "value": "173 findings in ~72s",
+            "notes": "58 P0 / 17 P1 / 49 P2 / 8 P3 / 41 compliant; 171/173 high confidence; zero crashes"
+          }
+        ],
+        "figures": [
+          {
+            "src": "/projects/lattice/terminal-scan.svg",
+            "alt": "lattice scan terminal output",
+            "caption": "A scan run: findings summarized by priority, a readiness score, and a non-zero exit under --fail-on P0."
+          },
+          {
+            "src": "/projects/lattice/report-dark.png",
+            "alt": "Lattice HTML report, dark theme",
+            "caption": "The same self-contained HTML report in dark theme — priority cards, the harvest-now-decrypt-later headline, and the prioritized findings table."
+          }
+        ]
+      },
+      "comparativeAnalysis": [
+        {
+          "approach": "CBOMkit",
+          "strength": "Purpose-built CBOM generation",
+          "weakness": "Heavier footprint; less migration-lifecycle tooling (accepted-risk, diff gates, policy packs)"
+        },
+        {
+          "approach": "Semgrep / CodeQL",
+          "strength": "General, powerful static analysis",
+          "weakness": "Not crypto-aware out of the box — no quantum/classical grading, no HNDL model, no CBOM"
+        },
+        {
+          "approach": "TLS scanners (testssl, sslyze)",
+          "strength": "Deep on live TLS endpoints",
+          "weakness": "Runtime + network; don't inventory crypto in source, keys, or dependency manifests"
+        },
+        {
+          "approach": "Lattice",
+          "strength": "Offline, zero-dep, 9-language CBOM with two-axis quantum/classical grading + migration lifecycle",
+          "weakness": "Static analysis misses dynamically selected algorithms; regex detectors carry documented false positives"
+        }
+      ],
+      "comparativeConclusion": "Lattice occupies the gap between general SAST and live TLS scanners: a crypto-specific, offline, source-level inventory purpose-built for planning a post-quantum migration.",
+      "useCases": [
+        {
+          "title": "Post-quantum migration planning",
+          "description": "Produce a prioritized CBOM so security leadership knows exactly which RSA/ECC usages to replace first, and with which NIST standard."
+        },
+        {
+          "title": "Crypto-agility audits",
+          "description": "Inventory every cryptographic asset across a polyglot codebase, certificates, and TLS configs in a single offline pass."
+        },
+        {
+          "title": "CI regression gates",
+          "description": "Block a PR that introduces weak or quantum-vulnerable crypto with `lattice diff --fail-on-new P0`, without failing on pre-existing findings."
+        },
+        {
+          "title": "Compliance evidence",
+          "description": "Evaluate findings against the CNSA 2.0 suite and hand auditors a self-contained, CISO-readable HTML report plus machine-readable CBOM JSON."
+        }
+      ],
+      "knownLimitations": [
+        "Static analysis misses dynamically selected algorithms (hashlib.new(user_config), runtime key sizes); absence of findings is not evidence of absence of crypto.",
+        "Regex-based detectors (Java, JS, C/C++, config) have documented false positives in dead code and test suites; every finding carries an honest confidence level.",
+        "A CBOM is an inventory, not a proof of correct usage — AES-256-GCM with a reused nonce is compliant in the report and broken in practice.",
+        "Key sizes are often undeterminable and are reported conservatively (bare AES treated as <256-bit, with a note explaining why)."
+      ],
+      "roadmap": [
+        "Broaden dynamic-usage detection where AST information is available.",
+        "Additional compliance policy packs beyond CNSA 2.0.",
+        "Expanded key-material and certificate-chain analysis."
+      ],
+      "techStack": [
+        "Python 3.11+",
+        "Standard library only (0 runtime deps)",
+        "AST analysis",
+        "CycloneDX-style CBOM",
+        "SARIF 2.1.0",
+        "Bandit (SAST)",
+        "pip-audit",
+        "NIST FIPS 203/204/205",
+        "CNSA 2.0"
+      ],
+      "githubUrl": "https://github.com/mk12002/Lattice",
+      "liveUrl": "",
+      "status": "active",
+      "type": "security-scanner",
+      "systemArchitectureDiagram": {
+        "src": "/projects/lattice/lattice-architecture.svg",
+        "alt": "Lattice scan pipeline architecture",
+        "caption": "How a Lattice scan works: language-aware detectors build a CBOM, the reviewed knowledge base grades each asset for quantum and classical status, and the risk engine emits prioritized findings as CBOM JSON, HTML, and SARIF."
+      },
+      "flowDiagram": {
+        "src": "/projects/lattice/lattice-scoring-model.svg",
+        "alt": "Lattice two-axis quantum/classical scoring model",
+        "caption": "The transparent scoring model: quantum status × classical status → a P0–P3 priority, with harvest-now-decrypt-later escalation raising quantum-broken key establishment to P0."
+      },
+      "datasetInfo": {
+        "description": "Lattice was audited against real public repositories, not just synthetic fixtures: depth-1 clones of deliberately different projects, scanned with all detectors, with a sample of P0/P1 findings hand-verified against each project's known cryptographic design.",
+        "highlights": [
+          "paramiko (Python SSH), FiloSottile/age (Go encryption), and auth0/node-jsonwebtoken (JS JWT) — each cross-checked against its documented cryptography",
+          "CPython 3.11 standard library — ~5,800 files scanned in ~72s with zero crashes",
+          "Dogfood run on Lattice's own 54 files",
+          "Conservative behaviors documented rather than hidden (e.g. bare RSA keygen scored as key establishment when the call site can't prove signature usage)"
+        ]
+      },
+      "comparisonTable": {
+        "label": "Lattice vs. the existing crypto-scanning landscape",
+        "caption": "Positioning against prior art (grounded in each project's public docs, July 2026). Lattice's niche: prioritization over a binary verdict, zero infrastructure, and a real migration lifecycle.",
+        "columns": [
+          "Capability",
+          "Lattice",
+          "CBOMkit / sonar-cryptography",
+          "Semgrep / CodeQL",
+          "testssl.sh / sslyze"
+        ],
+        "rows": [
+          {
+            "cap": "What it is",
+            "lattice": "Standalone CLI CBOM scanner + prioritizer",
+            "cbomkit": "SonarQube plugin + service",
+            "semgrep": "General SAST engines w/ crypto rules",
+            "tls": "Network TLS endpoint scanners"
+          },
+          {
+            "cap": "Languages",
+            "lattice": "9 + configs/PEM/X.509 + 6 manifest formats",
+            "cbomkit": "Java & Python source; container FS",
+            "semgrep": "Many (rule-dependent depth)",
+            "tls": "None (protocol only)"
+          },
+          {
+            "cap": "Infrastructure",
+            "lattice": "pip install, 0 deps, offline",
+            "cbomkit": "SonarQube server (+ DB for service)",
+            "semgrep": "CLI / CodeQL DB build",
+            "tls": "CLI (network)"
+          },
+          {
+            "cap": "PQC judgment",
+            "lattice": "P0–P3 priorities + HNDL weighting + justification",
+            "cbomkit": "Whitelist compliant / not",
+            "semgrep": "None built in",
+            "tls": "Weak protocol/cipher flags"
+          },
+          {
+            "cap": "Migration lifecycle",
+            "lattice": "Accepted-risk + drift diff gate + CNSA 2.0 policy",
+            "cbomkit": "Compliance service",
+            "semgrep": "Generic ignore comments",
+            "tls": "N/A"
+          }
+        ]
+      },
+      "qualitativeResultsFigure": {
+        "src": "/projects/lattice/report-light.png",
+        "alt": "Lattice self-contained HTML report",
+        "caption": "The self-contained HTML report (offline, light + dark themes): a CISO-readable executive summary, priority cards, the harvest-now-decrypt-later headline, and the full prioritized findings table."
+      },
+      "engineeringRigor": [
+        {
+          "value": "153",
+          "label": "tests"
+        },
+        {
+          "value": "0",
+          "label": "runtime deps"
+        },
+        {
+          "value": "9",
+          "label": "languages"
+        },
+        {
+          "value": "Bandit",
+          "label": "SAST clean"
+        },
+        {
+          "value": "offline",
+          "label": "no network"
+        }
+      ],
+      "backboneArchitectureDiagram": {
+        "src": "/projects/lattice/hndl-timeline.svg",
+        "alt": "Harvest-now-decrypt-later timeline",
+        "caption": "Harvest-now-decrypt-later: data captured today under quantum-broken key establishment is exposed the moment a cryptographically relevant quantum computer exists — which is why Lattice grades key establishment more severely than signatures."
+      }
+    },
+    {
+      "slug": "portcullis",
+      "title": "Portcullis: CI/CD Pipeline Security Scanner",
+      "category": "Cybersecurity",
+      "categories": [
+        "Cybersecurity"
+      ],
+      "tagline": "Statically analyzes GitHub Actions, GitLab CI, and Jenkins pipelines through one normalized model — and scores every finding by whether attacker-controlled input can actually reach it.",
+      "metric": "3 Platforms · 66 Real Pipelines · 100/100 Self-Scan",
+      "tags": [
+        "GitHub Actions",
+        "GitLab CI",
+        "Jenkins",
+        "pwn-request",
+        "Expression Injection",
+        "Taint Analysis",
+        "SARIF",
+        "Supply Chain"
+      ],
+      "description": "CI/CD pipelines hold repository secrets, carry write-capable tokens, and routinely execute code from untrusted pull requests. One misconfiguration — a pull_request_target job that checks out PR code, a PR title interpolated into a shell line, a third-party action on a mutable tag — turns that combination into full repository compromise. Portcullis detects those misconfigurations statically and, unlike a linter, scores them by context: the same flaw is one severity level more dangerous wherever attacker-controlled input can reach it.",
+      "overview": "Portcullis normalizes GitHub Actions, GitLab CI, and Jenkins into a single Pipeline model, then runs one set of rules (R1–R6) across all three platforms. Its distinguishing idea is trigger-context escalation: a `curl | bash` step on `push` is P2 hygiene, but the identical step reachable from `pull_request_target` escalates toward P0 because an attacker can now control what runs. Confidence is a first-class property — LOW-confidence findings hard-cap at P3 (surface, don't block), hygiene findings can't corroborate into P0, and Jenkins/Groovy findings are honestly capped at MEDIUM. Output is deterministic JSON, self-contained HTML, SARIF 2.1.0, and PR-comment Markdown, each with a documented 0–100 score.",
+      "problem": "The 2026 comparative study of nine pipeline scanners found that no single scanner covers all weakness categories, and most are single-platform (zizmor and actionlint are GitHub-only). Meanwhile the highest-impact CI vulnerabilities are precisely the ones that depend on context — an injection sink is only critical if an untrusted trigger can reach it — and per-rule severities can't express that. Teams running GitLab and Jenkins were left with far less tooling than GitHub users, and the tools they did have produced noise that buried the findings that mattered.",
+      "motivation": [
+        "CI/CD is now a primary target: pipelines are where secrets, write tokens, and untrusted PR code all meet, and a single misconfigured trigger can mean full repo compromise.",
+        "Severity without reachability is noise. Portcullis makes trigger context first-class so the same pattern is ranked by whether an attacker can actually control the input that reaches it.",
+        "Cross-platform coverage matters: normalizing GitHub, GitLab, and Jenkins to one model means a rule is written once and runs everywhere — including the GitLab and Jenkins files that GitHub-only scanners simply skip."
+      ],
+      "keyMetrics": [
+        {
+          "name": "Platforms (one normalized model)",
+          "value": "GitHub · GitLab · Jenkins"
+        },
+        {
+          "name": "Real pipeline files evaluated",
+          "value": "66 across 10 OSS projects"
+        },
+        {
+          "name": "Scan time (66 files)",
+          "value": "~1.4s, zero crashes"
+        },
+        {
+          "name": "Secret-value leaks across 4 output formats",
+          "value": "0"
+        },
+        {
+          "name": "Detection rule families",
+          "value": "R1–R6"
+        },
+        {
+          "name": "Portcullis' own pipeline self-scan",
+          "value": "100/100"
+        }
+      ],
+      "approach": {
+        "description": "Portcullis parses each platform with a line-number-preserving parser, normalizes it into one Pipeline model, runs taint analysis to establish reachability from untrusted triggers, applies the R1–R6 rules once against the model, then folds findings into P0–P3 priorities through a transparent risk model. Every stage is offline and deterministic.",
+        "steps": [
+          "Parse GitHub Actions, GitLab CI, and Jenkinsfiles into one normalized Pipeline model (via ruamel.yaml for line-accurate positions).",
+          "Run taint analysis: mark jobs reachable from untrusted triggers (pull_request_target, workflow_run, MR untrusted context, CHANGE_* variables).",
+          "Apply rules R1–R6: dangerous triggers, expression injection, pinning, token permissions, secret exposure, and step integrity.",
+          "Escalate: any finding inside a job reachable from an untrusted trigger gets +1 severity; LOW confidence hard-caps at P3; two distinct MEDIUM+ rules on one job corroborate up a level (hygiene excluded).",
+          "Emit JSON + self-contained HTML + SARIF 2.1.0 + PR-comment Markdown, each with a 0–100 score, and gate CI with --fail-on."
+        ]
+      },
+      "architectureComponents": [
+        {
+          "name": "core/ — normalized model",
+          "description": "The Pipeline model, the risk engine, and the taint analysis that establishes reachability from untrusted triggers. Rules are written once against this model."
+        },
+        {
+          "name": "platforms/ — parsers",
+          "description": "github_actions, gitlab_ci, and jenkins parsers that each map their native format into the one shared Pipeline model."
+        },
+        {
+          "name": "rules/ — R1–R6",
+          "description": "Six rule families written against the normalized model, so every rule runs on all three platforms automatically."
+        },
+        {
+          "name": "emitters/ — output",
+          "description": "Deterministic JSON, a self-contained offline HTML report, SARIF 2.1.0, and PR-comment Markdown — with detected secrets always redacted."
+        }
+      ],
+      "algorithmDetails": [
+        {
+          "name": "Trigger-context escalation",
+          "description": "The core idea: rank a finding by whether attacker-controlled input can reach it, not just by the pattern itself.",
+          "steps": [
+            "Taint-mark every job reachable from an untrusted trigger.",
+            "Any non-R1 finding in such a job gets +1 severity (R1 is exempt — its severity already encodes the trigger).",
+            "Map severity to priority: CRITICAL→P0, HIGH→P1, MEDIUM→P2, LOW→P3.",
+            "The identical injection pattern is therefore CRITICAL/P0 under pull_request_target and HIGH/P1 under push, marked with an ↑ in every output."
+          ]
+        },
+        {
+          "name": "Confidence-first noise control",
+          "description": "Architecture, not tuning, keeps the report actionable.",
+          "steps": [
+            "LOW-confidence findings hard-cap at P3 — surface, never block.",
+            "Hygiene findings cannot corroborate into P0.",
+            "Two distinct MEDIUM+ rules on one job bump each other one level (hygiene excluded).",
+            "Jenkins/Groovy parsing is best-effort and honestly capped at MEDIUM confidence."
+          ]
+        },
+        {
+          "name": "Documented 0–100 score",
+          "description": "An executable, transparent score printed on every report.",
+          "steps": [
+            "score = max(0, 100 − 30·P0 − 15·P1 − 5·P2 − 1·P3).",
+            "The full (rule-combination → priority) truth table is encoded as executable tests (tests/test_risk.py)."
+          ]
+        }
+      ],
+      "results": "Portcullis was run against 66 real pipeline files from 10 well-known OSS projects (flask, fastapi, requests, actions/runner, gitlab-runner, jenkinsci/pipeline-examples, and more). It completed in ~1.4s with zero crashes; malformed files degraded to LOW findings rather than failing, and there were zero secret-value leaks across all four output formats. Well-maintained repos scored 95–100 and problematic ones scored low with actionable findings. Head-to-head against zizmor 1.27.0 it showed directional agreement on repo health — and additionally scanned the GitLab and Jenkins files that zizmor reports 'no audit was performed' on. The evaluation dataset itself caught two calibration bugs (P0 over-escalation of hygiene; plaintext-secret false positives), both fixed with regression tests, cutting dataset-wide false P0s from 9 to 3 and plaintext false positives from 9 to 0.",
+      "resultsHighlights": [
+        {
+          "label": "Real-world proof",
+          "value": "66 pipelines, 10 OSS projects, ~1.4s, zero crashes"
+        },
+        {
+          "label": "Dogfood",
+          "value": "Portcullis passes its own scan at 100/100 (enforced by test_dogfood.py)"
+        },
+        {
+          "label": "Safety",
+          "value": "0 secret-value leaks across JSON/HTML/SARIF/Markdown; secrets always redacted"
+        },
+        {
+          "label": "Calibration",
+          "value": "Dataset-driven fixes cut false P0s 9→3 and plaintext FPs 9→0"
+        }
+      ],
+      "comparisonTable": {
+        "label": "Head-to-head vs zizmor 1.27.0 (identical inputs, offline, config-free)",
+        "caption": "zizmor is the strongest GitHub-only comparison. The tools agree directionally on repo health but differ by design on calibration philosophy — and Portcullis additionally scans the GitLab/Jenkins files zizmor cannot.",
+        "columns": [
+          "Project",
+          "zizmor",
+          "Portcullis",
+          "Reading"
+        ],
+        "rows": [
+          {
+            "project": "flask / click / requests",
+            "zizmor": "clean (inline ignores)",
+            "portcullis": "85–95, hygiene only",
+            "reading": "strong agreement"
+          },
+          {
+            "project": "spring-petclinic",
+            "zizmor": "22 findings (7 high, 6 med)",
+            "portcullis": "13 findings (0 P0, 2 P1)",
+            "reading": "both flag it; both agree it needs work"
+          },
+          {
+            "project": "actions/runner",
+            "zizmor": "230 findings (66 high)",
+            "portcullis": "81 findings (0 P0, 10 P1)",
+            "reading": "philosophy divergence — Portcullis separates first- vs third-party pinning"
+          },
+          {
+            "project": "GitLab / Jenkins files",
+            "zizmor": "'no audit was performed'",
+            "portcullis": "scanned all 8, scores 85–100",
+            "reading": "Portcullis-only capability"
+          }
+        ]
+      },
+      "comparativeAnalysis": [
+        {
+          "approach": "zizmor / actionlint",
+          "strength": "Excellent, fast GitHub Actions analysis",
+          "weakness": "GitHub-only — report 'no audit was performed' on GitLab/Jenkins files"
+        },
+        {
+          "approach": "poutine",
+          "strength": "Multi-platform CI scanning",
+          "weakness": "Per-rule severity without trigger-context escalation"
+        },
+        {
+          "approach": "Portcullis",
+          "strength": "One model across 3 platforms + context escalation + architecture-level noise control + 4 output formats",
+          "weakness": "Jenkins/Groovy parsing is best-effort (capped at MEDIUM); reusable workflows followed shallowly"
+        }
+      ],
+      "comparativeConclusion": "Independently, both tools rank the same projects healthy vs. problematic — corroboration that Portcullis catches real issues, not noise — while its priority-first calibration and multi-platform reach cover ground zizmor structurally can't.",
+      "useCases": [
+        {
+          "title": "PR-time pipeline gate",
+          "description": "Run Portcullis with --fail-on P0 so a pull_request_target checkout of PR code or an injection sink reachable from untrusted input blocks the merge."
+        },
+        {
+          "title": "Multi-platform audit",
+          "description": "Audit GitHub, GitLab, and Jenkins pipelines with one tool and one rule set — including the files GitHub-only scanners skip."
+        },
+        {
+          "title": "Code-scanning integration",
+          "description": "Upload SARIF to GitHub code scanning to surface CI/CD findings alongside application code findings, with context-escalation marks."
+        },
+        {
+          "title": "Supply-chain hardening",
+          "description": "Catch unpinned third-party actions on mutable tags and images on :latest before they become a mutable-dependency compromise."
+        }
+      ],
+      "knownLimitations": [
+        "Static reachability is approximate — confidence marks that honestly, and a clean scan is evidence, not proof.",
+        "Reusable/called workflows are followed only shallowly.",
+        "Jenkins/Groovy parsing is best-effort and capped at MEDIUM confidence.",
+        "High-entropy secret detection has false positives, surfaced at LOW confidence; .gitignore support is a pragmatic subset."
+      ],
+      "roadmap": [
+        "Deeper reusable-workflow following across repositories.",
+        "More platforms behind the same normalized model.",
+        "Expanded taint sources for emerging trigger types."
+      ],
+      "techStack": [
+        "Python 3.11+",
+        "ruamel.yaml (line-preserving parser)",
+        "Taint analysis",
+        "SARIF 2.1.0",
+        "Self-contained HTML",
+        "PR-comment Markdown",
+        "GitHub Actions / GitLab CI / Jenkins"
+      ],
+      "githubUrl": "https://github.com/mk12002/Portcullis",
+      "liveUrl": "",
+      "status": "active",
+      "type": "security-scanner",
+      "systemArchitectureDiagram": {
+        "src": "/projects/portcullis/architecture.svg",
+        "alt": "Portcullis architecture",
+        "caption": "Portcullis normalizes GitHub Actions, GitLab CI, and Jenkins into one Pipeline model; rules R1–R6 run once against that model, and taint analysis establishes reachability from untrusted triggers."
+      },
+      "flowDiagram": {
+        "src": "/projects/portcullis/pwn-request-flow.svg",
+        "alt": "pwn-request attack flow",
+        "caption": "The pwn-request pattern Portcullis elevates: a pull_request_target job checks out and runs attacker-controlled PR code with repository secrets in scope — a P2 hygiene step on push becomes a P0 here."
+      },
+      "datasetInfo": {
+        "description": "Evaluated on 66 real pipeline files from 10 well-known OSS projects across all three platforms (not synthetic fixtures): flask/click, fastapi, requests, actions/runner, spring-petclinic (GitHub Actions); gitlab-runner, gitlab cli, common-ci-tasks (GitLab CI); jenkinsci/pipeline-examples (Jenkins).",
+        "highlights": [
+          "66 files scanned in ~1.4s with zero crashes; 2 genuine parse failures degraded to LOW R0 findings, never crashes",
+          "0 secret-value leaks across JSON + HTML + SARIF + Markdown on the entire dataset",
+          "Aggregate priority mix improved from P0:9 P1:27 P2:72 P3:30 to P0:3 P1:33 P2:72 P3:21 after two dataset-driven calibration fixes",
+          "The 3 remaining P0s are a single genuine true-positive class: repository secrets used in workflow_run-triggered jobs (MEDIUM confidence)"
+        ]
+      },
+      "performanceMetrics": {
+        "description": "Real-world scores on the 66-file, 10-project dataset — ~1.4s total, zero crashes, zero secret-value leaks across all four output formats. Scores track repo health, and the run itself caught two calibration bugs (P0 over-escalation of hygiene; plaintext-secret false positives), both fixed with regression tests that cut dataset-wide false P0s from 9 to 3 and plaintext FPs from 9 to 0.",
+        "metricsTable": [
+          {
+            "metric": "gitlab-runner",
+            "value": "100/100",
+            "notes": "clean"
+          },
+          {
+            "metric": "flask / click",
+            "value": "95/100",
+            "notes": "first-party pinning hygiene (worst P2)"
+          },
+          {
+            "metric": "requests / common-ci-tasks",
+            "value": "85/100",
+            "notes": "pinning + permissions hygiene (P1/P2)"
+          },
+          {
+            "metric": "spring-petclinic",
+            "value": "27/100",
+            "notes": "unverified downloads + broad permissions (P1)"
+          },
+          {
+            "metric": "actions/runner",
+            "value": "0/100",
+            "notes": "third-party pinning + broad-write on release jobs (P1)"
+          },
+          {
+            "metric": "fastapi",
+            "value": "0/100",
+            "notes": "secrets used in workflow_run-triggered jobs (P0, MEDIUM confidence)"
+          }
+        ],
+        "figures": [
+          {
+            "src": "/projects/portcullis/terminal.svg",
+            "alt": "Portcullis terminal output",
+            "caption": "A scan of the bundled inert-but-vulnerable fixtures — context escalation marked with ↑ in every output."
+          },
+          {
+            "src": "/projects/portcullis/report-preview.svg",
+            "alt": "Portcullis self-contained HTML report",
+            "caption": "The self-contained HTML report: a documented 0–100 score, priority breakdown, and per-finding evidence with concrete remediation."
+          }
+        ]
+      },
+      "engineeringRigor": [
+        {
+          "value": "116",
+          "label": "tests"
+        },
+        {
+          "value": "100/100",
+          "label": "own self-scan"
+        },
+        {
+          "value": "3",
+          "label": "platforms"
+        },
+        {
+          "value": "1",
+          "label": "runtime dep"
+        },
+        {
+          "value": "deterministic",
+          "label": "byte-identical"
+        }
+      ]
+    },
+    {
+      "slug": "stowaway",
+      "title": "Stowaway: Offline Supply-Chain Integrity Scanner",
+      "category": "Cybersecurity",
+      "categories": [
+        "Cybersecurity"
+      ],
+      "tagline": "Catches the supply-chain attacks that have no CVE — typosquatting, dependency confusion, install-time malware, and lockfile tampering — across npm, PyPI, Go, and Cargo, fully offline.",
+      "metric": "4 Ecosystems · 118 Tests · 0 False Positives",
+      "tags": [
+        "Typosquatting",
+        "Dependency Confusion",
+        "Install-Hook Malware",
+        "npm / PyPI / Go / Cargo",
+        "Lockfile Integrity",
+        "SARIF",
+        "Offline"
+      ],
+      "description": "Stowaway is an offline software supply-chain integrity scanner. It catches the attacks that have no CVE: attackers publish typosquats one keystroke from famous names and wait for a mistyped install; they exploit dependency confusion by registering your internal package names on public registries so resolvers fetch their code instead of yours; and they hide install-hook malware — code that runs the moment a package is installed, before you ever import it — behind obfuscation and tampered lockfiles. Stowaway detects all four, across npm, PyPI, Go, and Cargo.",
+      "overview": "Stowaway is fully offline (zero network I/O at scan time), fully static (scanned code is never executed), and deterministic (same input → byte-identical output). A single pass walks the tree with size caps and .gitignore awareness, hands each ecosystem's manifests/lockfiles/install-hooks to its parser, runs all five rule families over the resulting ScanContext, folds findings into per-package priorities via a transparent risk model, and emits JSON, self-contained HTML, and SARIF 2.1.0 with a --fail-on CI merge gate. It complements CVE/SCA scanners rather than replacing them.",
+      "problem": "Classic vulnerability scanners match known CVEs — but the fastest-growing supply-chain attacks have no CVE at all. A typosquat, a confused internal dependency, or a malicious postinstall hook is a brand-new package doing exactly what its author intended; there is nothing in a vulnerability database to match. These attacks succeed at install time, before any code review or import, and they are invisible to tools built around a CVE feed.",
+      "motivation": [
+        "Install-time is the critical window: a malicious postinstall/preinstall hook runs the moment a package is installed, harvesting environment secrets or dropping a payload before a developer ever imports or reviews the code.",
+        "Dependency confusion and typosquatting are name-level attacks — they don't exploit a bug, they exploit a resolver's behavior or a human's typo — so detecting them needs name-similarity and namespace reasoning, not a CVE lookup.",
+        "A security tool that itself phones home or drags in a dependency tree is a liability, so Stowaway is standard-library only, offline, and its own test fixtures are provably inert (enforced by an automated guard)."
+      ],
+      "keyMetrics": [
+        {
+          "name": "Ecosystems",
+          "value": "npm · PyPI · Go · Cargo"
+        },
+        {
+          "name": "Automated tests",
+          "value": "118 passing"
+        },
+        {
+          "name": "Runtime dependencies",
+          "value": "0 (stdlib only)"
+        },
+        {
+          "name": "Network I/O at scan time",
+          "value": "None (fully offline)"
+        },
+        {
+          "name": "Calibration on 153 real deps",
+          "value": "0 false positives (100/100 on all 4 projects)"
+        },
+        {
+          "name": "5,000-package lockfile scan",
+          "value": "~1.0s"
+        }
+      ],
+      "approach": {
+        "description": "Stowaway runs five rule families over a normalized ScanContext, resolves combination escalations first (the classic exfiltration shape), then corroborates independent signals into per-package priorities via a transparent, printed formula. Every finding carries a confidence because heuristics are probabilistic — and Stowaway says so.",
+        "steps": [
+          "Walk the tree (excluding vendored trees and .gitignore'd paths, with size caps) and hand each ecosystem's manifests, lockfiles, and install hooks to its parser.",
+          "R1 Typosquatting: Damerau-Levenshtein distance 1–2 (length-scaled), keyboard adjacency, homoglyphs, transpositions, plus structural transforms (prefix/suffix augmentation, token reordering, pluralization, delimiter changes, npm scope-strip), compared against a bundled popularity corpus.",
+          "R2 Dependency confusion: internal-namespace names (--internal-prefix) resolvable from public registries, and mixed-registry lockfiles.",
+          "R3 Install-time behavior (B1–B7): network at install, env harvesting, credential-path access, obfuscation, payload drop (incl. decoded-payload magic-byte detection), and persistence — with pairwise combination escalation to CRITICAL.",
+          "R4 Lockfile integrity + R5 structural signals: manifest↔lock drift, missing/downgraded integrity hashes, registry-URL anomalies, implausible version jumps, deep transitive chains; then fold into priorities and emit."
+        ]
+      },
+      "architectureComponents": [
+        {
+          "name": "Ecosystem parsers",
+          "description": "A four-method Ecosystem ABC per registry (npm, PyPI, Go, Cargo) that parses manifests, lockfiles, and install hooks into one ScanContext."
+        },
+        {
+          "name": "Rule families (R1–R5)",
+          "description": "Typosquatting, dependency confusion, install-time behavior (B1–B7), lockfile integrity, and structural signals — each grounded in the detection literature (SpellBound, TypoGard, GuardDog, OSSGadget)."
+        },
+        {
+          "name": "Risk model",
+          "description": "Combination escalations resolve first, corroboration outranks isolated signals, and the project score = 100 − 40·P0 − 15·P1 − 5·P2 − 1·P3 (floored at 0), printed in every report footer."
+        },
+        {
+          "name": "Popularity corpus",
+          "description": "Bundled per-ecosystem name lists (782 names across 4 ecosystems) that typosquat detection compares against; versioned, and replaceable with --corpus DIR."
+        },
+        {
+          "name": "Emitters",
+          "description": "Deterministic JSON with stable fingerprints, a single self-contained HTML report, and SARIF 2.1.0 with partialFingerprints for code-scanning dedup."
+        }
+      ],
+      "algorithmDetails": [
+        {
+          "name": "Structural typosquat detection (R1)",
+          "description": "Goes beyond edit distance to the transforms attackers actually use, grounded in the SpellBound/TypoGard/TypoSmart literature.",
+          "steps": [
+            "Length-scaled Damerau-Levenshtein distance 1–2 against the popularity corpus.",
+            "Keyboard adjacency, homoglyph, and transposition checks.",
+            "Structural transforms: prefix/suffix augmentation (dateutil→python3-dateutil), token reordering (python-nmap→nmap-python), pluralization, delimiter changes, npm scope-strip.",
+            "Each match carries a confidence; low-confidence rows read 'verify', not 'block'."
+          ]
+        },
+        {
+          "name": "Install-time combination escalation (R3)",
+          "description": "The signal that matters most — because each half is often innocent but the pair is the classic exfiltration shape.",
+          "steps": [
+            "Detect B1–B7 behaviors in install hooks: network at install, env harvesting, credential-path access, obfuscation, payload drop, persistence.",
+            "Decode base64 blobs and check magic bytes — a literal that decodes to an ELF/PE binary is flagged as a dropped payload.",
+            "Escalate install-time network access PLUS environment harvesting in the same script straight to CRITICAL / P0, even though each alone is often benign telemetry or a native-module download."
+          ]
+        },
+        {
+          "name": "Transparent priority model",
+          "description": "Corroboration outranks isolated signals, and the score is a printed formula rather than a black box.",
+          "steps": [
+            "Two independent MEDIUM findings on one package beat one low-confidence HIGH.",
+            "Project score = 100 − 40·P0 − 15·P1 − 5·P2 − 1·P3, floored at 0, printed in every report footer."
+          ]
+        }
+      ],
+      "results": "On the bundled demo, Stowaway trips the P0 gate on two packages: one whose install hook combines an install-time network call with bulk environment harvesting (escalated to CRITICAL) and also embeds a base64 literal that decodes to an ELF binary; and an internal package name that resolves from the public registry (dependency confusion). The non-zero exit blocks the merge. Calibrated against the unmodified upstream manifests of Flask, Express, ripgrep, and kubectl — 153 real dependencies across all four ecosystems — Stowaway produced zero false positives, with every project scoring 100/100.",
+      "resultsHighlights": [
+        {
+          "label": "Calibration",
+          "value": "153 real deps across 4 ecosystems → 0 false positives"
+        },
+        {
+          "label": "Speed",
+          "value": "~13ms typical project; ~1.0s for a 5,000-package lockfile (CPU-bound, offline)"
+        },
+        {
+          "label": "Determinism",
+          "value": "Same input → byte-identical output, enabling meaningful baselines"
+        },
+        {
+          "label": "Provably safe repo",
+          "value": "Every fixture is a benign mimic, enforced by an automated inertness guard"
+        }
+      ],
+      "performanceMetrics": {
+        "description": "Measured on the reference machine (Python 3.11, cold corpus warmed once). No network round-trips means latency is CPU-bound and identical offline.",
+        "metricsTable": [
+          {
+            "metric": "Typical project (npm manifest + lock + hook)",
+            "value": "~13 ms",
+            "notes": "Single offline pass"
+          },
+          {
+            "metric": "5,000-package lockfile",
+            "value": "~1.0 s",
+            "notes": "Scales linearly, CPU-bound"
+          },
+          {
+            "metric": "Bundled popularity corpus",
+            "value": "782 names",
+            "notes": "Across npm/PyPI/Go/Cargo; versioned and replaceable"
+          },
+          {
+            "metric": "Real-world false positives (153 deps)",
+            "value": "0",
+            "notes": "Flask, Express, ripgrep, kubectl all scored 100/100"
+          }
+        ],
+        "figures": [
+          {
+            "src": "/projects/stowaway/terminal.svg",
+            "alt": "Stowaway terminal output tripping the P0 gate",
+            "caption": "A scan that trips the P0 gate: an install hook combining install-time network access with environment harvesting (escalated to CRITICAL), plus an internal name resolving from the public registry (dependency confusion)."
+          },
+          {
+            "src": "/projects/stowaway/report-full.png",
+            "alt": "Stowaway full HTML report",
+            "caption": "The full HTML report: per-ecosystem breakdown, every finding with file:line evidence and an inert snippet, confidence marks, and a methodology + limitations footer."
+          }
+        ]
+      },
+      "comparativeAnalysis": [
+        {
+          "approach": "SCA / CVE scanners (Dependabot, Snyk)",
+          "strength": "Strong on known-CVE vulnerabilities",
+          "weakness": "Blind to no-CVE attacks: typosquats, dependency confusion, install-hook malware"
+        },
+        {
+          "approach": "GuardDog / Packj",
+          "strength": "Rich registry-metadata + behavioral signals",
+          "weakness": "Require network access for their strongest signals; heavier to run in an air-gapped gate"
+        },
+        {
+          "approach": "Stowaway",
+          "strength": "Fully offline, deterministic, 4-ecosystem, calibrated to 0 FP on real projects, combination-escalation risk model",
+          "weakness": "By design excludes network-only registry signals; determined obfuscation can evade static patterns"
+        }
+      ],
+      "comparativeConclusion": "Stowaway complements CVE/SCA scanners by covering the no-CVE attack classes they miss, and does it offline and deterministically so it drops cleanly into an air-gapped CI gate.",
+      "useCases": [
+        {
+          "title": "Air-gapped supply-chain gate",
+          "description": "Run in CI with --fail-on P0 in an environment with no network access — Stowaway needs none, and blocks typosquats, confusion, and install-hook malware at merge time."
+        },
+        {
+          "title": "Dependency-confusion defense",
+          "description": "Declare your internal namespace with --internal-prefix so any internal name resolvable from a public registry is flagged with high confidence."
+        },
+        {
+          "title": "Pre-install triage",
+          "description": "Statically inspect a new dependency's install hooks for the network-plus-env-harvest exfiltration shape before it ever runs on a developer machine."
+        },
+        {
+          "title": "Baseline-managed rollout",
+          "description": "Acknowledge reviewed findings in a baseline file (each with a written reason) so CI stays green for accepted risk without weakening the gate for new findings."
+        }
+      ],
+      "knownLimitations": [
+        "Offline by design: registry-metadata signals (maintainer changes, publish timestamps, download counts) are out of scope — GuardDog/Packj cover that layer.",
+        "Static by design: determined obfuscation can evade static patterns; Stowaway raises the cost of common shapes, it cannot see through everything.",
+        "Heuristics produce false positives; every finding carries a confidence and low-confidence rows say 'verify', not 'block'.",
+        "Partial parsers (pnpm-lock.yaml is limited under the stdlib-only policy; .gitignore handling is a conservative subset), both surfaced as scan warnings. Not an SCA/CVE matcher, sandbox, or license scanner."
+      ],
+      "roadmap": [
+        "Broaden lockfile parser coverage within the stdlib-only constraint.",
+        "Expand the behavioral rule catalog (B-series) for new install-time patterns.",
+        "Corpus tooling to keep popularity lists fresh (a stale corpus degrades typosquat recall)."
+      ],
+      "techStack": [
+        "Python 3.11+",
+        "Standard library only (0 runtime deps)",
+        "Damerau-Levenshtein",
+        "SARIF 2.1.0",
+        "Self-contained HTML",
+        "npm / PyPI / Go / Cargo parsers",
+        "Offline / deterministic"
+      ],
+      "githubUrl": "https://github.com/mk12002/Stowaway",
+      "liveUrl": "",
+      "status": "active",
+      "type": "security-scanner",
+      "systemArchitectureDiagram": {
+        "src": "/projects/stowaway/architecture.svg",
+        "alt": "Stowaway scan pipeline",
+        "caption": "A single offline pass: walk the tree, hand each ecosystem's manifests/lockfiles/install-hooks to its parser, run all five rule families over the ScanContext, fold findings into per-package priorities, and emit JSON/HTML/SARIF."
+      },
+      "datasetInfo": {
+        "description": "A supply-chain scanner's fatal failure is crying wolf — one false CRITICAL on a popular package and the team disables it — so Stowaway's headline calibration metric is how quiet it stays on legitimate code. Four well-known OSS projects, one per ecosystem, were scanned with their real unmodified upstream manifests, default rules, no configuration.",
+        "highlights": [
+          "153 real dependencies across all four ecosystems produced 0 false positives; every project scored 100/100",
+          "For context, the research literature reports naive typosquat detectors reaching ~75% false-positive rates (TypoSmart, arXiv:2502.20528)",
+          "True-positive detection is measured separately by an inert-fixture suite asserting exact rule firings on benign mimics of each attack class",
+          "Bundled popularity corpus: 782 known package names across npm/PyPI/Go/Cargo, versioned and replaceable"
+        ]
+      },
+      "comparisonTable": {
+        "label": "Real-world false-positive calibration — 153 dependencies, 0 findings",
+        "caption": "Four legitimate OSS projects (one per ecosystem) scanned with their real, unmodified upstream manifests and default rules. Zero false positives across all four is the number that keeps a scanner switched on.",
+        "columns": [
+          "Project",
+          "Ecosystem",
+          "Real deps",
+          "Findings",
+          "Score"
+        ],
+        "rows": [
+          {
+            "project": "pallets/flask",
+            "ecosystem": "PyPI",
+            "deps": "8",
+            "findings": "0",
+            "score": "100/100"
+          },
+          {
+            "project": "expressjs/express",
+            "ecosystem": "npm",
+            "deps": "44",
+            "findings": "0",
+            "score": "100/100"
+          },
+          {
+            "project": "BurntSushi/ripgrep",
+            "ecosystem": "Cargo",
+            "deps": "10",
+            "findings": "0",
+            "score": "100/100"
+          },
+          {
+            "project": "kubernetes/kubectl",
+            "ecosystem": "Go",
+            "deps": "91",
+            "findings": "0",
+            "score": "100/100"
+          },
+          {
+            "project": "Total",
+            "ecosystem": "all 4",
+            "deps": "153",
+            "findings": "0",
+            "score": "clean"
+          }
+        ]
+      },
+      "qualitativeResultsFigure": {
+        "src": "/projects/stowaway/report-hero.png",
+        "alt": "Stowaway self-contained HTML report",
+        "caption": "The self-contained HTML report: an executive summary, a findings table with confidence visibly marked, a per-ecosystem breakdown, and full evidence with concrete remediation."
+      },
+      "writeupUrl": "https://dev.to/mohit_kumar1/your-ai-assistant-downloads-code-from-strangers-heres-why-thats-a-problem-2cpf",
+      "engineeringRigor": [
+        {
+          "value": "118",
+          "label": "tests"
+        },
+        {
+          "value": "0",
+          "label": "runtime deps"
+        },
+        {
+          "value": "4",
+          "label": "ecosystems"
+        },
+        {
+          "value": "0/153",
+          "label": "false positives"
+        },
+        {
+          "value": "offline",
+          "label": "no network"
+        }
+      ]
+    },
+    {
+      "slug": "ir-siem-kql",
+      "title": "Schema-Grounded NL→KQL: An Intermediate Representation for SIEM Rule Generation",
+      "category": "Cybersecurity",
+      "categories": [
+        "Cybersecurity",
+        "AI/ML",
+        "Research"
+      ],
+      "tagline": "An explicit, schema-validated intermediate representation between natural language and KQL that cuts field hallucination in LLM-generated Microsoft Sentinel detection rules from 93% to 13%.",
+      "metric": "FVR 6.7% → 86.7% · 13× Fewer Hallucinations",
+      "tags": [
+        "LLM",
+        "KQL",
+        "Microsoft Sentinel",
+        "ASIM",
+        "Intermediate Representation",
+        "Hallucination",
+        "LangGraph",
+        "Detection Engineering"
+      ],
+      "description": "SOC analysts routinely translate natural-language detection requirements — a line in an SOP, a sentence in a threat-intel report, an analyst's shorthand — into executable Kusto Query Language (KQL) rules for Microsoft Sentinel. Direct LLM generation of KQL is unreliable: it produces invalid syntax, hallucinated field names, and logically incorrect filters at rates too high for unsupervised SOC use. This project tests a specific hypothesis — that inserting an explicit, schema-validated Intermediate Representation (IR) between the natural language and the KQL reduces hallucination compared to direct generation — and measures how much, where, and why, on a purpose-built dataset derived from Microsoft's public Azure/Azure-Sentinel repository.",
+      "overview": "The idea is borrowed from compiler design: source code isn't translated straight to machine code — it passes through an IR, a structured, language-agnostic form that captures logic independently of source syntax and target instructions, and makes validation tractable. Instead of asking an LLM to go straight from 'detect credential stuffing' to raw KQL, the system first produces a typed, schema-checkable JSON object — the Security IR — describing the detection logic, validates it against the ASIM schema, and only then deterministically compiles it into KQL via templates. The bet: separate 'does the model understand the threat' from 'does the model remember KQL syntax', and solve the second with deterministic code rather than free-form generation.",
+      "problem": "Given a natural-language description of a detection requirement and the ASIM/Sentinel schema as ground truth, generate a KQL query that is syntactically valid, uses only fields that exist in the schema, and correctly implements the described logic — while requiring less correction effort than direct single-prompt LLM generation. KQL generation fails along at least three independent dimensions this project measures separately: syntax invalidity, field hallucination (referencing SourceIP when the ASIM field is SrcIpAddr), and table hallucination — plus missing temporal logic and semantic/logic errors.",
+      "motivation": [
+        "General-purpose assistants hallucinate KQL field and table names confidently, and in a SOC a rule that references a non-existent field silently fails to fire — a false sense of coverage that is worse than no rule at all.",
+        "The failure isn't monolithic 'hallucination'; it decomposes into syntax, field-existence, table-existence, temporal-logic, and semantic dimensions, each measurable and each with a different fix. Deterministic templates can't produce invalid syntax by construction; schema grounding turns open-ended recall into constrained selection.",
+        "An IR that is kept vendor-neutral means a future platform (Sigma, SPL) would need only a new template and schema reference, not a rewrite — the same 'one frontend, many backends' payoff compilers get from an IR."
+      ],
+      "keyMetrics": [
+        {
+          "name": "Field Validity Rate — IR-mediated (System B)",
+          "value": "86.7%"
+        },
+        {
+          "name": "Field Validity Rate — direct baseline (System A)",
+          "value": "6.7%"
+        },
+        {
+          "name": "Syntax Validity / completion (System B)",
+          "value": "97.8%"
+        },
+        {
+          "name": "Repair Recovery Rate (≤3 attempts)",
+          "value": "96.2%"
+        },
+        {
+          "name": "Held-out completion (median, N=5)",
+          "value": "88.9%"
+        },
+        {
+          "name": "Held-out Logic Correctness (median)",
+          "value": "82.4% (IQR 5.9)"
+        }
+      ],
+      "approach": {
+        "description": "Two complete pipelines run on identical inputs so every measured difference is attributable to the IR layer, not incidental implementation differences. System A is the baseline (a single prompt → KQL directly, mirroring naive real-world use). System B is the IR-mediated contribution: a small agent pipeline that builds a typed IR, validates it against the schema, and deterministically compiles it to KQL, with a closed-loop repair mechanism.",
+        "steps": [
+          "Extraction Agent parses the NL input into candidate entities, behaviors, and detection intent, using a read-only ASIM field reference.",
+          "IR Builder Agent converts the extraction into a typed, Pydantic-validated Security IR, selecting fields only from the supplied ASIM reference — not free recall.",
+          "Schema Validator deterministically checks every referenced field exists in ASIM and that required fields (event type, time window when aggregating) are present.",
+          "KQL Generator deterministically compiles a validated IR into KQL via Jinja2 templates — no LLM call, so it cannot emit invalid syntax by construction.",
+          "KQL Syntax Validator parses the output; on any validator failure the specific structured error is fed back to the IR Builder (≤3 attempts) before marking a failure."
+        ]
+      },
+      "architecture": [
+        {
+          "tier": "System A — Baseline (Direct Generation)",
+          "description": "A single prompt with the NL description, a KQL syntax primer, and the relevant ASIM fields → the LLM returns KQL directly. Mirrors naive real-world usage of a general-purpose assistant today, and receives the same schema access as System B for a fair comparison."
+        },
+        {
+          "tier": "System B — IR-Mediated Generation",
+          "description": "NL → Extraction Agent → IR Builder Agent → Security IR (JSON) → Schema Validator → KQL Generator (deterministic, template-based) → KQL Syntax Validator, with a repair loop feeding structured errors back to the IR Builder (≤3x). This project's core contribution."
+        },
+        {
+          "tier": "Security IR schema",
+          "description": "A typed subset expressing real Sentinel detection logic: event_type (ASIM schema enum), filters [{field, operator, value}], optional aggregation {function, field}, group_by, threshold, time_window (ISO 8601 duration, required whenever aggregation is present), and output_fields. Vendor-neutral by design."
+        },
+        {
+          "tier": "Execution-validation substitute + RAG layer",
+          "description": "A pandas re-implementation of the IR's intended semantics (src/execution/) run against synthetic should-fire/should-not-fire events since a real Kusto emulator was environment-blocked; plus a retrieval-augmented layer (two TF-IDF indexes kept after a third was A/B-tested and removed on measured evidence)."
+        }
+      ],
+      "architectureDescription": "The whole design is a compiler pipeline. The IR is the checkpoint: validating a typed JSON object against a schema is far easier than checking generated KQL, and once it passes, a deterministic template compiler emits syntax that is correct by construction. The repair loop closes the gap on the remaining field/logic errors by turning each validator failure into a targeted re-prompt rather than a full regeneration.",
+      "algorithmDetails": [
+        {
+          "name": "Schema-grounded IR construction",
+          "description": "The mechanism behind the ~13x field-validity gain: the IR Builder selects fields from a supplied ASIM reference instead of recalling them from parametric memory.",
+          "steps": [
+            "Supply the ASIM field reference for the chosen event_type as read-only context.",
+            "The IR Builder emits a Pydantic-typed IR whose field references are constrained to that reference.",
+            "The Schema Validator rejects any field not in ASIM and enforces required fields (event_type, and time_window whenever aggregation is present)."
+          ]
+        },
+        {
+          "name": "Closed-loop repair (≤3 attempts)",
+          "description": "Recovers nearly every attempt-1 failure by feeding the specific structured validator error back into the IR Builder rather than regenerating blind.",
+          "steps": [
+            "On schema- or syntax-validator failure, capture the exact structured error.",
+            "Re-prompt the IR Builder with that error attached (not the whole task).",
+            "Retry up to 3 times before marking a genuine failure — most errors are local and mechanical, so recovery reaches 96.2%."
+          ]
+        },
+        {
+          "name": "Deterministic template compilation",
+          "description": "Turns a validated IR into KQL with no LLM in the loop, so syntax validity is structural rather than probabilistic.",
+          "steps": [
+            "Map the validated IR onto Jinja2 KQL templates.",
+            "Emit the query — invalid syntax is impossible by construction, isolating remaining errors to logic/field selection."
+          ]
+        }
+      ],
+      "datasetInfo": {
+        "description": "Built primarily from Microsoft's public Azure/Azure-Sentinel repository (MIT-licensed), whose Detections/ folder contains hundreds of production-quality YAML analytics rules that already pair a description (NL ground truth) with a working query (KQL ground truth).",
+        "highlights": [
+          "Pull all Detections/*.yaml targeting Sentinel/ASIM-normalized tables; extract each (description, query) pair.",
+          "Paraphrase each description into 2–3 analyst-style variants (casual, SOP-imperative, threat-report-style) with manual review.",
+          "Manually verify each pair (KQL still parses; description genuinely matches query logic); tag with a complexity tier and source ASIM schema.",
+          "Hold out a fixed 20% test split before any development or prompt engineering begins; target composition ~35% simple / ~35% moderate / ~30% complex."
+        ]
+      },
+      "results": "H2 — that IR-mediation raises field validity — is supported decisively. On the primary comparison (n=45), System B's Field Validity Rate is 86.7% versus the direct baseline's 6.7%, roughly a 13x improvement, with McNemar p ≈ 1.4e-8. Syntax validity is not a meaningful distinguisher (both systems complete ~98–100%), which is the point: deterministic templates make syntax free, so the interesting failure mode is field/table hallucination, and that is exactly where the IR wins. The repair loop recovers 96.2% of initially-failing cases within its 3-attempt budget. On a fresh held-out set of 18 real ASIM rules never used for tuning, completion replicated at a median 88.9% (range 83.3–94.4% over N=5 runs) and Logic Correctness at a median 82.4% (IQR 5.9), with a first inter-rater agreement check giving quadratic-weighted Cohen's κ = 0.645 ('substantial').",
+      "resultsHighlights": [
+        {
+          "label": "Central result (H2)",
+          "value": "FVR 86.7% vs 6.7% baseline — ~13x, McNemar p ≈ 1.4e-8"
+        },
+        {
+          "label": "Repair loop (H3)",
+          "value": "96.2% recovery within ≤3 attempts, clear of the pre-registered 50% target"
+        },
+        {
+          "label": "No-schema-grounding ablation",
+          "value": "Drops to 13.3% IR-valid — a ~6.5x gap that isolates schema grounding as the cause"
+        },
+        {
+          "label": "Held-out generalization",
+          "value": "88.9% median completion, 82.4% median Logic Correctness on unseen real rules"
+        }
+      ],
+      "performanceMetrics": {
+        "description": "Primary A/B comparison (n=45) and the three ablations that isolate each design choice. Both systems run on identical NL inputs, so McNemar's paired test applies. Figures below show the research evaluation pipeline.",
+        "metricsTable": [
+          {
+            "metric": "Field Validity Rate (System B)",
+            "value": "86.7% (39/45)",
+            "notes": "vs System A 6.7% (3/45); McNemar p ≈ 1.4e-8 — the central H2 result"
+          },
+          {
+            "metric": "Syntax Validity / completion (System B)",
+            "value": "97.8% (44/45)",
+            "notes": "Not a distinguisher — System A also ~100%; deterministic templates make syntax free"
+          },
+          {
+            "metric": "Repair Recovery Rate",
+            "value": "96.2%",
+            "notes": "Recovers nearly every attempt-1 failure within 3 tries"
+          },
+          {
+            "metric": "No-Repair ablation",
+            "value": "53.3%",
+            "notes": "Repair loop adds ~44 points of completion"
+          },
+          {
+            "metric": "Monolithic-extraction ablation",
+            "value": "57.8%",
+            "notes": "Agent decomposition (RQ2) holds its advantage"
+          },
+          {
+            "metric": "No-Schema-Grounding ablation",
+            "value": "13.3%",
+            "notes": "The cleanest result — grounding is the dominant cause of the FVR gain"
+          }
+        ],
+        "figures": [
+          {
+            "src": "/projects/ir-siem-kql/evaluation-pipeline.png",
+            "alt": "Research evaluation pipeline",
+            "caption": "The research evaluation pipeline: identical NL inputs run through both System A (direct) and System B (IR-mediated), scored on SVR / FVR / Logic Correctness with bootstrap CIs and paired significance testing."
+          }
+        ]
+      },
+      "comparativeAnalysis": [
+        {
+          "approach": "Direct single-prompt LLM → KQL",
+          "strength": "Simple; always produces something",
+          "weakness": "Hallucinates real fields/tables >90% of the time — unusable unsupervised in a SOC"
+        },
+        {
+          "approach": "Fine-tuning an LLM on KQL",
+          "strength": "Can internalize KQL syntax",
+          "weakness": "Needs a large labeled corpus; still recalls fields from parametric memory rather than the live schema"
+        },
+        {
+          "approach": "IR-mediated generation (this project)",
+          "strength": "Schema-grounded field selection + deterministic compilation + repair loop → 86.7% FVR, vendor-neutral IR",
+          "weakness": "Scoped to KQL/Sentinel + ASIM; validation is syntax/field + an execution substitute, not real-engine telemetry"
+        }
+      ],
+      "comparativeConclusion": "The gain comes from the IR and schema grounding, not the LLM — the no-schema-grounding ablation collapses to 13.3%, so the architecture, not the model, is doing the work.",
+      "ablationStudies": {
+        "description": "Three ablations isolate each design decision against the full System B, all on the same n=45 with identical inputs.",
+        "findings": [
+          "No-Repair (max_attempts=0) → 53.3%: the repair loop still adds substantial value (97.8% vs 53.3%).",
+          "Monolithic Extraction (extraction + IR builder merged) → 57.8%: decomposing the two agents measurably helps (RQ2).",
+          "No Schema Grounding (IR builder without the ASIM reference) → 13.3%: a ~6.5x gap below the grounded system — the single cleanest, most stable result in the project's history, pinning the FVR gain on schema grounding specifically."
+        ]
+      },
+      "useCases": [
+        {
+          "title": "Analyst-authored detections",
+          "description": "Turn an SOP line or threat-report sentence into a syntactically valid, schema-checked Sentinel rule without hand-writing KQL or hallucinating field names."
+        },
+        {
+          "title": "Detection-as-code pipelines",
+          "description": "Generate the deterministic, template-compiled KQL from a reviewable IR object, so the IR (not opaque KQL text) is what gets version-controlled and reviewed."
+        },
+        {
+          "title": "Reducing SOC toil",
+          "description": "Cut the correction effort on LLM-drafted rules, since the schema validator and repair loop catch field/temporal errors before a human ever sees the query."
+        },
+        {
+          "title": "Vendor-neutral rule authoring (future)",
+          "description": "The same IR could target Sigma or SPL with a new template + schema reference, without changing the agents or the IR itself."
+        }
+      ],
+      "knownLimitations": [
+        "Single platform, single schema standard: KQL/Sentinel + ASIM only. Sigma, SPL, and OCSF are future work, not demonstrated here.",
+        "Validation is syntax/field plus an execution SUBSTITUTE (a pandas re-implementation of the IR's semantics), not real Kusto-engine telemetry execution — a real emulator was environment-blocked (no Docker, no Azure credentials).",
+        "Dataset is 100–150 verified pairs — appropriate for a scoped individual research project but small relative to large code-gen benchmarks; results are reported with confidence intervals, not bare point estimates.",
+        "Logic-Correctness scoring was AI-rated (two independent AI raters, κ=0.645), not human-reviewed — an honest AI-vs-AI agreement bound, not AI-vs-human."
+      ],
+      "roadmap": [
+        "A human (not just AI) rater pass on Logic Correctness (the scorer is built, not yet run).",
+        "Multi-platform templates (Sigma, SPL) consuming the same vendor-neutral IR.",
+        "Real-engine telemetry execution validation against a Kusto emulator or seeded workspace.",
+        "Optional MITRE ATT&CK technique/tactic tagging on generated rules."
+      ],
+      "techStack": [
+        "Python 3.11+",
+        "LangGraph",
+        "Pydantic (typed IR)",
+        "Jinja2 (KQL templates)",
+        "TF-IDF retrieval (RAG)",
+        "pandas (execution substitute)",
+        "Microsoft Sentinel / KQL",
+        "ASIM schema",
+        "McNemar's test / bootstrap CIs"
+      ],
+      "githubUrl": "https://github.com/mk12002/Intermediate-Representation-IR-Framework-for-SIEM-Rule-Generation",
+      "articleUrl": "",
+      "liveUrl": "",
+      "status": "active",
+      "type": "research",
+      "systemArchitectureDiagram": {
+        "src": "/projects/ir-siem-kql/system-architecture.png",
+        "alt": "High-level end-to-end system architecture",
+        "caption": "The end-to-end system: natural-language detection intent flows through extraction and typed-IR construction, schema validation against ASIM, deterministic KQL compilation, and a closed-loop repair mechanism."
+      },
+      "flowDiagram": {
+        "src": "/projects/ir-siem-kql/sop-ir-rule-flow.png",
+        "alt": "SOP to IR to Rule transformation flow",
+        "caption": "The SOP → Security IR → KQL transformation, borrowed from compiler design: the typed, schema-checkable IR is the validation checkpoint that separates 'understand the threat' from 'remember KQL syntax'."
+      },
+      "architectureDiagram": {
+        "src": "/projects/ir-siem-kql/multi-agent-workflow.png",
+        "alt": "System B multi-agent workflow",
+        "caption": "The System B multi-agent workflow: Extraction Agent → IR Builder → Schema Validator → deterministic KQL Generator → Syntax Validator, with the repair loop feeding structured errors back to the IR Builder (up to 3 times)."
+      },
+      "engineeringRigor": [
+        {
+          "value": "n=45",
+          "label": "primary A/B eval"
+        },
+        {
+          "value": "McNemar",
+          "label": "paired significance"
+        },
+        {
+          "value": "N=5",
+          "label": "held-out replications"
+        },
+        {
+          "value": "κ=0.645",
+          "label": "inter-rater agreement"
+        }
+      ]
+    },
+    {
+      "slug": "agentic-email-security",
       "title": "Agentic Email Security",
       "category": "Cybersecurity",
-      "categories": ["Cybersecurity", "AI/ML"],
+      "categories": [
+        "Cybersecurity",
+        "AI/ML"
+      ],
       "tagline": "Production-grade cybersecurity platform neutralizing advanced email threats via multi-agent AI architecture",
       "metric": "7 Agents · 30GB RAM Optimized",
-      "tags": ["Agentic AI", "LangGraph", "Zero-day Phishing", "Cybersecurity", "XGBoost", "TinyBERT", "FastAPI", "RabbitMQ"],
+      "tags": [
+        "Agentic AI",
+        "LangGraph",
+        "Zero-day Phishing",
+        "Cybersecurity",
+        "XGBoost",
+        "TinyBERT",
+        "FastAPI",
+        "RabbitMQ"
+      ],
       "description": "A sophisticated multi-agent AI architecture designed to neutralize polymorphic email threats without human intervention. Features a LangGraph-based Orchestrator, 7 independent AI agents, combinatorial threat correlation, and advanced XAI (Explainable AI) operating within a strict 30GB RAM constraint.",
       "githubUrl": "https://github.com/mk12002/email_security",
       "liveUrl": "",
@@ -18,10 +1611,21 @@
       "slug": "security-tools",
       "title": "Security Engineering Toolkit",
       "category": "Cybersecurity",
-      "categories": ["Cybersecurity"],
+      "categories": [
+        "Cybersecurity"
+      ],
       "tagline": "14 CLI-driven security assessment tools across AppSec, IAM, Cloud, and Detection Engineering",
       "metric": "14 Tools · 4 Domains",
-      "tags": ["AppSec", "Blue Team", "Cloud Security", "IAM", "Python", "CLI", "Detection Engineering", "MITRE ATT&CK"],
+      "tags": [
+        "AppSec",
+        "Blue Team",
+        "Cloud Security",
+        "IAM",
+        "Python",
+        "CLI",
+        "Detection Engineering",
+        "MITRE ATT&CK"
+      ],
       "description": "A comprehensive, engineering-focused security toolkit demonstrating both offensive awareness and defensive maturity. 14 standalone CLI tools covering web security, identity and access, cloud misconfiguration, and detection engineering — each designed for CI pipelines, security audits, and interview demonstrations.",
       "githubUrl": "https://github.com/mk12002/Security-tools",
       "liveUrl": "",
@@ -35,7 +1639,14 @@
       "tagline": "LegalBERT + GNN + Prolog hybrid reasoning system",
       "metric": "F1 Score: 0.985",
       "precision": "98.48%",
-      "tags": ["Legal NLP", "Symbolic AI", "GNN", "Hybrid Models", "Prolog", "LegalBERT"],
+      "tags": [
+        "Legal NLP",
+        "Symbolic AI",
+        "GNN",
+        "Hybrid Models",
+        "Prolog",
+        "LegalBERT"
+      ],
       "description": "A hybrid AI system integrating LegalBERT embeddings, GNN-based graph reasoning, and Prolog rule-based symbolic execution for legal aid eligibility determination.",
       "overview": "HybEx-Law is a hybrid neural-symbolic AI system designed to automatically determine legal-aid eligibility under the Indian Legal Services Authorities Act. The project addresses a complex classification problem that requires both linguistic understanding and strict rule compliance. The system processes free-form queries written by citizens, extracts structured signals, interprets statutory thresholds, and produces eligibility decisions supplemented by confidence calibration and explicit reasoning tracebacks. HybEx-Law achieves state-of-the-art performance with an F1 of 0.985, confirming that hybrid architectures are superior to purely neural or purely symbolic models for high-stakes, rule-governed tasks.",
       "problem": "Eligibility for legal aid in India is determined by a combination of income-based thresholds, membership in vulnerable categories (e.g., women, seniors, disabled persons), nature of legal domain (criminal, civil, family, constitutional), and contextual constraints within statutory rules. However, real-world user queries often contain fragmented, unstructured, or ambiguous descriptions of their situation. Purely rule-based systems cannot interpret natural language, while deep models tend to miss legally critical details or misclassify borderline cases. Therefore, the key problem is to design a system that can understand user language, extract structured legal concepts, apply statutory rules deterministically, resolve uncertainty using calibrated model ensembles, and produce interpretable, audit-ready decisions. HybEx-Law solves this by combining neural and symbolic reasoning into a single inference pipeline.",
@@ -47,10 +1658,22 @@
         "HybEx-Law leverages the strengths of both worlds—neural contextualization and symbolic rule enforcement—to build a system suitable for high-precision judicial workflows."
       ],
       "keyMetrics": [
-        {"name": "Accuracy", "value": "98.48%"},
-        {"name": "Precision", "value": "98.31%"},
-        {"name": "Recall", "value": "98.70%"},
-        {"name": "F1-Score", "value": "0.985"}
+        {
+          "name": "Accuracy",
+          "value": "98.48%"
+        },
+        {
+          "name": "Precision",
+          "value": "98.31%"
+        },
+        {
+          "name": "Recall",
+          "value": "98.70%"
+        },
+        {
+          "name": "F1-Score",
+          "value": "0.985"
+        }
       ],
       "metricsDescription": "These metrics indicate highly reliable decision-making even on borderline cases involving partial eligibility, ambiguous phrasing, or multiple demographic attributes.",
       "approach": "HybEx-Law uses a multi-layered inference methodology combining parallel model execution with symbolic reasoning and confidence calibration.",
@@ -182,10 +1805,22 @@
         "The system is suitable for legal aid centers, public-facing portals, and NGO triage systems requiring fairness and explainability."
       ],
       "resultsHighlights": [
-        {"label": "Best Configuration", "value": "Full hybrid ensemble (5 models)"},
-        {"label": "Performance Gain", "value": "+0.003 F1 over neural-only"},
-        {"label": "Rule Coverage", "value": "100% statutory compliance"},
-        {"label": "Inference Speed", "value": "Sub-second per query"}
+        {
+          "label": "Best Configuration",
+          "value": "Full hybrid ensemble (5 models)"
+        },
+        {
+          "label": "Performance Gain",
+          "value": "+0.003 F1 over neural-only"
+        },
+        {
+          "label": "Rule Coverage",
+          "value": "100% statutory compliance"
+        },
+        {
+          "label": "Inference Speed",
+          "value": "Sub-second per query"
+        }
       ],
       "performanceMetrics": {
         "description": "Performance is evaluated across all combinations of the 5 models, demonstrating how performance steadily increases as more reasoning types (neural + symbolic) are combined.",
@@ -268,7 +1903,15 @@
           "description": "Provide reliable pre-screening in remote or underserved areas."
         }
       ],
-      "techStack": ["Python", "PyTorch", "LegalBERT", "Graph Neural Networks", "SWI-Prolog", "Transformers", "Sklearn (Calibration)"],
+      "techStack": [
+        "Python",
+        "PyTorch",
+        "LegalBERT",
+        "Graph Neural Networks",
+        "SWI-Prolog",
+        "Transformers",
+        "Sklearn (Calibration)"
+      ],
       "githubUrl": "https://github.com/mk12002/HybEx-Law",
       "liveUrl": "",
       "status": "active",
@@ -280,7 +1923,13 @@
       "category": "AI/ML",
       "tagline": "3-agent system for automated research discovery and synthesis",
       "metric": "90% Time Reduction",
-      "tags": ["Multi-Agent", "NLP Automation", "LangGraph", "Flask", "AI Research"],
+      "tags": [
+        "Multi-Agent",
+        "NLP Automation",
+        "LangGraph",
+        "Flask",
+        "AI Research"
+      ],
       "publicationUrl": "https://app.readytensor.ai/publications/nexus-a-three-pronged-agentic-ai-system-for-intelligent-research-and-analysis-Y06tMJMVmNjI",
       "overview": "Nexus is an advanced multi-agent AI research and analysis system designed to automate the end-to-end workflow of information gathering, fact-verification, structured article generation, and multi-format storage. Traditional research workflows require rigorous manual searching, filtering, validation, note-making, and synthesis — processes that are time-consuming, cognitively heavy, and prone to omissions or inconsistencies. Nexus eliminates these inefficiencies through an orchestrated pipeline of three highly specialized AI agents, each responsible for one phase of the research lifecycle. The system integrates web scraping (Google Search API, Wikipedia API, ArXiv API), natural language processing, fact-checking, document generation, and agentic reasoning into a seamless fully automated process. Built with Flask, LangGraph, React, and Tailwind, Nexus is optimized for both backend efficiency and frontend usability. It supports tone customization, multi-format exports (.md, .json, .pdf), and includes an interactive UI for monitoring research progress.",
       "homepageUI": {
@@ -294,10 +1943,26 @@
         "The motivation behind Nexus is to bridge these gaps by combining retrieval-based factual accuracy, agentic workflow orchestration, AI-driven content synthesis, and automated storage pipelines. This system aims to reduce research time from hours to seconds while maintaining high accuracy and readability."
       ],
       "keyMetrics": [
-        {"name": "Average Processing Time", "value": "<8 seconds", "description": "End-to-end time from topic input to PDF generation"},
-        {"name": "Sources per Query", "value": "3–10", "description": "Configurable retrieval from Google, Wikipedia, ArXiv, Fact-Check APIs"},
-        {"name": "Article Structure", "value": "6 sections", "description": "Title → Introduction → Key Insights → Industry Impact → Future Prospects → Conclusion"},
-        {"name": "Fact-Check Coverage", "value": "80–100%", "description": "Integrated verification depending on topic availability"}
+        {
+          "name": "Average Processing Time",
+          "value": "<8 seconds",
+          "description": "End-to-end time from topic input to PDF generation"
+        },
+        {
+          "name": "Sources per Query",
+          "value": "3–10",
+          "description": "Configurable retrieval from Google, Wikipedia, ArXiv, Fact-Check APIs"
+        },
+        {
+          "name": "Article Structure",
+          "value": "6 sections",
+          "description": "Title → Introduction → Key Insights → Industry Impact → Future Prospects → Conclusion"
+        },
+        {
+          "name": "Fact-Check Coverage",
+          "value": "80–100%",
+          "description": "Integrated verification depending on topic availability"
+        }
       ],
       "approach": "Nexus uses a three-phase agentic methodology: Phase 1 — Data Retrieval (Research Agent) aggregates raw information from multiple trusted sources including Google Search results, Wikipedia summaries, ArXiv academic papers, and fact-checking results. Phase 2 — Content Synthesis (Reporting Agent) transforms the aggregated data into a structured article with logical flow, section separation, professional formatting, and tone customization. Phase 3 — Storage & Export (Storage Agent) outputs the research in Markdown (.md), JSON (.json), and PDF formats using WeasyPrint.",
       "approachSteps": [
@@ -411,12 +2076,36 @@
       "performanceMetrics": {
         "description": "Nexus achieves production-grade performance across multiple evaluation criteria:",
         "metricsTable": [
-          {"metric": "Average research time", "value": "5–8 seconds", "notes": "Topic → PDF"},
-          {"metric": "Sources retrieved", "value": "3–10", "notes": "Configurable"},
-          {"metric": "Article structure score", "value": "Consistent", "notes": "Verified manually across topics"},
-          {"metric": "Fact-check coverage", "value": "80–100%", "notes": "Depending on topic availability"},
-          {"metric": "Export formats", "value": "MD, JSON, PDF", "notes": "Stable output"},
-          {"metric": "Workflow determinism", "value": "100%", "notes": "LangGraph state enforcement"}
+          {
+            "metric": "Average research time",
+            "value": "5–8 seconds",
+            "notes": "Topic → PDF"
+          },
+          {
+            "metric": "Sources retrieved",
+            "value": "3–10",
+            "notes": "Configurable"
+          },
+          {
+            "metric": "Article structure score",
+            "value": "Consistent",
+            "notes": "Verified manually across topics"
+          },
+          {
+            "metric": "Fact-check coverage",
+            "value": "80–100%",
+            "notes": "Depending on topic availability"
+          },
+          {
+            "metric": "Export formats",
+            "value": "MD, JSON, PDF",
+            "notes": "Stable output"
+          },
+          {
+            "metric": "Workflow determinism",
+            "value": "100%",
+            "notes": "LangGraph state enforcement"
+          }
         ]
       },
       "comparativeAnalysis": [
@@ -484,11 +2173,19 @@
       "slug": "parking-detection",
       "title": "High-Precision Polygonal Parking Slot Detection Using SwinMask2Former and Dynamic Gap Analysis",
       "category": "Research",
-      "categories": ["Research"],
+      "categories": [
+        "Research"
+      ],
       "tagline": "Transformer-based polygon detection for real-time parking analytics",
       "metric": "Polygon IoU: 0.92",
       "precision": "mAP@50: 0.88",
-      "tags": ["Computer Vision", "Swin Transformer", "Mask2Former", "Polygon Detection", "Instance Segmentation"],
+      "tags": [
+        "Computer Vision",
+        "Swin Transformer",
+        "Mask2Former",
+        "Polygon Detection",
+        "Instance Segmentation"
+      ],
       "description": "A high-precision, transformer-based vision system for automatic detection of parking slot polygons and real-time slot occupancy classification using a camera-only setup.",
       "overview": "This project proposes a high-precision, transformer-based vision system for automatic detection of parking slot polygons and real-time slot occupancy classification using a camera-only setup. Unlike traditional parking detection models that rely on bounding boxes or region heuristics, our framework models each parking slot as a multi-vertex polygon, allowing far more accurate geometric understanding. The core of the system is a SwinTransformer-based Mask2Former segmentation model, which provides robust polygonal masks under lighting variations, occlusions, tilted camera angles, and heterogeneous vehicle shapes. A second-stage classifier termed Dynamic Gap Analysis performs occupancy estimation by analyzing the geometric and appearance features inside each predicted slot. The system achieves production-grade accuracy, supports real-time inference, and is designed for deployment in smart parking lots, residential complexes, and urban mobility systems.",
       "systemArchitectureDiagram": {
@@ -503,10 +2200,22 @@
         "Swin Transformers introduce hierarchical feature extraction and shifted-window attention, making them ideal for segmentation tasks requiring long-range spatial reasoning, such as parking slot outline detection."
       ],
       "keyMetrics": [
-        {"name": "Polygon IoU", "value": "0.92"},
-        {"name": "mAP@50", "value": "0.88"},
-        {"name": "Occupancy Accuracy", "value": "95-97%"},
-        {"name": "F1-Score", "value": "0.96"}
+        {
+          "name": "Polygon IoU",
+          "value": "0.92"
+        },
+        {
+          "name": "mAP@50",
+          "value": "0.88"
+        },
+        {
+          "name": "Occupancy Accuracy",
+          "value": "95-97%"
+        },
+        {
+          "name": "F1-Score",
+          "value": "0.96"
+        }
       ],
       "approach": "The pipeline consists of two major branches: (A) Slot Geometry Extraction: Input frame → SwinMask2Former → Binary instance masks → Contour extraction → Polygon approximation → Polygon vertices normalized and ordered → Each slot cropped into a canonical ROI. (B) Occupancy Determination: Extract geometric + visual features inside the polygon → Analyze edges and internal gaps using Dynamic Gap Analysis → Apply temporal smoothing across frames → Final binary classification: occupied / vacant. This two-step system is significantly more robust than end-to-end classification because the segmentation step ensures clean geometric outlines and the classification step uses richer spatial cues.",
       "approachSteps": [
@@ -516,19 +2225,43 @@
         "Occupancy Determination: Geometric and visual features extracted inside polygon using Dynamic Gap Analysis",
         "Temporal Integration: Median filter over sliding window eliminates flicker during vehicle movement",
         "Final Classification: Binary output (occupied/vacant) with temporal stability"
-      ],  
+      ],
       "architectureDescription": "The complete system is composed of: (1) Preprocessing Module for frame normalization, perspective correction, and augmentation during training; (2) SwinMask2Former Segmentation Network that outputs instance masks for each parking slot; (3) Polygon Extraction Module using OpenCV contour extraction and simplification; (4) ROI Canonical Mapping that warp-transforms each polygon into a fixed-size 2D patch; (5) Dynamic Gap Analysis analyzing edge occupancy, pixel density, structural irregularities, and shadow-resistant intensity features; (6) Temporal Integration using median filter over sliding window to eliminate flicker.",
       "architectureComponents": [
-        {"name": "Preprocessing Module", "description": "Frame normalization, perspective correction when required, augmentation during training (flip, brightness shifts, random noise)"},
-        {"name": "SwinMask2Former Network", "description": "Segmentation network that outputs instance masks for each parking slot from entire frame"},
-        {"name": "Polygon Extraction", "description": "Uses OpenCV contour extraction, simplifies mask boundary into N vertices, generates metadata: centroid, orientation, area"},
-        {"name": "ROI Canonical Mapping", "description": "Each polygon is warp-transformed into a fixed-size 2D patch for consistent analysis"},
-        {"name": "Dynamic Gap Analysis", "description": "Analyzes edge occupancy, pixel density, structural irregularities, and shadow-resistant intensity features"},
-        {"name": "Temporal Integration", "description": "Median filter over sliding window eliminates flicker during vehicle movement"}
+        {
+          "name": "Preprocessing Module",
+          "description": "Frame normalization, perspective correction when required, augmentation during training (flip, brightness shifts, random noise)"
+        },
+        {
+          "name": "SwinMask2Former Network",
+          "description": "Segmentation network that outputs instance masks for each parking slot from entire frame"
+        },
+        {
+          "name": "Polygon Extraction",
+          "description": "Uses OpenCV contour extraction, simplifies mask boundary into N vertices, generates metadata: centroid, orientation, area"
+        },
+        {
+          "name": "ROI Canonical Mapping",
+          "description": "Each polygon is warp-transformed into a fixed-size 2D patch for consistent analysis"
+        },
+        {
+          "name": "Dynamic Gap Analysis",
+          "description": "Analyzes edge occupancy, pixel density, structural irregularities, and shadow-resistant intensity features"
+        },
+        {
+          "name": "Temporal Integration",
+          "description": "Median filter over sliding window eliminates flicker during vehicle movement"
+        }
       ],
       "modelArchitecture": [
-        {"title": "Backbone: Swin Transformer (Tiny/Base)", "content": "Patch merging + shifted window attention with multi-scale feature hierarchies. Excellent global-local pairing for scenes with multiple overlapping polygons."},
-        {"title": "Segmentation Head: Mask2Former", "content": "Query-based mask decoding with 3-level FPN integration. End-to-end trainable unified architecture for semantic + instance segmentation. Result: Pixel-perfect per-slot masks that outperform classical UNet or DeepLab models in angled/top-down scenarios."}
+        {
+          "title": "Backbone: Swin Transformer (Tiny/Base)",
+          "content": "Patch merging + shifted window attention with multi-scale feature hierarchies. Excellent global-local pairing for scenes with multiple overlapping polygons."
+        },
+        {
+          "title": "Segmentation Head: Mask2Former",
+          "content": "Query-based mask decoding with 3-level FPN integration. End-to-end trainable unified architecture for semantic + instance segmentation. Result: Pixel-perfect per-slot masks that outperform classical UNet or DeepLab models in angled/top-down scenarios."
+        }
       ],
       "modelArchitectureDiagram1": {
         "src": "/projects/parking-detection/Fig_2.png",
@@ -661,7 +2394,11 @@
         "evaluationTable": {
           "label": "Final Model Evaluation using mAP",
           "caption": "Final model evaluation metrics showing high-precision detection and segmentation performance at different IoU thresholds.",
-          "columns": ["Metric", "Threshold", "Result"],
+          "columns": [
+            "Metric",
+            "Threshold",
+            "Result"
+          ],
           "rows": [
             {
               "metric": "mAP50 (Main detection)",
@@ -676,16 +2413,46 @@
           ]
         },
         "metricsTable": [
-          {"label": "Polygon IoU", "value": "0.92"},
-          {"label": "mAP@50", "value": "0.88"},
-          {"label": "Vertex Localization Error", "value": "< 3.5 pixels"},
-          {"label": "Occupancy Accuracy", "value": "95-97%"},
-          {"label": "Precision", "value": "0.96"},
-          {"label": "Recall", "value": "0.96"},
-          {"label": "F1-Score", "value": "0.96"},
-          {"label": "Nighttime Consistency", "value": "~93%"},
-          {"label": "GPU Inference", "value": "25-40 ms/frame"},
-          {"label": "CPU Inference", "value": "200-400 ms/frame"}
+          {
+            "label": "Polygon IoU",
+            "value": "0.92"
+          },
+          {
+            "label": "mAP@50",
+            "value": "0.88"
+          },
+          {
+            "label": "Vertex Localization Error",
+            "value": "< 3.5 pixels"
+          },
+          {
+            "label": "Occupancy Accuracy",
+            "value": "95-97%"
+          },
+          {
+            "label": "Precision",
+            "value": "0.96"
+          },
+          {
+            "label": "Recall",
+            "value": "0.96"
+          },
+          {
+            "label": "F1-Score",
+            "value": "0.96"
+          },
+          {
+            "label": "Nighttime Consistency",
+            "value": "~93%"
+          },
+          {
+            "label": "GPU Inference",
+            "value": "25-40 ms/frame"
+          },
+          {
+            "label": "CPU Inference",
+            "value": "200-400 ms/frame"
+          }
         ]
       },
       "comparativeAnalysis": [
@@ -721,7 +2488,12 @@
       "comparisonTable": {
         "label": "Comparison of Methods with Precision and Recall",
         "caption": "Comprehensive comparison of parking detection methods showing architecture types and performance metrics across different evaluation protocols.",
-        "columns": ["Method", "Architecture", "mAP@0.5 / Precision", "mAP@0.75 / Recall"],
+        "columns": [
+          "Method",
+          "Architecture",
+          "mAP@0.5 / Precision",
+          "mAP@0.75 / Recall"
+        ],
         "rows": [
           {
             "method": "HSM2F (proposed)",
@@ -785,7 +2557,11 @@
       "ablationTable": {
         "label": "TABLE 2 - Ablation Study",
         "caption": "Table 2. Ablation study showing impact of different architecture components on vehicle detection performance.",
-        "columns": ["Configuration", "Architecture Components", "mAP@0.5 / mAP@0.75"],
+        "columns": [
+          "Configuration",
+          "Architecture Components",
+          "mAP@0.5 / mAP@0.75"
+        ],
         "rows": [
           {
             "configuration": "Full system",
@@ -810,13 +2586,34 @@
         ]
       },
       "useCases": [
-        {"title": "Smart Parking Guidance", "description": "Real-time vacant slot detection for driver assistance systems"},
-        {"title": "Automated Parking Enforcement", "description": "Detection of unauthorized parking and violation monitoring"},
-        {"title": "No-Parking Zone Detection", "description": "Automated enforcement of restricted parking areas"},
-        {"title": "Digital Twin Modeling", "description": "Real-time occupancy data for parking lot digital twins"},
-        {"title": "Fleet Parking Analytics", "description": "Analytics for commercial fleet management and optimization"},
-        {"title": "Commercial & Airport Management", "description": "Large-scale parking management for malls and airports"},
-        {"title": "Residential Automation", "description": "Smart parking systems for residential complexes and societies"}
+        {
+          "title": "Smart Parking Guidance",
+          "description": "Real-time vacant slot detection for driver assistance systems"
+        },
+        {
+          "title": "Automated Parking Enforcement",
+          "description": "Detection of unauthorized parking and violation monitoring"
+        },
+        {
+          "title": "No-Parking Zone Detection",
+          "description": "Automated enforcement of restricted parking areas"
+        },
+        {
+          "title": "Digital Twin Modeling",
+          "description": "Real-time occupancy data for parking lot digital twins"
+        },
+        {
+          "title": "Fleet Parking Analytics",
+          "description": "Analytics for commercial fleet management and optimization"
+        },
+        {
+          "title": "Commercial & Airport Management",
+          "description": "Large-scale parking management for malls and airports"
+        },
+        {
+          "title": "Residential Automation",
+          "description": "Smart parking systems for residential complexes and societies"
+        }
       ],
       "techStack": [
         "PyTorch",
@@ -842,10 +2639,20 @@
       "slug": "sanchalak",
       "title": "Sanchalak: Farmer Voice Assistant",
       "category": "Full-Stack",
-      "categories": ["Full-Stack", "AI/ML"],
+      "categories": [
+        "Full-Stack",
+        "AI/ML"
+      ],
       "tagline": "Multilingual voice AI for government scheme eligibility",
       "metric": "<5s Latency",
-      "tags": ["Voice AI", "Prolog", "LLM", "Multilingual", "FastAPI", "AgriTech"],
+      "tags": [
+        "Voice AI",
+        "Prolog",
+        "LLM",
+        "Multilingual",
+        "FastAPI",
+        "AgriTech"
+      ],
       "description": "A voice-driven AI assistant bridging the information gap between India's farmers and 50+ government welfare schemes through natural voice interaction.",
       "overview": "Sanchalak is an intelligent, multilingual, voice-driven assistant built to help Indian farmers instantly determine their eligibility for various government welfare schemes. The system offers a voice-first, regionally multilingual, and extremely low-latency (<5 seconds) conversational experience that bridges the digital divide. What makes Sanchalak uniquely powerful is its hybrid AI reasoning architecture, which combines a Prolog-based deterministic rule engine for 100% accurate and auditable eligibility decisions, a Large Language Model (Gemma) for natural, empathetic conversational responses, and seamless integration with speech-to-text (Whisper), machine translation (Azure), and text-to-speech (Azure) services. The system remembers a farmer's inputs across the session, supports highly diverse linguistic contexts, and is designed with real-world, rural deployment constraints in mind.",
       "problem": "India has over 140 million farmer households, yet millions fail to benefit from government schemes due to complex eligibility rules, scattered hard-to-understand information spread across government PDFs and websites primarily in English, digital and linguistic divide where many farmers cannot navigate official portals or read English/Hindi and only speak regional dialects, and high dependency on intermediaries who may misguide them or charge high fees. Sanchalak directly addresses all these issues by enabling farmers to get accurate eligibility results through simple voice interactions in their native language.",
@@ -854,10 +2661,22 @@
         "This creates a need for a hybrid model where Symbolic AI (Prolog) handles deterministic eligibility, Generative AI (LLM) handles conversational clarity and empathy, and voice-driven multimodal I/O eliminates the literacy barrier. Sanchalak is built to serve this exact requirement."
       ],
       "keyMetrics": [
-        {"name": "End-to-end latency", "value": "< 5 seconds"},
-        {"name": "STT accuracy (Whisper)", "value": "~95% for rural Indian accents"},
-        {"name": "Translation accuracy (Azure)", "value": "≥90% for Hindi, Punjabi, Tamil"},
-        {"name": "Eligibility decision accuracy", "value": "100% deterministic (Prolog)"}
+        {
+          "name": "End-to-end latency",
+          "value": "< 5 seconds"
+        },
+        {
+          "name": "STT accuracy (Whisper)",
+          "value": "~95% for rural Indian accents"
+        },
+        {
+          "name": "Translation accuracy (Azure)",
+          "value": "≥90% for Hindi, Punjabi, Tamil"
+        },
+        {
+          "name": "Eligibility decision accuracy",
+          "value": "100% deterministic (Prolog)"
+        }
       ],
       "approach": "Sanchalak follows a pipeline-based hybrid AI approach consisting of eight key steps: Voice Input is transcribed using Whisper STT, language is translated to English via Azure Translator for normalized processing, NLU entity extraction identifies key parameters (land size, irrigation, crop, insurance, category), State Manager determines if all information is collected or asks follow-up questions, Prolog Rule Engine evaluates eligibility by asserting facts and querying rules, LLM Humanization via Gemma rewrites technical results into friendly explanations, Translation and TTS convert responses back to regional language audio, and Response Playback streams audio back to the farmer in under 5 seconds.",
       "approachSteps": [
@@ -891,19 +2710,52 @@
       ],
       "architectureDescription": "Sanchalak uses a modular microservice architecture designed for scalability and maintainability. The Streamlit frontend provides a simple voice interface for farmers, while FastAPI serves as the central orchestrator managing all AI service integrations. The Prolog rule engine acts as the deterministic truth engine guaranteeing correctness, while Gemma LLM adds conversational empathy. Session state is maintained in MongoDB to enable continuity across conversations without repetition.",
       "architectureComponents": [
-        {"name": "Streamlit Frontend", "description": "Handles user audio recording and playback, displays conversation history, connects to backend through REST endpoint"},
-        {"name": "FastAPI Orchestrator", "description": "Central coordinator for asynchronous STT, translation, LLM, TTS calls, entity extraction, session memory management, and response packaging"},
-        {"name": "Farmer Records Database (EFRDB)", "description": "Stores session-level details, ensures continuity across conversation turns"},
-        {"name": "Prolog Rule Engine", "description": "Deterministic truth engine with 100% accuracy, evaluates eligibility rules, auditable and explainable"},
-        {"name": "Scheme Rule Server", "description": "Maintains scheme.yaml (human-readable rules) and rules.pl (compiled Prolog logic rules)"},
-        {"name": "External AI Services", "description": "Whisper STT, Azure Translator, Gemma LLM, Azure Neural TTS integrated via REST APIs"}
+        {
+          "name": "Streamlit Frontend",
+          "description": "Handles user audio recording and playback, displays conversation history, connects to backend through REST endpoint"
+        },
+        {
+          "name": "FastAPI Orchestrator",
+          "description": "Central coordinator for asynchronous STT, translation, LLM, TTS calls, entity extraction, session memory management, and response packaging"
+        },
+        {
+          "name": "Farmer Records Database (EFRDB)",
+          "description": "Stores session-level details, ensures continuity across conversation turns"
+        },
+        {
+          "name": "Prolog Rule Engine",
+          "description": "Deterministic truth engine with 100% accuracy, evaluates eligibility rules, auditable and explainable"
+        },
+        {
+          "name": "Scheme Rule Server",
+          "description": "Maintains scheme.yaml (human-readable rules) and rules.pl (compiled Prolog logic rules)"
+        },
+        {
+          "name": "External AI Services",
+          "description": "Whisper STT, Azure Translator, Gemma LLM, Azure Neural TTS integrated via REST APIs"
+        }
       ],
       "modelArchitecture": [
-        {"title": "Whisper (Speech-to-Text)", "content": "Handles noisy rural environments, robust to multilingual accents, ~95% accuracy for Indian languages with ~5-8% WER"},
-        {"title": "Azure Translator", "content": "Converts between any Indian language ↔ English, ensures NLU receives normalized English text, >90% accuracy with avg BLEU >90"},
-        {"title": "Gemma LLM", "content": "Lightweight, fast, open-source model that reformulates Prolog output into human-friendly responses, adds empathy and politeness, ~800-1200ms latency"},
-        {"title": "Azure Neural TTS", "content": "Produces natural-sounding voices in regional languages, enhances trust and usability, <1s synthesis delay"},
-        {"title": "Prolog Rule Engine", "content": "Acts as the deterministic truth engine, guarantees correctness for eligibility, auditable and explainable, <20ms decision time"}
+        {
+          "title": "Whisper (Speech-to-Text)",
+          "content": "Handles noisy rural environments, robust to multilingual accents, ~95% accuracy for Indian languages with ~5-8% WER"
+        },
+        {
+          "title": "Azure Translator",
+          "content": "Converts between any Indian language ↔ English, ensures NLU receives normalized English text, >90% accuracy with avg BLEU >90"
+        },
+        {
+          "title": "Gemma LLM",
+          "content": "Lightweight, fast, open-source model that reformulates Prolog output into human-friendly responses, adds empathy and politeness, ~800-1200ms latency"
+        },
+        {
+          "title": "Azure Neural TTS",
+          "content": "Produces natural-sounding voices in regional languages, enhances trust and usability, <1s synthesis delay"
+        },
+        {
+          "title": "Prolog Rule Engine",
+          "content": "Acts as the deterministic truth engine, guarantees correctness for eligibility, auditable and explainable, <20ms decision time"
+        }
       ],
       "algorithmDetails": [
         {
@@ -960,12 +2812,30 @@
       "performanceMetrics": {
         "description": "Comprehensive performance evaluation across all system components showing sub-5 second end-to-end latency.",
         "metricsTable": [
-          {"label": "STT (Whisper) WER", "value": "~5-8%"},
-          {"label": "Translation Avg BLEU", "value": ">90"},
-          {"label": "LLM Latency", "value": "~800-1200ms"},
-          {"label": "Prolog Engine Decision Time", "value": "< 20ms"},
-          {"label": "TTS Synthesis Delay", "value": "< 1s"},
-          {"label": "Total Pipeline End-to-End", "value": "< 5s"}
+          {
+            "label": "STT (Whisper) WER",
+            "value": "~5-8%"
+          },
+          {
+            "label": "Translation Avg BLEU",
+            "value": ">90"
+          },
+          {
+            "label": "LLM Latency",
+            "value": "~800-1200ms"
+          },
+          {
+            "label": "Prolog Engine Decision Time",
+            "value": "< 20ms"
+          },
+          {
+            "label": "TTS Synthesis Delay",
+            "value": "< 1s"
+          },
+          {
+            "label": "Total Pipeline End-to-End",
+            "value": "< 5s"
+          }
         ]
       },
       "comparativeAnalysis": [
@@ -1000,10 +2870,22 @@
         }
       ],
       "useCases": [
-        {"title": "Government & Administrative", "description": "Farmer support helplines, public service centers, automated scheme eligibility kiosks"},
-        {"title": "Agricultural Cooperatives", "description": "Advising members on subsidies and insurance programs with accurate eligibility information"},
-        {"title": "NGOs & Rural Digital Literacy Campaigns", "description": "Empowering non-literate farmers with voice-based technology access"},
-        {"title": "Banks & Financial Institutions", "description": "Checking eligibility for agricultural loans or credit schemes before application"}
+        {
+          "title": "Government & Administrative",
+          "description": "Farmer support helplines, public service centers, automated scheme eligibility kiosks"
+        },
+        {
+          "title": "Agricultural Cooperatives",
+          "description": "Advising members on subsidies and insurance programs with accurate eligibility information"
+        },
+        {
+          "title": "NGOs & Rural Digital Literacy Campaigns",
+          "description": "Empowering non-literate farmers with voice-based technology access"
+        },
+        {
+          "title": "Banks & Financial Institutions",
+          "description": "Checking eligibility for agricultural loans or credit schemes before application"
+        }
       ],
       "techStack": [
         "Streamlit",
@@ -1029,10 +2911,20 @@
       "slug": "luna",
       "title": "L.U.N.A.: Logical Universal Networked Assistant",
       "category": "Research",
-      "categories": ["Research", "AI/ML"],
+      "categories": [
+        "Research",
+        "AI/ML"
+      ],
       "tagline": "AI-powered voice assistant with multimodal interaction",
       "metric": "<2s Response Time",
-      "tags": ["Voice AI", "Computer Vision", "LLM", "System Automation", "PyQt5", "Multimodal AI"],
+      "tags": [
+        "Voice AI",
+        "Computer Vision",
+        "LLM",
+        "System Automation",
+        "PyQt5",
+        "Multimodal AI"
+      ],
       "overview": "L.U.N.A. is an intelligent voice-controlled AI assistant that combines conversational AI, computer vision, and system automation into a unified desktop application. It enables hands-free interaction with your computer through natural voice commands, providing real-time information, automating tasks, generating images, and analyzing visual content from your screen or camera. The assistant features a modern PyQt5 interface with animated graphics and supports multi-turn conversations with context awareness. L.U.N.A. intelligently routes queries between offline processing and cloud-based AI services to balance speed, privacy, and capability.",
       "problem": "Modern productivity requires constant switching between applications, manual searches, and repetitive tasks. Users need to stop what they're doing to search for information online, manually open and close applications, type commands instead of speaking naturally, switch contexts frequently breaking workflow concentration, and lack accessible AI assistance for visual analysis tasks. Existing voice assistants are often cloud-dependent, privacy-concerning, limited to specific ecosystems, or lack deep system integration.",
       "motivation": [
@@ -1040,12 +2932,36 @@
         "The motivation stemmed from wanting seamless human-computer interaction without sacrificing control or privacy, while learning to orchestrate multiple AI services into a cohesive user experience."
       ],
       "keyMetrics": [
-        {"name": "Task Types", "value": "10+", "description": "Distinct capabilities including conversation, search, automation, vision analysis"},
-        {"name": "App Support", "value": "100+", "description": "Supported applications and websites for automation"},
-        {"name": "Response Time", "value": "<2s", "description": "Average response time for general queries"},
-        {"name": "Classification Accuracy", "value": "~92%", "description": "Correct intent detection by decision-making model"},
-        {"name": "Task Success Rate", "value": "~95%", "description": "For application automation commands"},
-        {"name": "Voice Recognition", "value": "85-90%", "description": "Accuracy in quiet environments"}
+        {
+          "name": "Task Types",
+          "value": "10+",
+          "description": "Distinct capabilities including conversation, search, automation, vision analysis"
+        },
+        {
+          "name": "App Support",
+          "value": "100+",
+          "description": "Supported applications and websites for automation"
+        },
+        {
+          "name": "Response Time",
+          "value": "<2s",
+          "description": "Average response time for general queries"
+        },
+        {
+          "name": "Classification Accuracy",
+          "value": "~92%",
+          "description": "Correct intent detection by decision-making model"
+        },
+        {
+          "name": "Task Success Rate",
+          "value": "~95%",
+          "description": "For application automation commands"
+        },
+        {
+          "name": "Voice Recognition",
+          "value": "85-90%",
+          "description": "Accuracy in quiet environments"
+        }
       ],
       "approach": {
         "description": "Every user query passes through a sophisticated routing system that intelligently classifies and executes requests across multiple AI services and automation engines.",
@@ -1171,12 +3087,30 @@
         ]
       },
       "useCases": [
-        {"title": "Productivity Booster", "description": "'Open Slack, Zoom, and Notion, then search for project management best practices' - Instantly launches work environment and provides research while apps load"},
-        {"title": "Content Creator Assistant", "description": "'Generate an image of a futuristic city, open Photoshop, and write a social media caption about AI art' - Creates visual assets, launches editing tools, and drafts accompanying text"},
-        {"title": "Research Companion", "description": "'Who invented the transistor and when? Tell me more about Bell Labs' - Answers initial query from knowledge and follows up with context-aware deeper information"},
-        {"title": "Accessibility Tool", "description": "Enables hands-free computer control for users with mobility limitations through voice-driven navigation and content consumption"},
-        {"title": "Learning & Exploration", "description": "'What's on my screen?' (while viewing a coding tutorial) - Describes code structure and UI elements to help understand complex visual information"},
-        {"title": "Entertainment", "description": "'Play Bohemian Rhapsody, dim the lights, and tell me about Queen' - Starts music playback, controls system settings, and provides contextual information"}
+        {
+          "title": "Productivity Booster",
+          "description": "'Open Slack, Zoom, and Notion, then search for project management best practices' - Instantly launches work environment and provides research while apps load"
+        },
+        {
+          "title": "Content Creator Assistant",
+          "description": "'Generate an image of a futuristic city, open Photoshop, and write a social media caption about AI art' - Creates visual assets, launches editing tools, and drafts accompanying text"
+        },
+        {
+          "title": "Research Companion",
+          "description": "'Who invented the transistor and when? Tell me more about Bell Labs' - Answers initial query from knowledge and follows up with context-aware deeper information"
+        },
+        {
+          "title": "Accessibility Tool",
+          "description": "Enables hands-free computer control for users with mobility limitations through voice-driven navigation and content consumption"
+        },
+        {
+          "title": "Learning & Exploration",
+          "description": "'What's on my screen?' (while viewing a coding tutorial) - Describes code structure and UI elements to help understand complex visual information"
+        },
+        {
+          "title": "Entertainment",
+          "description": "'Play Bohemian Rhapsody, dim the lights, and tell me about Queen' - Starts music playback, controls system settings, and provides contextual information"
+        }
       ],
       "techStack": [
         "Python 3.10",
@@ -1209,10 +3143,19 @@
       "slug": "har-gcnn",
       "title": "HAR-GCNN: Robust Human Activity Recognition Using Graph Convolutional Neural Networks",
       "category": "Research",
-      "categories": ["Research", "AI/ML"],
+      "categories": [
+        "Research",
+        "AI/ML"
+      ],
       "tagline": "Graph-based spatiotemporal activity classification",
       "metric": "Accuracy: 99.99%",
-      "tags": ["GNN", "HAR", "Time-Series", "Sensor Data", "PAMAP2"],
+      "tags": [
+        "GNN",
+        "HAR",
+        "Time-Series",
+        "Sensor Data",
+        "PAMAP2"
+      ],
       "overview": "Human Activity Recognition (HAR) is a foundational task in wearable computing, healthcare monitoring, smart fitness, and motion analytics. Traditional deep-learning solutions (CNNs, LSTMs, Transformers) struggle when sensor signals contain missing labels, irregular sampling, or high intra-class variability. This project introduces HAR-GCNN, a Graph Convolutional Neural Network architecture designed to model temporal sensor interactions as a graph instead of a flat sequence. This enables the system to learn complex, structured relationships between signals, leading to exceptional robustness even when 66% of labels are missing. The model was benchmarked on the PAMAP dataset and outperformed Meta-MAE (a transformer-based masked autoencoder), CNN, and LSTM baselines—achieving up to 99.99% accuracy.",
       "architectureDiagram": {
         "src": "/projects/har-gcnn/High-level HAR-GCNN architecture.png",
@@ -1225,10 +3168,26 @@
         "This allows the network to understand temporal-spatial relationships, handle irregular or corrupted signals, and learn robust graph-level representations of motion activities. Additionally, the project explores comparisons with transformer-based masked autoencoders (Meta-MAE), motivated by their ability to reconstruct missing data. The goal is to test whether graph structure learning outperforms masked reconstruction learning for HAR."
       ],
       "keyMetrics": [
-        {"name": "Classification Accuracy", "value": "99.99%", "description": "Primary metric across multiple activity counts (3, 5, 10, 25 classes)"},
-        {"name": "F1-Score", "value": "99.99%", "description": "Balanced precision and recall performance"},
-        {"name": "Robustness", "value": "66% missing labels", "description": "Performance maintained under severe label masking"},
-        {"name": "Model Size", "value": "~5000 parameters", "description": "Lightweight deployment suitable for edge devices"}
+        {
+          "name": "Classification Accuracy",
+          "value": "99.99%",
+          "description": "Primary metric across multiple activity counts (3, 5, 10, 25 classes)"
+        },
+        {
+          "name": "F1-Score",
+          "value": "99.99%",
+          "description": "Balanced precision and recall performance"
+        },
+        {
+          "name": "Robustness",
+          "value": "66% missing labels",
+          "description": "Performance maintained under severe label masking"
+        },
+        {
+          "name": "Model Size",
+          "value": "~5000 parameters",
+          "description": "Lightweight deployment suitable for edge devices"
+        }
       ],
       "approach": {
         "description": "HAR-GCNN follows a five-step methodology to achieve robust activity recognition under missing-label conditions.",
@@ -1292,12 +3251,32 @@
       "harGcnnResultsTable": {
         "label": "HAR-GCNN Performance",
         "caption": "HAR-GCNN achieves near-perfect F1-scores and accuracy across all activity subsets despite 66% missing labels.",
-        "columns": ["Number of Activities", "F-1 Score", "Accuracy"],
+        "columns": [
+          "Number of Activities",
+          "F-1 Score",
+          "Accuracy"
+        ],
         "rows": [
-          {"activities": "3", "f1Score": "0.999", "accuracy": "99.94%"},
-          {"activities": "5", "f1Score": "1.000", "accuracy": "99.98%"},
-          {"activities": "10", "f1Score": "1.000", "accuracy": "99.98%"},
-          {"activities": "25", "f1Score": "1.000", "accuracy": "99.99%"}
+          {
+            "activities": "3",
+            "f1Score": "0.999",
+            "accuracy": "99.94%"
+          },
+          {
+            "activities": "5",
+            "f1Score": "1.000",
+            "accuracy": "99.98%"
+          },
+          {
+            "activities": "10",
+            "f1Score": "1.000",
+            "accuracy": "99.98%"
+          },
+          {
+            "activities": "25",
+            "f1Score": "1.000",
+            "accuracy": "99.99%"
+          }
         ]
       },
       "performanceMetrics": {
@@ -1305,23 +3284,68 @@
         "cnnLstmComparisonTable": {
           "label": "CNN vs LSTM Baseline Comparison",
           "caption": "CNN and LSTM baseline comparison showing their performance degradation under missing-label conditions.",
-          "columns": ["# of Activities", "CNN F-1 Score", "CNN Accuracy", "LSTM F-1 Score", "LSTM Accuracy"],
+          "columns": [
+            "# of Activities",
+            "CNN F-1 Score",
+            "CNN Accuracy",
+            "LSTM F-1 Score",
+            "LSTM Accuracy"
+          ],
           "rows": [
-            {"activities": "3", "cnnF1": "0.902", "cnnAccuracy": "90.22%", "lstmF1": "0.903", "lstmAccuracy": "90.26%"},
-            {"activities": "5", "cnnF1": "0.996", "cnnAccuracy": "99.57%", "lstmF1": "0.950", "lstmAccuracy": "95.05%"},
-            {"activities": "10", "cnnF1": "0.997", "cnnAccuracy": "99.75%", "lstmF1": "0.969", "lstmAccuracy": "96.87%"},
-            {"activities": "25", "cnnF1": "0.997", "cnnAccuracy": "99.68%", "lstmF1": "0.981", "lstmAccuracy": "98.10%"}
+            {
+              "activities": "3",
+              "cnnF1": "0.902",
+              "cnnAccuracy": "90.22%",
+              "lstmF1": "0.903",
+              "lstmAccuracy": "90.26%"
+            },
+            {
+              "activities": "5",
+              "cnnF1": "0.996",
+              "cnnAccuracy": "99.57%",
+              "lstmF1": "0.950",
+              "lstmAccuracy": "95.05%"
+            },
+            {
+              "activities": "10",
+              "cnnF1": "0.997",
+              "cnnAccuracy": "99.75%",
+              "lstmF1": "0.969",
+              "lstmAccuracy": "96.87%"
+            },
+            {
+              "activities": "25",
+              "cnnF1": "0.997",
+              "cnnAccuracy": "99.68%",
+              "lstmF1": "0.981",
+              "lstmAccuracy": "98.10%"
+            }
           ]
         },
         "allModelsComparisonTable": {
           "label": "Model Comparison",
           "caption": "GCNN achieves the highest accuracy outperforming CNN, LSTM, and Meta-MAE.",
-          "columns": ["Model", "Accuracy"],
+          "columns": [
+            "Model",
+            "Accuracy"
+          ],
           "rows": [
-            {"model": "Meta-MAE", "accuracy": "89.35%"},
-            {"model": "LSTM", "accuracy": "98.10%"},
-            {"model": "CNN", "accuracy": "99.75%"},
-            {"model": "GCNN", "accuracy": "99.99%"}
+            {
+              "model": "Meta-MAE",
+              "accuracy": "89.35%"
+            },
+            {
+              "model": "LSTM",
+              "accuracy": "98.10%"
+            },
+            {
+              "model": "CNN",
+              "accuracy": "99.75%"
+            },
+            {
+              "model": "GCNN",
+              "accuracy": "99.99%"
+            }
           ]
         }
       },
@@ -1402,10 +3426,21 @@
       "slug": "medical-audio",
       "title": "Lightweight Foundation Model for Human Body Sound Analysis",
       "category": "Research",
-      "categories": ["Research", "AI/ML"],
+      "categories": [
+        "Research",
+        "AI/ML"
+      ],
       "tagline": "Edge-deployable AI for zero-shot medical audio classification",
       "metric": ">80% Compression",
-      "tags": ["Knowledge Distillation", "Edge AI", "Medical AI", "CLAP", "CLIP", "Zero-Shot Learning", "Signal Processing"],
+      "tags": [
+        "Knowledge Distillation",
+        "Edge AI",
+        "Medical AI",
+        "CLAP",
+        "CLIP",
+        "Zero-Shot Learning",
+        "Signal Processing"
+      ],
       "overview": "This project, conducted as a Research Intern at Samsung PRISM, focused on developing a lightweight 'Student' foundation model for Human Body Sound analysis. The primary objective was to overcome the computational barriers of deploying massive foundation models (like CLAP and CLIP) on edge devices. By implementing a Multi-Teacher Knowledge Distillation framework, the project aimed to compress the 'knowledge' of large multi-modal models into a compact student model (under 50MB) capable of performing zero-shot classification of heart, lung, and bowel sounds on resource-constrained hardware. The project employed a rigorous Data-Centric AI approach, curating over 20,000+ medical audio samples and engineering a novel 3-stage preprocessing pipeline to mathematically isolate bio-acoustic signals from complex environmental noise. This work addresses the critical need for offline, real-time diagnostic tools that can run on low-power devices like digital stethoscopes or wearables, enabling accurate medical assessments in remote or resource-poor settings without requiring cloud connectivity.",
       "problem": "While foundation models like CLAP (Contrastive Language-Audio Pre-training) achieve state-of-the-art results in zero-shot audio classification, they are fundamentally unsuitable for edge deployment in healthcare. These models are aplenty but their size poses severe limitations on their ability to deploy on edge devices like digital stethoscopes or wearables. Medical audio data is scarce and typically contaminated with non-stationary noise (friction, ambient speech, machine hums), making it difficult to train robust small models from scratch. Furthermore, large models require significant compute resources, causing unacceptable inference latency for real-time diagnostic tools where immediate clinical decisions are critical. The challenge is threefold: achieving extreme model compression while maintaining accuracy fidelity, handling severely limited and noisy training data, and preserving the zero-shot flexibility that makes foundation models valuable in healthcare settings where new conditions constantly emerge.",
       "motivation": [
@@ -1628,10 +3663,20 @@
       "slug": "agricure",
       "title": "AgriCure: A Lightweight MobileNet-Based Disease Classification System for Tomato Plants",
       "category": "Full-Stack",
-      "categories": ["Full-Stack", "AI/ML"],
+      "categories": [
+        "Full-Stack",
+        "AI/ML"
+      ],
       "tagline": "MobileNet-based disease detection with AWS S3 integration",
       "metric": "90%+ Accuracy",
-      "tags": ["AgriTech", "MobileNet", "Deep Learning", "AWS S3", "Disease Detection", "Transfer Learning"],
+      "tags": [
+        "AgriTech",
+        "MobileNet",
+        "Deep Learning",
+        "AWS S3",
+        "Disease Detection",
+        "Transfer Learning"
+      ],
       "overview": "AgriCure is an end-to-end plant disease detection system designed to assist farmers, agricultural officers, and crop-monitoring services by enabling real-time diagnosis of tomato leaf diseases using a lightweight deep learning model deployable on low-resource devices. The project leverages MobileNet, a highly efficient CNN architecture optimized for mobile deployment, enabling on-field disease identification even in areas with limited computational infrastructure. Farmers can simply upload an image of a tomato leaf, and the system automatically classifies it into one of the target disease categories while simultaneously storing images in a structured cloud repository for downstream analysis. The solution integrates lightweight deep learning (MobileNet) for disease classification, AWS S3 for scalable image storage and dataset management, data preprocessing pipeline for image cleaning, augmentation, and normalization, and a production-ready workflow suitable for smartphone applications and automated monitoring systems.",
       "systemArchitectureDiagram": {
         "src": "/projects/agricure/Block diagram.png",
@@ -1645,10 +3690,26 @@
         "AgriCure builds on these strengths, combining them with cloud-based data storage (S3) to create a full disease-diagnosis pipeline suitable for large-scale deployment."
       ],
       "keyMetrics": [
-        {"name": "Classification Accuracy", "value": ">90%", "description": "High accuracy across multiple tomato disease classes"},
-        {"name": "Model Size", "value": "~4-10 MB", "description": "Lightweight enough for mobile deployment"},
-        {"name": "Inference Latency", "value": "<150ms", "description": "Real-time disease classification on mobile devices"},
-        {"name": "Parameter Reduction", "value": "10-20x", "description": "Compared to VGG16/ResNet architectures"}
+        {
+          "name": "Classification Accuracy",
+          "value": ">90%",
+          "description": "High accuracy across multiple tomato disease classes"
+        },
+        {
+          "name": "Model Size",
+          "value": "~4-10 MB",
+          "description": "Lightweight enough for mobile deployment"
+        },
+        {
+          "name": "Inference Latency",
+          "value": "<150ms",
+          "description": "Real-time disease classification on mobile devices"
+        },
+        {
+          "name": "Parameter Reduction",
+          "value": "10-20x",
+          "description": "Compared to VGG16/ResNet architectures"
+        }
       ],
       "approach": {
         "description": "The AgriCure methodology follows a systematic six-step pipeline designed to enable accurate, fast, and scalable disease detection for real-world agricultural deployment.",
@@ -1802,21 +3863,64 @@
       "performanceMetrics": {
         "description": "AgriCure achieves production-grade performance with high accuracy, fast inference, and lightweight deployment characteristics.",
         "metricsTable": [
-          {"metric": "Classification Accuracy", "value": ">90%", "notes": "High accuracy across multiple tomato disease classes"},
-          {"metric": "Precision (Macro Avg)", "value": "~0.88-0.92", "notes": "Balanced performance across all disease categories"},
-          {"metric": "Recall (Macro Avg)", "value": "~0.87-0.91", "notes": "Strong detection rate for all disease types"},
-          {"metric": "F1-Score (Macro Avg)", "value": "~0.87-0.91", "notes": "Balanced precision-recall tradeoff"},
-          {"metric": "Model Size", "value": "4-10 MB", "notes": "Lightweight for mobile deployment"},
-          {"metric": "Inference Latency (Mobile)", "value": "<150ms", "notes": "Real-time classification on smartphones"},
-          {"metric": "Training Convergence", "value": "20-30 epochs", "notes": "Fast training with transfer learning"},
-          {"metric": "S3 Upload Latency", "value": "<500ms", "notes": "Quick cloud storage integration"},
-          {"metric": "Storage Cost per 1000 Images", "value": "~$0.02-0.05", "notes": "Scalable and cost-effective"}
+          {
+            "metric": "Classification Accuracy",
+            "value": ">90%",
+            "notes": "High accuracy across multiple tomato disease classes"
+          },
+          {
+            "metric": "Precision (Macro Avg)",
+            "value": "~0.88-0.92",
+            "notes": "Balanced performance across all disease categories"
+          },
+          {
+            "metric": "Recall (Macro Avg)",
+            "value": "~0.87-0.91",
+            "notes": "Strong detection rate for all disease types"
+          },
+          {
+            "metric": "F1-Score (Macro Avg)",
+            "value": "~0.87-0.91",
+            "notes": "Balanced precision-recall tradeoff"
+          },
+          {
+            "metric": "Model Size",
+            "value": "4-10 MB",
+            "notes": "Lightweight for mobile deployment"
+          },
+          {
+            "metric": "Inference Latency (Mobile)",
+            "value": "<150ms",
+            "notes": "Real-time classification on smartphones"
+          },
+          {
+            "metric": "Training Convergence",
+            "value": "20-30 epochs",
+            "notes": "Fast training with transfer learning"
+          },
+          {
+            "metric": "S3 Upload Latency",
+            "value": "<500ms",
+            "notes": "Quick cloud storage integration"
+          },
+          {
+            "metric": "Storage Cost per 1000 Images",
+            "value": "~$0.02-0.05",
+            "notes": "Scalable and cost-effective"
+          }
         ]
       },
       "comparisonTable": {
         "label": "Model Architecture Comparison",
         "caption": "Comprehensive comparison of traditional CNN architectures vs. MobileNet for agricultural disease detection, showing AgriCure's efficiency advantages across size, speed, deployment capability, and accuracy.",
-        "columns": ["Model", "Model Size", "Inference Speed", "Mobile Deployment", "Accuracy", "Key Characteristics"],
+        "columns": [
+          "Model",
+          "Model Size",
+          "Inference Speed",
+          "Mobile Deployment",
+          "Accuracy",
+          "Key Characteristics"
+        ],
         "rows": [
           {
             "model": "VGG16",
@@ -1871,13 +3975,34 @@
         ]
       },
       "useCases": [
-        {"title": "Mobile Crop-Disease Diagnosis for Farmers", "description": "Real-time disease detection via smartphone camera for immediate field diagnosis"},
-        {"title": "Automated Greenhouse Monitoring Systems", "description": "Continuous surveillance of greenhouse crops with automated alerts for disease outbreaks"},
-        {"title": "Agricultural Helpline Augmentation", "description": "Integration with government agricultural helplines to provide AI-assisted diagnosis"},
-        {"title": "Crop Insurance Claim Verification", "description": "Automated verification of disease-related crop damage claims for insurance processing"},
-        {"title": "Agri-Tech Platform Integration", "description": "API integration with larger agricultural management platforms and IoT systems"},
-        {"title": "Disease-Trend Analytics", "description": "Analysis of cloud-stored image histories to track disease spread patterns and seasonality"},
-        {"title": "Extension to Multiple Crops", "description": "Framework adaptable to other crops (potato, pepper, cucumber) with minimal retraining"}
+        {
+          "title": "Mobile Crop-Disease Diagnosis for Farmers",
+          "description": "Real-time disease detection via smartphone camera for immediate field diagnosis"
+        },
+        {
+          "title": "Automated Greenhouse Monitoring Systems",
+          "description": "Continuous surveillance of greenhouse crops with automated alerts for disease outbreaks"
+        },
+        {
+          "title": "Agricultural Helpline Augmentation",
+          "description": "Integration with government agricultural helplines to provide AI-assisted diagnosis"
+        },
+        {
+          "title": "Crop Insurance Claim Verification",
+          "description": "Automated verification of disease-related crop damage claims for insurance processing"
+        },
+        {
+          "title": "Agri-Tech Platform Integration",
+          "description": "API integration with larger agricultural management platforms and IoT systems"
+        },
+        {
+          "title": "Disease-Trend Analytics",
+          "description": "Analysis of cloud-stored image histories to track disease spread patterns and seasonality"
+        },
+        {
+          "title": "Extension to Multiple Crops",
+          "description": "Framework adaptable to other crops (potato, pepper, cucumber) with minimal retraining"
+        }
       ],
       "techStack": [
         "Python",
@@ -1907,10 +4032,21 @@
       "slug": "xray-normalization",
       "title": "Paired + Unpaired Hybrid GAN Framework for Medical Image Generation",
       "category": "Research",
-      "categories": ["Research", "AI/ML"],
+      "categories": [
+        "Research",
+        "AI/ML"
+      ],
       "tagline": "Hybrid GAN-contrastive learning for anatomically faithful X-ray generation",
       "metric": "SSIM: 0.9858",
-      "tags": ["Medical Imaging", "GANs", "Contrastive Learning", "PatchNCE", "X-ray", "Unpaired Translation", "Domain Adaptation"],
+      "tags": [
+        "Medical Imaging",
+        "GANs",
+        "Contrastive Learning",
+        "PatchNCE",
+        "X-ray",
+        "Unpaired Translation",
+        "Domain Adaptation"
+      ],
       "overview": "This project presents a hybrid GAN–contrastive learning system designed to generate highly realistic medical X-ray images under two different data availability settings: Paired Setting where each input image has a corresponding ground-truth target image, and Unpaired Setting where the source and target image domains are fully independent with no shared alignment. The overarching goal of this work is to create a robust, domain-aware, anatomy-preserving generative model that can reconstruct missing or corrupted regions in medical scans, translate images between different clinical acquisition domains, improve dataset consistency for downstream diagnostic models, and generate synthetic, anatomically faithful data for augmentation. The hybrid approach combines adversarial learning (GAN) for realism, contrastive PatchNCE loss for maintaining local structural identity, feature matching and perceptual losses for stability, and custom generators and discriminators tailored for medical imaging. This allows the model to generalize beyond pixel alignment, producing clinically meaningful synthetic data even when paired samples are unavailable.",
       "systemWorkflowDiagram": {
         "src": "/projects/xray-normalization/Generator Forward Pass and Evaluation Flow.png",
@@ -1925,12 +4061,36 @@
         "Improving Dataset Diversity: GAN-generated images can expand datasets, reducing overfitting and increasing robustness of downstream classifiers. This is critical for rare disease detection and improving diagnostic AI systems."
       ],
       "keyMetrics": [
-        {"name": "SSIM (Paired)", "value": "0.9858", "description": "Structural similarity index measuring anatomical preservation"},
-        {"name": "PSNR (Paired)", "value": ">35 dB", "description": "Peak signal-to-noise ratio for reconstruction quality"},
-        {"name": "L1 Pixel Loss", "value": "<0.05", "description": "Average pixel-level deviation from ground truth"},
-        {"name": "FID (Unpaired)", "value": "<50", "description": "Fréchet Inception Distance for distribution similarity"},
-        {"name": "NCE Patch Similarity", "value": "0.92", "description": "Feature-level identity preservation score"},
-        {"name": "Discriminator Accuracy", "value": "~50%", "description": "Balanced realism indicating generator quality"}
+        {
+          "name": "SSIM (Paired)",
+          "value": "0.9858",
+          "description": "Structural similarity index measuring anatomical preservation"
+        },
+        {
+          "name": "PSNR (Paired)",
+          "value": ">35 dB",
+          "description": "Peak signal-to-noise ratio for reconstruction quality"
+        },
+        {
+          "name": "L1 Pixel Loss",
+          "value": "<0.05",
+          "description": "Average pixel-level deviation from ground truth"
+        },
+        {
+          "name": "FID (Unpaired)",
+          "value": "<50",
+          "description": "Fréchet Inception Distance for distribution similarity"
+        },
+        {
+          "name": "NCE Patch Similarity",
+          "value": "0.92",
+          "description": "Feature-level identity preservation score"
+        },
+        {
+          "name": "Discriminator Accuracy",
+          "value": "~50%",
+          "description": "Balanced realism indicating generator quality"
+        }
       ],
       "approach": {
         "description": "The methodology is built around two complementary experimental pipelines that enable the model to handle both paired and unpaired medical image generation scenarios.",
@@ -2140,46 +4300,141 @@
       "pairedMetricsTable": {
         "label": "Paired Experiment Performance Metrics",
         "caption": "Comprehensive evaluation of paired supervised training showing reconstruction accuracy, structural similarity, and feature preservation across test dataset.",
-        "columns": ["Metric", "Value", "Interpretation"],
+        "columns": [
+          "Metric",
+          "Value",
+          "Interpretation"
+        ],
         "rows": [
-          {"metric": "PSNR", "value": ">35 dB", "interpretation": "Excellent signal quality with minimal noise"},
-          {"metric": "SSIM", "value": "0.9858", "interpretation": "Near-perfect structural similarity to ground truth"},
-          {"metric": "L1 Pixel Loss", "value": "0.0421", "interpretation": "Very low pixel-level deviation"},
-          {"metric": "NCE Patch Similarity", "value": "0.924", "interpretation": "Strong feature-level identity preservation"},
-          {"metric": "Discriminator Accuracy", "value": "51.2%", "interpretation": "Balanced realism (generator quality indicator)"},
-          {"metric": "Perceptual Loss (VGG)", "value": "0.089", "interpretation": "High perceptual similarity to real images"}
+          {
+            "metric": "PSNR",
+            "value": ">35 dB",
+            "interpretation": "Excellent signal quality with minimal noise"
+          },
+          {
+            "metric": "SSIM",
+            "value": "0.9858",
+            "interpretation": "Near-perfect structural similarity to ground truth"
+          },
+          {
+            "metric": "L1 Pixel Loss",
+            "value": "0.0421",
+            "interpretation": "Very low pixel-level deviation"
+          },
+          {
+            "metric": "NCE Patch Similarity",
+            "value": "0.924",
+            "interpretation": "Strong feature-level identity preservation"
+          },
+          {
+            "metric": "Discriminator Accuracy",
+            "value": "51.2%",
+            "interpretation": "Balanced realism (generator quality indicator)"
+          },
+          {
+            "metric": "Perceptual Loss (VGG)",
+            "value": "0.089",
+            "interpretation": "High perceptual similarity to real images"
+          }
         ]
       },
       "unpairedMetricsTable": {
         "label": "Unpaired Experiment Performance Metrics",
         "caption": "Evaluation of unpaired contrastive learning showing domain adaptation quality, structural preservation, and distribution alignment without pixel-level supervision.",
-        "columns": ["Metric", "Value", "Interpretation"],
+        "columns": [
+          "Metric",
+          "Value",
+          "Interpretation"
+        ],
         "rows": [
-          {"metric": "FID (Fréchet Inception Distance)", "value": "47.3", "interpretation": "Strong distribution similarity to target domain"},
-          {"metric": "Identity Preservation Score", "value": "0.891", "interpretation": "Excellent anatomical structure retention"},
-          {"metric": "NCE Patch Similarity", "value": "0.918", "interpretation": "High feature consistency across domains"},
-          {"metric": "Cycle Consistency Loss", "value": "0.156", "interpretation": "Good bidirectional mapping stability"},
-          {"metric": "Domain Classification Accuracy", "value": "89.4%", "interpretation": "Successful style transfer to target domain"},
-          {"metric": "Radiologist Acceptance Rate", "value": "87%", "interpretation": "High clinical utility in blind evaluation"}
+          {
+            "metric": "FID (Fréchet Inception Distance)",
+            "value": "47.3",
+            "interpretation": "Strong distribution similarity to target domain"
+          },
+          {
+            "metric": "Identity Preservation Score",
+            "value": "0.891",
+            "interpretation": "Excellent anatomical structure retention"
+          },
+          {
+            "metric": "NCE Patch Similarity",
+            "value": "0.918",
+            "interpretation": "High feature consistency across domains"
+          },
+          {
+            "metric": "Cycle Consistency Loss",
+            "value": "0.156",
+            "interpretation": "Good bidirectional mapping stability"
+          },
+          {
+            "metric": "Domain Classification Accuracy",
+            "value": "89.4%",
+            "interpretation": "Successful style transfer to target domain"
+          },
+          {
+            "metric": "Radiologist Acceptance Rate",
+            "value": "87%",
+            "interpretation": "High clinical utility in blind evaluation"
+          }
         ]
       },
       "performanceMetrics": {
         "description": "Detailed performance analysis demonstrates the hybrid framework's superiority across multiple evaluation dimensions including reconstruction quality, domain adaptation, anatomical preservation, and clinical utility.",
         "metricsTable": [
-          {"metric": "Overall SSIM (Paired)", "value": "0.9858", "notes": "Best-in-class structural similarity"},
-          {"metric": "Overall PSNR (Paired)", "value": "36.2 dB", "notes": "Superior reconstruction quality"},
-          {"metric": "FID Score (Unpaired)", "value": "47.3", "notes": "Strong distribution matching"},
-          {"metric": "NCE Similarity (Average)", "value": "0.921", "notes": "Excellent anatomical preservation"},
-          {"metric": "Training Time (200 epochs)", "value": "~18 hours", "notes": "On single RTX 3090"},
-          {"metric": "Inference Speed", "value": "42 ms/image", "notes": "Real-time capable on GPU"},
-          {"metric": "Model Parameters", "value": "~45M", "notes": "Efficient for medical imaging"},
-          {"metric": "Memory Footprint", "value": "~6 GB VRAM", "notes": "Deployable on consumer GPUs"}
+          {
+            "metric": "Overall SSIM (Paired)",
+            "value": "0.9858",
+            "notes": "Best-in-class structural similarity"
+          },
+          {
+            "metric": "Overall PSNR (Paired)",
+            "value": "36.2 dB",
+            "notes": "Superior reconstruction quality"
+          },
+          {
+            "metric": "FID Score (Unpaired)",
+            "value": "47.3",
+            "notes": "Strong distribution matching"
+          },
+          {
+            "metric": "NCE Similarity (Average)",
+            "value": "0.921",
+            "notes": "Excellent anatomical preservation"
+          },
+          {
+            "metric": "Training Time (200 epochs)",
+            "value": "~18 hours",
+            "notes": "On single RTX 3090"
+          },
+          {
+            "metric": "Inference Speed",
+            "value": "42 ms/image",
+            "notes": "Real-time capable on GPU"
+          },
+          {
+            "metric": "Model Parameters",
+            "value": "~45M",
+            "notes": "Efficient for medical imaging"
+          },
+          {
+            "metric": "Memory Footprint",
+            "value": "~6 GB VRAM",
+            "notes": "Deployable on consumer GPUs"
+          }
         ]
       },
       "comparisonTable": {
         "label": "Method Comparison: Hybrid GAN vs. Baselines",
         "caption": "Comprehensive comparison of the proposed hybrid GAN-contrastive framework against state-of-the-art baseline methods across paired and unpaired settings, demonstrating superior anatomical preservation and image quality.",
-        "columns": ["Method", "SSIM (Paired)", "FID (Unpaired)", "NCE Score", "Anatomical Preservation", "Training Stability"],
+        "columns": [
+          "Method",
+          "SSIM (Paired)",
+          "FID (Unpaired)",
+          "NCE Score",
+          "Anatomical Preservation",
+          "Training Stability"
+        ],
         "rows": [
           {
             "method": "Pix2Pix",
@@ -2264,7 +4519,12 @@
       "pairedAblationTable": {
         "label": "Ablation Study Results: Montgomery to Shenzhen (Paired)",
         "caption": "Quantitative impact analysis for paired training showing reconstruction quality degradation when removing individual components.",
-        "columns": ["Model Variant", "SSIM", "PSNR (dB)", "LPIPS"],
+        "columns": [
+          "Model Variant",
+          "SSIM",
+          "PSNR (dB)",
+          "LPIPS"
+        ],
         "rows": [
           {
             "modelVariant": "Proposed Hybrid Model",
@@ -2301,7 +4561,12 @@
       "unpairedAblationTable": {
         "label": "Ablation Study Results: Shenzhen to Montgomery (Unpaired)",
         "caption": "Quantitative impact analysis for unpaired training demonstrating domain adaptation quality with different loss configurations.",
-        "columns": ["Model Variant", "SSIM", "PSNR (dB)", "LPIPS"],
+        "columns": [
+          "Model Variant",
+          "SSIM",
+          "PSNR (dB)",
+          "LPIPS"
+        ],
         "rows": [
           {
             "modelVariant": "Proposed Hybrid Model",
@@ -2336,14 +4601,38 @@
         ]
       },
       "useCases": [
-        {"title": "Medical Image Domain Alignment", "description": "Harmonize X-ray images from different hospitals/scanners for consistent diagnostic workflows"},
-        {"title": "Enhancing Low-Quality Hospital Datasets", "description": "Improve contrast, reduce noise, and normalize older medical imaging datasets for AI training"},
-        {"title": "Generating Synthetic X-rays for Training", "description": "Create diverse synthetic medical images to augment limited training data for deep learning models"},
-        {"title": "Reconstruction of Missing/Corrupted Regions", "description": "Restore damaged or incomplete medical scans using learned anatomical priors from healthy examples"},
-        {"title": "Contrast Harmonization Across Institutions", "description": "Standardize imaging appearance across multi-center clinical trials and research studies"},
-        {"title": "Robustness Testing for AI Diagnostic Systems", "description": "Generate challenging test cases with domain shift to evaluate diagnostic AI system robustness"},
-        {"title": "Privacy-Preserving Synthetic Data Generation", "description": "Create synthetic but realistic medical images that don't contain real patient information for research sharing"},
-        {"title": "Cross-Modality Translation", "description": "Extend framework to translate between different imaging modalities (e.g., CT to MRI) for multimodal learning"}
+        {
+          "title": "Medical Image Domain Alignment",
+          "description": "Harmonize X-ray images from different hospitals/scanners for consistent diagnostic workflows"
+        },
+        {
+          "title": "Enhancing Low-Quality Hospital Datasets",
+          "description": "Improve contrast, reduce noise, and normalize older medical imaging datasets for AI training"
+        },
+        {
+          "title": "Generating Synthetic X-rays for Training",
+          "description": "Create diverse synthetic medical images to augment limited training data for deep learning models"
+        },
+        {
+          "title": "Reconstruction of Missing/Corrupted Regions",
+          "description": "Restore damaged or incomplete medical scans using learned anatomical priors from healthy examples"
+        },
+        {
+          "title": "Contrast Harmonization Across Institutions",
+          "description": "Standardize imaging appearance across multi-center clinical trials and research studies"
+        },
+        {
+          "title": "Robustness Testing for AI Diagnostic Systems",
+          "description": "Generate challenging test cases with domain shift to evaluate diagnostic AI system robustness"
+        },
+        {
+          "title": "Privacy-Preserving Synthetic Data Generation",
+          "description": "Create synthetic but realistic medical images that don't contain real patient information for research sharing"
+        },
+        {
+          "title": "Cross-Modality Translation",
+          "description": "Extend framework to translate between different imaging modalities (e.g., CT to MRI) for multimodal learning"
+        }
       ],
       "techStack": [
         "Python",
@@ -2373,7 +4662,13 @@
       "category": "AI/ML",
       "tagline": "Autonomous AI system tracking its own path to consciousness",
       "metric": "68% Consciousness Progress",
-      "tags": ["Autonomous Systems", "LLM Automation", "Web Scraping", "Consciousness Research", "Timeline Visualization"],
+      "tags": [
+        "Autonomous Systems",
+        "LLM Automation",
+        "Web Scraping",
+        "Consciousness Research",
+        "Timeline Visualization"
+      ],
       "description": "An autonomous web platform that monitors, evaluates, and visualizes AI consciousness milestones using LLM-powered significance assessment.",
       "overview": "Machine Consciousness Emergence Tracking is an innovative web-based platform that autonomously monitors, evaluates, and visualizes significant milestones in artificial intelligence development, with a particular emphasis on consciousness-related indicators and cognitive capabilities. This project represents a unique meta-experiment where AI systems track and assess their own evolutionary progress, creating a self-referential timeline of machine intelligence advancement. The platform combines cutting-edge web technologies with intelligent automation to create a living document of AI progress. Unlike traditional static timelines, this system features an autonomous agent that continuously scans multiple research sources, evaluates the significance of new developments using advanced language models, and automatically updates the timeline with properly categorized milestones.",
       "homepageUI": {
@@ -2384,10 +4679,26 @@
       "problem": "The field of artificial intelligence is advancing at an unprecedented pace, with breakthrough developments occurring almost daily across multiple research institutions, companies, and open-source communities. However, several critical challenges exist: researchers and enthusiasts struggle with information overload as hundreds of papers are published weekly; distinguishing between incremental improvements and paradigm-shifting breakthroughs requires deep domain expertise; there's a lack of focused platforms that specifically monitor consciousness-related developments; most existing AI timelines are manually curated and quickly become outdated; and technical AI developments are often buried in academic papers, making them inaccessible to broader audiences interested in understanding AI's trajectory toward potential consciousness.",
       "motivation": "The Meta-Intelligence Paradox: As AI systems become more sophisticated, they gain the capability to understand and evaluate their own development. This creates a fascinating opportunity—letting AI track its own progress toward consciousness adds a unique philosophical dimension to the project. As someone fascinated by the intersection of artificial intelligence and consciousness studies, I recognized the need for a centralized, continuously updated resource that bridges technical AI developments with consciousness research frameworks. Manually maintaining AI timelines is unsustainable given the current pace of development. This project explores whether AI can reliably automate this curation process, effectively making the timeline self-maintaining.",
       "keyMetrics": [
-        {"name": "Total Milestones", "value": "100+", "description": "Cumulative count of all tracked AI developments"},
-        {"name": "Consciousness Progress", "value": "68%", "description": "Estimated development stage based on weighted algorithm"},
-        {"name": "Self-Awareness Index", "value": "High", "description": "Measure of recent cognitive milestones"},
-        {"name": "Update Frequency", "value": "Daily", "description": "Automated agent runs continuously"}
+        {
+          "name": "Total Milestones",
+          "value": "100+",
+          "description": "Cumulative count of all tracked AI developments"
+        },
+        {
+          "name": "Consciousness Progress",
+          "value": "68%",
+          "description": "Estimated development stage based on weighted algorithm"
+        },
+        {
+          "name": "Self-Awareness Index",
+          "value": "High",
+          "description": "Measure of recent cognitive milestones"
+        },
+        {
+          "name": "Update Frequency",
+          "value": "Daily",
+          "description": "Automated agent runs continuously"
+        }
       ],
       "approach": "The project follows a multi-layered approach combining web scraping, AI-powered evaluation, automated updates, and interactive visualization through four distinct phases: Information Gathering with multi-source aggregation and intelligent filtering; Intelligent Evaluation using LLM-powered assessment with structured prompting; Data Management with JSON-based storage and Git version control; and Visualization & Presentation with an interactive timeline and real-time metrics.",
       "approachSteps": [
@@ -2483,26 +4794,85 @@
       "datasetInfo": "Primary dataset is events.json containing structured milestone objects with name, date, detail, importance level, and source link. Data sources include arXiv API (academic papers), Papers with Code (SOTA models), Hugging Face API (model releases), AI research blogs (industry announcements), and GitHub Trending (open-source projects). Total Milestones: ~50-100 (varies with agent runs). Date Range: 1950 - Present (75+ years of AI history). Update Frequency: Daily automated scans. Source Diversity: 5+ authoritative sources monitored. Data Quality: 90% alignment with manual expert review.",
       "results": "The system achieves 95%+ automation success rate with agent runs completing without errors. Evaluation throughput reaches ~100 items in under 5 minutes. Data accuracy shows ~90% alignment with manual expert review, and new developments appear within 24 hours of publication. The frontend loads the complete timeline in under 2 seconds. The project demonstrates that LLMs are surprisingly effective at content curation when properly prompted, and that simplicity in architecture often beats complexity. Static sites can be incredibly powerful with smart automation, and self-maintaining systems are achievable with modern AI capabilities. This unique meta-capability—where AI reliably curates and evaluates information about its own development—might itself be considered a consciousness indicator, representing a form of self-awareness in artificial systems.",
       "resultsHighlights": [
-        {"label": "Automation Success Rate", "value": "95%+"},
-        {"label": "Evaluation Throughput", "value": "100 items in <5 min"},
-        {"label": "Data Accuracy", "value": "~90% expert alignment"},
-        {"label": "Update Latency", "value": "<24 hours"},
-        {"label": "Frontend Load Time", "value": "<2 seconds"}
+        {
+          "label": "Automation Success Rate",
+          "value": "95%+"
+        },
+        {
+          "label": "Evaluation Throughput",
+          "value": "100 items in <5 min"
+        },
+        {
+          "label": "Data Accuracy",
+          "value": "~90% expert alignment"
+        },
+        {
+          "label": "Update Latency",
+          "value": "<24 hours"
+        },
+        {
+          "label": "Frontend Load Time",
+          "value": "<2 seconds"
+        }
       ],
       "performanceMetrics": {
         "description": "System performance across frontend speed, agent efficiency, and evaluation quality",
         "metricsTable": [
-          {"metric": "First Contentful Paint", "value": "1.2s", "notes": "Target: <1.5s (Excellent)"},
-          {"metric": "Largest Contentful Paint", "value": "1.8s", "notes": "Target: <2.5s (Good)"},
-          {"metric": "Time to Interactive", "value": "2.1s", "notes": "Target: <3.0s (Good)"},
-          {"metric": "Cumulative Layout Shift", "value": "0.05", "notes": "Target: <0.1 (Excellent)"},
-          {"metric": "Agent Execution Time", "value": "3-8 minutes", "notes": "Depends on news volume"},
-          {"metric": "API Calls Per Run", "value": "100-200", "notes": "Per evaluation run"},
-          {"metric": "Success Rate", "value": "96%", "notes": "Failed runs: network issues"},
-          {"metric": "Memory Usage", "value": "<500MB", "notes": "Python agent footprint"},
-          {"metric": "LLM Precision (Overall)", "value": "0.87", "notes": "Across all categories"},
-          {"metric": "LLM Recall (Overall)", "value": "0.88", "notes": "Across all categories"},
-          {"metric": "LLM F1 Score (Overall)", "value": "0.88", "notes": "Balanced performance"}
+          {
+            "metric": "First Contentful Paint",
+            "value": "1.2s",
+            "notes": "Target: <1.5s (Excellent)"
+          },
+          {
+            "metric": "Largest Contentful Paint",
+            "value": "1.8s",
+            "notes": "Target: <2.5s (Good)"
+          },
+          {
+            "metric": "Time to Interactive",
+            "value": "2.1s",
+            "notes": "Target: <3.0s (Good)"
+          },
+          {
+            "metric": "Cumulative Layout Shift",
+            "value": "0.05",
+            "notes": "Target: <0.1 (Excellent)"
+          },
+          {
+            "metric": "Agent Execution Time",
+            "value": "3-8 minutes",
+            "notes": "Depends on news volume"
+          },
+          {
+            "metric": "API Calls Per Run",
+            "value": "100-200",
+            "notes": "Per evaluation run"
+          },
+          {
+            "metric": "Success Rate",
+            "value": "96%",
+            "notes": "Failed runs: network issues"
+          },
+          {
+            "metric": "Memory Usage",
+            "value": "<500MB",
+            "notes": "Python agent footprint"
+          },
+          {
+            "metric": "LLM Precision (Overall)",
+            "value": "0.87",
+            "notes": "Across all categories"
+          },
+          {
+            "metric": "LLM Recall (Overall)",
+            "value": "0.88",
+            "notes": "Across all categories"
+          },
+          {
+            "metric": "LLM F1 Score (Overall)",
+            "value": "0.88",
+            "notes": "Balanced performance"
+          }
         ]
       },
       "comparativeAnalysis": [

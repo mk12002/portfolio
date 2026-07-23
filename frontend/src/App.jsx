@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Analytics } from '@vercel/analytics/react'
@@ -98,7 +98,8 @@ function App() {
                 <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
                 <Route path="/playground" element={<PageTransition><Playground /></PageTransition>} />
                 <Route path="/projects/security-tools" element={<PageTransition><SecurityTools /></PageTransition>} />
-                <Route path="/projects/tara-email-security" element={<PageTransition><EmailSecurity /></PageTransition>} />
+                <Route path="/projects/agentic-email-security" element={<PageTransition><EmailSecurity /></PageTransition>} />
+                <Route path="/projects/tara-email-security" element={<Navigate to="/projects/agentic-email-security" replace />} />
                 <Route path="/projects/:slug" element={<PageTransition><ProjectDetail /></PageTransition>} />
                 <Route path="/posts" element={<PageTransition><Posts /></PageTransition>} />
                 <Route path="/posts/:slug" element={<PageTransition><PostDetail /></PageTransition>} />

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaArrowRight, FaClock, FaCalendar } from 'react-icons/fa'
+import { FaArrowRight, FaClock, FaCalendar, FaLink } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { posts as localPosts, postCategories } from '../data/postsData'
@@ -13,6 +13,9 @@ const categoryColors = {
   'Multi-Agent Systems': 'vision',
   'Computer Vision': 'vision',
   'Security': 'reasoning',
+  'AI Security': 'vision',
+  'AI Research': 'reasoning',
+  'Social Impact': 'audio',
   'NLP': 'audio'
 }
 
@@ -130,6 +133,16 @@ export default function Posts() {
                       </span>
                     ))}
                   </div>
+
+                  {/* Related project cross-link */}
+                  {post.relatedProject && (
+                    <Link
+                      to={`/projects/${post.relatedProject.slug}`}
+                      className="inline-flex items-center gap-1.5 mb-4 px-3 py-1.5 rounded-lg text-xs font-medium bg-vision/10 text-vision border border-vision/20 hover:bg-vision/20 transition-colors w-fit"
+                    >
+                      <FaLink size={10} /> Related project: {post.relatedProject.title}
+                    </Link>
+                  )}
 
                   {/* Read Time & Link */}
                   <div className="flex items-center justify-between mt-auto pt-4 border-t border-white/10">

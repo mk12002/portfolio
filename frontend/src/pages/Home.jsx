@@ -27,31 +27,48 @@ const expertiseDetails = {
 
 const featuredProjects = [
   {
-    slug: 'tara-email-security',
-    title: 'Agentic Email Security',
-    description: 'Production-grade cybersecurity platform neutralizing advanced email threats via multi-agent AI architecture',
-    metric: '7 Agents · 30GB RAM Optimized',
-    tags: ['Agentic AI', 'LangGraph', 'Cybersecurity', 'XGBoost'],
+    slug: 'bulwark',
+    title: 'Bulwark: Security Stack for Agentic AI',
+    description: 'Three composable scanners that audit the whole AI-agent supply chain — pickle RCE, MCP risks, and agent excessive-agency — into one CycloneDX AI-BOM',
+    metric: '3 Tools · 14/14 Adversarial · 200+ Tests',
+    tags: ['AI Supply Chain', 'Pickle RCE', 'MCP Security', 'AI-BOM'],
     color: 'vision',
-    icon: FaShieldAlt,
+    icon: FaRobot,
   },
   {
-    slug: 'security-tools',
-    title: 'Security Engineering Toolkit',
-    description: '14 CLI-driven security assessment tools across AppSec, IAM, Cloud, and Detection Engineering',
-    metric: '14 Tools · 4 Domains',
-    tags: ['AppSec', 'Blue Team', 'Cloud Security', 'MITRE ATT&CK'],
+    slug: 'lattice',
+    title: 'Lattice: Post-Quantum Readiness Scanner',
+    description: 'Builds a Cryptographic Bill of Materials, grades every asset for quantum + classical weakness, and emits a NIST post-quantum migration roadmap',
+    metric: '9 Languages · 153 Tests · 0 Deps',
+    tags: ['Post-Quantum', 'CBOM', 'HNDL', 'NIST FIPS 203'],
     color: 'reasoning',
-    icon: FaTerminal,
-    isSpecialRoute: true,
+    icon: FaLock,
   },
   {
-    slug: 'hybex-law',
-    title: 'HybEx-Law: Hybrid Legal AI',
-    description: 'LegalBERT + GNN + Prolog hybrid reasoning system achieving 98.5% F1 score',
-    metric: 'F1 Score: 0.985',
-    tags: ['Neural-Symbolic', 'GNN', 'Prolog', 'Legal AI'],
+    slug: 'portcullis',
+    title: 'Portcullis: CI/CD Pipeline Scanner',
+    description: 'Static analyzer for GitHub Actions, GitLab CI, and Jenkins that ranks findings by whether attacker-controlled input can actually reach them',
+    metric: '3 Platforms · 66 Pipelines · 100/100 Self-Scan',
+    tags: ['GitHub Actions', 'pwn-request', 'Taint Analysis', 'SARIF'],
     color: 'audio',
+    icon: FaNetworkWired,
+  },
+  {
+    slug: 'stowaway',
+    title: 'Stowaway: Supply-Chain Integrity Scanner',
+    description: 'Catches the no-CVE attacks — typosquatting, dependency confusion, install-hook malware — across npm, PyPI, Go, and Cargo, fully offline',
+    metric: '4 Ecosystems · 118 Tests · 0 False Positives',
+    tags: ['Typosquatting', 'Dependency Confusion', 'Install Malware', 'Offline'],
+    color: 'vision',
+    icon: FaBug,
+  },
+  {
+    slug: 'ir-siem-kql',
+    title: 'Schema-Grounded NL→KQL for SIEM',
+    description: 'An intermediate representation between natural language and KQL that cuts field hallucination in Sentinel detection rules from 93% to 13%',
+    metric: 'FVR 6.7% → 86.7% · 13× Fewer Hallucinations',
+    tags: ['LLM', 'KQL / Sentinel', 'ASIM', 'Detection Engineering'],
+    color: 'reasoning',
     icon: FaBrain,
   },
 ]
@@ -282,6 +299,78 @@ function FeaturedProjects() {
   )
 }
 
+const suiteTools = [
+  { slug: 'bulwark', name: 'Bulwark', icon: FaRobot, blurb: 'Agentic-AI supply chain — models, MCP servers, agent assemblies', metric: '3 tools · AI-BOM' },
+  { slug: 'lattice', name: 'Lattice', icon: FaLock, blurb: 'Post-quantum crypto readiness — a Cryptographic Bill of Materials', metric: '9 languages · 0 deps' },
+  { slug: 'portcullis', name: 'Portcullis', icon: FaNetworkWired, blurb: 'CI/CD pipeline security — GitHub Actions, GitLab CI, Jenkins', metric: '3 platforms' },
+  { slug: 'stowaway', name: 'Stowaway', icon: FaBug, blurb: 'Supply-chain integrity — typosquat, confusion, install-malware', metric: '4 ecosystems' },
+]
+
+const suitePrinciples = ['Offline', 'Deterministic', 'SARIF 2.1.0', '--fail-on CI gate', 'Defensive-only', 'Standards-based']
+
+function SecuritySuite() {
+  return (
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+      >
+        <div className="rounded-2xl border border-white/10 bg-gradient-to-br from-vision/5 via-transparent to-reasoning/5 p-8 md:p-10">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-11 h-11 rounded-xl bg-vision/10 flex items-center justify-center">
+              <FaShieldAlt className="text-vision text-xl" />
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold">
+              The <span className="gradient-text">Security Tooling Suite</span>
+            </h2>
+          </div>
+          <p className="text-gray-400 max-w-3xl mb-6 leading-relaxed">
+            Four open-source scanners built on one design philosophy: they run <span className="text-gray-200">fully offline</span>, produce <span className="text-gray-200">byte-deterministic</span> output, emit <span className="text-gray-200">SARIF</span> for code-scanning UIs, gate merges with <span className="text-gray-200">--fail-on</span>, and are strictly <span className="text-gray-200">defensive</span> — they detect and report, and are hardened against the hostile inputs they read. Together they cover the modern software supply chain: the AI components, the cryptography, the pipelines, and the dependencies.
+          </p>
+
+          <div className="flex flex-wrap gap-2 mb-8">
+            {suitePrinciples.map((p) => (
+              <span key={p} className="px-3 py-1 rounded-full text-xs font-medium bg-white/5 text-gray-300 border border-white/10">
+                {p}
+              </span>
+            ))}
+          </div>
+
+          <div className="grid sm:grid-cols-2 gap-4 mb-6">
+            {suiteTools.map((tool) => (
+              <Link
+                key={tool.slug}
+                to={`/projects/${tool.slug}`}
+                className="group flex items-start gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-vision/40 hover:bg-white/[0.07] transition-all"
+              >
+                <div className="w-10 h-10 rounded-lg bg-vision/10 flex items-center justify-center flex-shrink-0 group-hover:bg-vision/20 transition-colors">
+                  <tool.icon className="text-vision" />
+                </div>
+                <div className="min-w-0">
+                  <div className="flex items-center gap-2">
+                    <h3 className="font-semibold">{tool.name}</h3>
+                    <span className="text-xs text-gray-500">{tool.metric}</span>
+                  </div>
+                  <p className="text-sm text-gray-400 leading-snug">{tool.blurb}</p>
+                </div>
+                <FaArrowRight className="text-gray-600 group-hover:text-vision transition-colors ml-auto mt-1 flex-shrink-0" />
+              </Link>
+            ))}
+          </div>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500 border-t border-white/10 pt-5">
+            <span><span className="text-gray-200 font-semibold">4</span> open-source scanners</span>
+            <span><span className="text-gray-200 font-semibold">580+</span> passing tests</span>
+            <span><span className="text-gray-200 font-semibold">0–1</span> runtime dependencies</span>
+            <span><span className="text-gray-200 font-semibold">Apache-2.0 / MIT</span></span>
+          </div>
+        </div>
+      </motion.div>
+    </section>
+  )
+}
+
 const skillGroups = [
   {
     title: 'Cybersecurity',
@@ -504,6 +593,9 @@ export default function Home() {
 
         {/* Featured Projects */}
         <FeaturedProjects />
+
+        {/* Security Tooling Suite */}
+        <SecuritySuite />
 
         {/* Security Domains Graph */}
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -4,9 +4,10 @@
  * even if the Java backend isn't running (or is cold-starting).
  *
  * Projects & reads are imported as snapshots of the backend content JSON
- * (frontend/src/data/*Content.json). Re-copy them when the backend changes:
- *   cp backend/src/main/resources/content/projects.json frontend/src/data/projectsContent.json
- *   cp backend/src/main/resources/content/reads.json     frontend/src/data/readsContent.json
+ * (frontend/src/data/*Content.json). These are kept in sync automatically by
+ * `scripts/sync-content.mjs`, which runs on every `npm run build` (prebuild)
+ * — or on demand via `npm run sync-content`. The backend content JSON is the
+ * single source of truth; edit there (or edit both) and the snapshot follows.
  */
 import projectsContent from './projectsContent.json'
 import readsContent from './readsContent.json'

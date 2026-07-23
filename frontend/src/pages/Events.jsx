@@ -56,7 +56,7 @@ export default function Events() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-lg mb-1">{event.title}</h3>
-                    <p className="text-gray-400 text-sm mb-2">{event.description}</p>
+                    <p className="text-gray-400 text-sm mb-2 line-clamp-5">{event.description}</p>
                     <div className="flex items-center gap-2 text-sm text-gray-500">
                       <FaCalendar />
                       <span>{event.year}</span>

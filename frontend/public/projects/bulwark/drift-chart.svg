@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 540" font-family="'Segoe UI',Inter,system-ui,sans-serif">
+  <rect width="1000" height="540" fill="#ffffff"/>
+  <text x="120" y="52" font-size="30" font-weight="700" fill="#111827">The count that should not have moved</text>
+  <text x="120" y="82" font-size="17" fill="#6b7280">Real-model artifacts the benchmark reported — same command, same corpus, three runs in a row.</text>
+
+  <!-- gridlines 0,15,30,45,60 ; baseline y=440, 6px/unit -->
+  <g font-size="14" fill="#9ca3af" text-anchor="end">
+    <line x1="120" y1="440" x2="940" y2="440" stroke="#d1d5db" stroke-width="1"/><text x="108" y="445">0</text>
+    <line x1="120" y1="350" x2="940" y2="350" stroke="#eef1f4" stroke-width="1"/><text x="108" y="355">15</text>
+    <line x1="120" y1="260" x2="940" y2="260" stroke="#eef1f4" stroke-width="1"/><text x="108" y="265">30</text>
+    <line x1="120" y1="170" x2="940" y2="170" stroke="#eef1f4" stroke-width="1"/><text x="108" y="175">45</text>
+  </g>
+
+  <!-- true-count reference line at 18 (y=332) -->
+  <line x1="120" y1="332" x2="940" y2="332" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="6 5"/>
+  <text x="936" y="325" font-size="13.5" fill="#16a34a" text-anchor="end" font-weight="600">true count = 18</text>
+
+  <!-- bars: 18,36,54,18 -->
+  <path d="M167,440 h110 v-104 a4,4 0 0 0 -4,-4 h-102 a4,4 0 0 0 -4,4 z" fill="#dc2626"/>
+  <path d="M372,440 h110 v-212 a4,4 0 0 0 -4,-4 h-102 a4,4 0 0 0 -4,4 z" fill="#dc2626"/>
+  <path d="M577,440 h110 v-320 a4,4 0 0 0 -4,-4 h-102 a4,4 0 0 0 -4,4 z" fill="#dc2626"/>
+  <path d="M782,440 h110 v-104 a4,4 0 0 0 -4,-4 h-102 a4,4 0 0 0 -4,4 z" fill="#16a34a"/>
+
+  <g font-size="22" font-weight="700" text-anchor="middle">
+    <text x="222" y="320" fill="#b91c1c">18</text>
+    <text x="427" y="212" fill="#b91c1c">36</text>
+    <text x="632" y="104" fill="#b91c1c">54</text>
+    <text x="837" y="320" fill="#15803d">18</text>
+  </g>
+
+  <g font-size="15.5" fill="#374151" text-anchor="middle">
+    <text x="222" y="466" font-weight="600">Run 1</text>
+    <text x="427" y="466" font-weight="600">Run 2</text>
+    <text x="632" y="466" font-weight="600">Run 3</text>
+    <text x="837" y="466" font-weight="600">After the fix</text>
+  </g>
+  <g font-size="13" fill="#9ca3af" text-anchor="middle">
+    <text x="222" y="486">nothing changed</text>
+    <text x="427" y="486">+18 (one copy / model)</text>
+    <text x="632" y="486">+18 again</text>
+    <text x="837" y="486">scan in place</text>
+  </g>
+
+  <text x="120" y="522" font-size="13" fill="#9ca3af">Captured live: the harness copied each of the 18 real models into the corpus, so every run re-scanned its own copies. Source: docs/DATASETS_AND_TESTING.md §8.</text>
+</svg>
