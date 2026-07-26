@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { FaCalendar, FaTrophy, FaUsers, FaGraduationCap } from 'react-icons/fa'
+import { FaCalendar, FaTrophy, FaUsers, FaGraduationCap, FaChevronDown, FaChevronUp } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import { useEvents } from '../hooks/useApi'
 
@@ -7,19 +8,32 @@ const typeIcons = {
   competition: FaTrophy,
   workshop: FaGraduationCap,
   conference: FaUsers,
-  leadership: FaUsers
+  leadership: FaUsers,
+  presentation: FaUsers
 }
 
 const typeColors = {
   competition: 'audio',
   workshop: 'vision',
   conference: 'reasoning',
-  leadership: 'reasoning'
+  leadership: 'reasoning',
+  presentation: 'vision'
 }
+
+// Descriptions longer than this get a Read more / Show less toggle.
+const LONG_DESC = 220
 
 export default function Events() {
   const { data, loading } = useEvents()
   const events = data?.events || []
+  const [expanded, setExpanded] = useState(() => new Set())
+
+  const toggle = (i) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      next.has(i) ? next.delete(i) : next.add(i)
+      return next
+    })
 
   if (loading) {
     return (
@@ -43,10 +57,12 @@ export default function Events() {
           <p className="text-gray-400">Hackathons, workshops, and leadership experiences</p>
         </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
           {events.map((event, i) => {
             const Icon = typeIcons[event.type] || FaCalendar
             const color = typeColors[event.type] || 'vision'
+            const isOpen = expanded.has(i)
+            const isLong = (event.description || '').length > LONG_DESC
 
             return (
               <GlowCard key={i} glowColor={color} delay={i * 0.1}>
@@ -54,9 +70,24 @@ export default function Events() {
                   <div className={`w-12 h-12 rounded-lg bg-${color}/20 flex items-center justify-center flex-shrink-0`}>
                     <Icon className={`text-${color} text-xl`} />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <h3 className="font-semibold text-lg mb-1">{event.title}</h3>
-                    <p className="text-gray-400 text-sm mb-2 line-clamp-5">{event.description}</p>
+                    <p className={`text-gray-400 text-sm mb-2 ${isOpen ? '' : 'line-clamp-5'}`}>
+                      {event.description}
+                    </p>
+                    {isLong && (
+                      <button
+                        onClick={() => toggle(i)}
+                        aria-expanded={isOpen}
+                        className={`inline-flex items-center gap-1.5 text-xs font-medium mb-2 transition-colors text-${color} hover:text-white`}
+                      >
+                        {isOpen ? (
+                          <>Show less <FaChevronUp size={10} /></>
+                        ) : (
+                          <>Read more <FaChevronDown size={10} /></>
+                        )}
+                      </button>
+                    )}
                     <div className="flex items-center gap-2 text-sm text-gray-500">
                       <FaCalendar />
                       <span>{event.year}</span>
