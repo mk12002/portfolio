@@ -87,11 +87,11 @@ export default function Projects() {
               <div className="flex-1">
                 <h2 className="text-lg font-bold mb-1">🛡️ The <span className="gradient-text">Security Tooling Suite</span></h2>
                 <p className="text-sm text-gray-400">
-                  Four open-source scanners — <span className="text-gray-200">Bulwark</span>, <span className="text-gray-200">Lattice</span>, <span className="text-gray-200">Portcullis</span>, and <span className="text-gray-200">Stowaway</span> — that share one design DNA: offline, deterministic, SARIF output, <span className="font-mono text-xs">--fail-on</span> CI gates, and defensive-only. 580+ tests, 0–1 runtime deps.
+                  Five open-source scanners — <span className="text-gray-200">Bastion</span>, <span className="text-gray-200">Bulwark</span>, <span className="text-gray-200">Lattice</span>, <span className="text-gray-200">Portcullis</span>, and <span className="text-gray-200">Stowaway</span> — that share one design DNA: offline, deterministic, SARIF output, <span className="font-mono text-xs">--fail-on</span> CI gates, and defensive-only. 1,100+ tests, 0–1 runtime deps.
                 </p>
               </div>
               <div className="flex flex-wrap gap-2 sm:justify-end">
-                {[['bulwark', 'Bulwark'], ['lattice', 'Lattice'], ['portcullis', 'Portcullis'], ['stowaway', 'Stowaway']].map(([slug, name]) => (
+                {[['bastion', 'Bastion'], ['bulwark', 'Bulwark'], ['lattice', 'Lattice'], ['portcullis', 'Portcullis'], ['stowaway', 'Stowaway']].map(([slug, name]) => (
                   <Link
                     key={slug}
                     to={`/projects/${slug}`}

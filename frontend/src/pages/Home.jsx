@@ -27,6 +27,15 @@ const expertiseDetails = {
 
 const featuredProjects = [
   {
+    slug: 'bastion',
+    title: 'Bastion: Kubernetes RBAC Attack-Path Analyzer',
+    description: 'Reads your Kubernetes manifests and tells you who can become cluster-admin, and how — modeling privilege escalation as a graph, not a checklist',
+    metric: '9 Charts · 47 Escalation Paths · 530+ Tests',
+    tags: ['Kubernetes', 'RBAC', 'Privilege Escalation', 'Attack Paths'],
+    color: 'audio',
+    icon: FaProjectDiagram,
+  },
+  {
     slug: 'bulwark',
     title: 'Bulwark: Security Stack for Agentic AI',
     description: 'Three composable scanners that audit the whole AI-agent supply chain — pickle RCE, MCP risks, and agent excessive-agency — into one CycloneDX AI-BOM',
@@ -300,6 +309,7 @@ function FeaturedProjects() {
 }
 
 const suiteTools = [
+  { slug: 'bastion', name: 'Bastion', icon: FaProjectDiagram, blurb: 'Kubernetes RBAC & pod-security attack paths — who can reach cluster-admin', metric: '47 paths · 9 charts' },
   { slug: 'bulwark', name: 'Bulwark', icon: FaRobot, blurb: 'Agentic-AI supply chain — models, MCP servers, agent assemblies', metric: '3 tools · AI-BOM' },
   { slug: 'lattice', name: 'Lattice', icon: FaLock, blurb: 'Post-quantum crypto readiness — a Cryptographic Bill of Materials', metric: '9 languages · 0 deps' },
   { slug: 'portcullis', name: 'Portcullis', icon: FaNetworkWired, blurb: 'CI/CD pipeline security — GitHub Actions, GitLab CI, Jenkins', metric: '3 platforms' },
@@ -326,7 +336,7 @@ function SecuritySuite() {
             </h2>
           </div>
           <p className="text-gray-400 max-w-3xl mb-6 leading-relaxed">
-            Four open-source scanners built on one design philosophy: they run <span className="text-gray-200">fully offline</span>, produce <span className="text-gray-200">byte-deterministic</span> output, emit <span className="text-gray-200">SARIF</span> for code-scanning UIs, gate merges with <span className="text-gray-200">--fail-on</span>, and are strictly <span className="text-gray-200">defensive</span> — they detect and report, and are hardened against the hostile inputs they read. Together they cover the modern software supply chain: the AI components, the cryptography, the pipelines, and the dependencies.
+            Five open-source scanners built on one design philosophy: they run <span className="text-gray-200">fully offline</span>, produce <span className="text-gray-200">byte-deterministic</span> output, emit <span className="text-gray-200">SARIF</span> for code-scanning UIs, gate merges with <span className="text-gray-200">--fail-on</span>, and are strictly <span className="text-gray-200">defensive</span> — they detect and report, and are hardened against the hostile inputs they read. Together they cover the modern software supply chain: the AI components, the cryptography, the CI/CD pipelines, the dependencies, and the Kubernetes RBAC that ties it all together.
           </p>
 
           <div className="flex flex-wrap gap-2 mb-8">
@@ -360,8 +370,8 @@ function SecuritySuite() {
           </div>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500 border-t border-white/10 pt-5">
-            <span><span className="text-gray-200 font-semibold">4</span> open-source scanners</span>
-            <span><span className="text-gray-200 font-semibold">580+</span> passing tests</span>
+            <span><span className="text-gray-200 font-semibold">5</span> open-source scanners</span>
+            <span><span className="text-gray-200 font-semibold">1,100+</span> passing tests</span>
             <span><span className="text-gray-200 font-semibold">0–1</span> runtime dependencies</span>
             <span><span className="text-gray-200 font-semibold">Apache-2.0 / MIT</span></span>
           </div>

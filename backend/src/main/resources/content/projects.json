@@ -1,6 +1,394 @@
 {
   "projects": [
     {
+      "slug": "bastion",
+      "title": "Bastion: Kubernetes RBAC & Attack-Path Analyzer",
+      "category": "Cybersecurity",
+      "categories": [
+        "Cybersecurity"
+      ],
+      "tagline": "Reads your Kubernetes manifests and tells you who can become cluster-admin, and how — treating privilege escalation as the graph problem it actually is.",
+      "metric": "9 Charts · 47 Escalation Paths · 530+ Tests",
+      "tags": [
+        "Kubernetes",
+        "RBAC",
+        "Privilege Escalation",
+        "Attack Paths",
+        "Pod Security",
+        "SARIF",
+        "Graph Analysis",
+        "Offline"
+      ],
+      "description": "Bastion is an offline Kubernetes RBAC and pod-security attack-path analyzer. It reads a manifest directory, `helm template` output, or a `kubectl get -o yaml` export — never a kubeconfig, never an API server, no network at scan time — and answers the question nobody's linter can: which identity can reach cluster-admin, and through what chain? Escalation in Kubernetes is a graph problem, not a checklist, so Bastion builds the privilege graph and reports the connected path instead of a pile of disconnected warnings.",
+      "overview": "`create pods` in a namespace is not 'can start a pod' — it is 'can become any ServiceAccount in that namespace', because a pod spec names the account it runs as. Chain a few individually-defensible grants (CI runs test pods, on-call execs into pods, a controller provisions RBAC) and you have a route from a build token to the whole cluster that no per-resource linter will ever flag. Bastion finds those routes with a deterministic breadth-first search over the privilege graph, explains each hop in prose, cites a file and a line for every edge, tells you which rule to delete, and marks its own confidence when an escalation depends on an assumption it can't verify statically.",
+      "problem": "Kubernetes RBAC grants compose in ways nobody reviews for, and the highest-impact misconfigurations are invisible one resource at a time. A tool that examines a single Role can't see that the ServiceAccount a pod runs as is two hops from every Secret in the cluster. The result is that teams ship escalation paths — a CI token that can reach cluster-admin — while their linters report four hundred pod-hygiene findings and zero about RBAC.",
+      "motivation": [
+        "The escalation that matters is emergent: each grant is individually justifiable (the build pipeline needs test pods, on-call needs exec, the platform controller needs to provision RBAC), and only their composition is dangerous. That is precisely what a checklist can't catch and a graph can.",
+        "Measured directly on nine real public Helm charts, a popular manifest linter produced 408 findings and zero about RBAC or escalation, while Bastion found 47 distinct escalation paths on the same input — including argo-cd's application controller and cert-manager's cainjector reaching cluster-admin.",
+        "It belongs upstream of admission control, at review time. Kyverno and Gatekeeper stop a deployment; Bastion is the report that helps a human review one before it ships — offline and deterministic enough to gate a merge on."
+      ],
+      "keyMetrics": [
+        {
+          "name": "Escalation paths found (9 real charts)",
+          "value": "47 across 68 findings"
+        },
+        {
+          "name": "RBAC/escalation findings from a popular linter (same input)",
+          "value": "0 of 408"
+        },
+        {
+          "name": "Manifests calibrated against",
+          "value": "368 (9 charts)"
+        },
+        {
+          "name": "Escalation rules (E-series)",
+          "value": "E1–E14"
+        },
+        {
+          "name": "Automated tests",
+          "value": "530+"
+        },
+        {
+          "name": "Runtime dependencies",
+          "value": "1 (ruamel.yaml, for line numbers)"
+        }
+      ],
+      "approach": {
+        "description": "Parse the manifests into a privilege graph, derive escalation edges from RBAC permissions, find shortest paths to critical terminals (cluster-admin, node, secrets), score with graph context, and emit. Every stage is offline and deterministic — the graph is an in-house implementation on the standard library so path ordering is stable across runs, which is what makes the CI diff trustworthy.",
+        "steps": [
+          "Load manifests with a line-number-preserving, code-execution-safe YAML loader (a manifest directory, rendered Helm output, or a kubectl export).",
+          "Build the privilege graph from RBAC subjects, roles, bindings, and workload ServiceAccounts; derive escalation edges (E1–E14) such as 'create pods → become any SA in the namespace'.",
+          "Run breadth-first search over simple paths to critical terminals (cluster-admin, node, secrets), shortest-first, bounded by --max-depth, per-terminal alternates, and a global expansion budget.",
+          "Score with graph context: an isolated misconfiguration ranks below an identical one provably on a path, via a documented saturating formula printed in every report.",
+          "Emit JSON, a self-contained HTML report with inline SVG, and SARIF 2.1.0; gate merges with --fail-on, and gate pull requests with `bastion diff --fail-on-new-path` (fingerprint-based, so reformatting doesn't cry wolf)."
+        ]
+      },
+      "architecture": [
+        {
+          "tier": "parsers/",
+          "description": "loader (line numbers, safe YAML) → rbac, workloads, network. Turns untrusted manifests into typed objects without ever executing them."
+        },
+        {
+          "tier": "core/",
+          "description": "The privilege graph (deterministic BFS over simple paths) and the path-aware risk model. Depends on nothing internal — parsers, rules, and emitters all depend on it, never the reverse."
+        },
+        {
+          "tier": "rules/",
+          "description": "Escalation E1–E14 (permission-derived), pod security P1–P8, isolation N1–N3, and hygiene H1–H5 — every entry carrying an explicit false-positive note."
+        },
+        {
+          "tier": "emitters/",
+          "description": "JSON, self-contained HTML with inline SVG, and SARIF 2.1.0. Determinism is tested across all three formats, including path ordering."
+        }
+      ],
+      "architectureDescription": "Parse → build the privilege graph → derive escalation edges → find shortest paths to critical terminals → score with graph context → emit. Path finding is breadth-first over simple paths, so cycles are harmless by construction, results arrive shortest-first, and a pathological input degrades into a truncated-but-honest report rather than a hang.",
+      "architectureComponents": [
+        {
+          "name": "In-house privilege graph",
+          "description": "No third-party graph library guarantees stable iteration order across versions, and unstable path ordering breaks CI diffs and erodes trust. Bastion sorts nodes and edges by an explicit composite key before every expansion."
+        },
+        {
+          "name": "Path-aware risk model",
+          "description": "The same misconfiguration is ranked by whether it's provably on an escalation path — a byte-identical privileged DaemonSet is P2 off-path and P1 on-path."
+        },
+        {
+          "name": "Fingerprint-based diff",
+          "description": "`bastion diff` identifies changes by fingerprint, not file:line, so reformatting a file or adding a comment doesn't report phantom findings — a diff that cries wolf gets switched off."
+        }
+      ],
+      "algorithmDetails": [
+        {
+          "name": "Permission-derived escalation edges (E1–E14)",
+          "description": "The heart of the analyzer: translate RBAC verbs into who-can-become-whom edges in the privilege graph.",
+          "steps": [
+            "E1 create pods → become any SA in the namespace; E3 pods/exec, attach, ephemeral containers → inherit a running pod's identity.",
+            "E4 get/list/watch secrets → tokens and credentials; E5 impersonate → direct identity assumption (CRITICAL).",
+            "E6 create bindings or the bind/escalate verbs → self-grant; E7 update/patch roles → rewrite your own permissions (CRITICAL).",
+            "E10 nodes/proxy → the kubelet API → every pod on the node; E11 create+approve CSR; E12 write admission webhooks; E13 write the provider identity-mapping ConfigMap (all CRITICAL)."
+          ]
+        },
+        {
+          "name": "Path-aware saturating score",
+          "description": "A documented, integer-only posture score that stays useful even for a badly compromised cluster.",
+          "steps": [
+            "score = round(100 / (1 + penalty / 100)).",
+            "penalty sums 30 for a 1–2 hop critical path, 18 at 3–4, 10 at 5+, scaled by confidence, plus 10/5/2/0.5 per P0/P1/P2/P3 finding.",
+            "The curve saturates rather than clamping, so a comprehensively compromised cluster scores in the low teens (not a flat zero) and the number still tracks whether a fix helped."
+          ]
+        },
+        {
+          "name": "Honest, confidence-marked edges",
+          "description": "A chain is only as strong as its weakest link, so confidence propagates along the path.",
+          "steps": [
+            "When an escalation depends on an assumption static analysis can't verify (e.g. whether Kubernetes' built-in privilege-escalation prevention applies), the edge is marked MEDIUM.",
+            "The whole path inherits the minimum confidence of its edges — Bastion never claims certainty it doesn't have."
+          ]
+        }
+      ],
+      "datasetInfo": {
+        "description": "A rule set that has only ever seen its own fixtures is tuned to its own fixtures. Bastion was calibrated against 9 widely-used public Helm charts — 368 rendered manifests — which surfaced three real bugs (all fixed and regression-tested) and produced the numbers below.",
+        "highlights": [
+          "Charts: ingress-nginx, cert-manager, kube-prometheus-stack, prometheus-node-exporter, argo-cd, argo-workflows, kyverno, grafana, promtail (rendered with helm template).",
+          "Headline paths — all real grants in the shipped charts, verifiable at file:line: argo-cd/argocd-application-controller → cluster-admin; cert-manager/cert-manager-cainjector → cluster-admin; ingress-nginx admission → cluster-admin; kyverno admission-controller → cluster-admin; promtail → node.",
+          "Real-chart paths are short (mostly 1–2 hops) and often inherent — an admission controller legitimately needs webhook write; Bastion names and explains it where a linter is silent.",
+          "Posture range 18–93: RBAC-heavy operators score in the 20s; low-privilege charts (grafana, node-exporter) score 88–93 — the saturating-score fix working."
+        ]
+      },
+      "results": "On nine real public Helm charts (368 manifests), Bastion produced 208 findings including 68 escalation findings across 47 distinct paths — while kube-score produced 408 findings and zero about RBAC or escalation, and checkov (file mode) failed to parse the rendered charts entirely. In argo-cd alone Bastion found 19 escalation paths; kube-score found 107 findings and none of them told you the application controller can reach cluster-admin. The scan is fast (max 5.8s on the largest chart) and every path cites file:line evidence for each hop.",
+      "resultsHighlights": [
+        {
+          "label": "The gap, measured",
+          "value": "kube-score: 0/408 findings about escalation. Bastion: 47 paths on the same input"
+        },
+        {
+          "label": "argo-cd",
+          "value": "19 escalation paths found (kube-score: 0 of 107 findings)"
+        },
+        {
+          "label": "Speed",
+          "value": "368 manifests across 9 charts; max 5.8s, most under 1s"
+        },
+        {
+          "label": "Honest confidence",
+          "value": "Unverifiable escalations marked MEDIUM; the path inherits its weakest edge"
+        }
+      ],
+      "performanceMetrics": {
+        "description": "Calibration across the 9-chart corpus (368 manifests). Posture tracks RBAC exposure; paths are the escalation routes to a critical terminal. Every path is a real grant in the shipped chart, verifiable at the cited file:line.",
+        "metricsTable": [
+          {
+            "metric": "argo-cd",
+            "value": "19 paths · posture 18",
+            "notes": "67 findings, 15 P0, 3.1s — 19 routes to cluster-admin"
+          },
+          {
+            "metric": "kube-prometheus-stack",
+            "value": "8 paths · posture 26",
+            "notes": "33 findings, 7 P0, 0.6s"
+          },
+          {
+            "metric": "kyverno",
+            "value": "7 paths · posture 27",
+            "notes": "36 findings, 10 P0, 5.8s"
+          },
+          {
+            "metric": "cert-manager",
+            "value": "6 paths · posture 27",
+            "notes": "20 findings, 10 P0, 0.1s — cainjector → cluster-admin"
+          },
+          {
+            "metric": "argo-workflows",
+            "value": "4 paths · posture 35",
+            "notes": "15 findings, 8 P0, 0.1s"
+          },
+          {
+            "metric": "ingress-nginx",
+            "value": "2 paths · posture 46",
+            "notes": "12 findings, 4 P0, 0.1s"
+          },
+          {
+            "metric": "grafana / node-exporter",
+            "value": "0 paths · posture 88–93",
+            "notes": "low-RBAC charts score high — the saturating score working"
+          },
+          {
+            "metric": "Total (9 charts, 368 manifests)",
+            "value": "47 paths · median posture 35",
+            "notes": "208 findings, 55 P0, max 5.8s"
+          }
+        ],
+        "figures": [
+          {
+            "src": "/projects/bastion/summary-chain.svg",
+            "alt": "Summary card for the chain fixture: posture 56/100",
+            "caption": "The scoring idea, made visible: the chain fixture scores 56/100 with critical paths flagged…"
+          },
+          {
+            "src": "/projects/bastion/summary-hardened.svg",
+            "alt": "Summary card for the hardened fixture: posture 100/100",
+            "caption": "…while the hardened fixture — same workloads, no escalation paths — scores a clean 100/100."
+          }
+        ]
+      },
+      "comparisonTable": {
+        "label": "Head-to-head vs kube-score, on 9 real Helm charts",
+        "caption": "Same input, rendered offline with helm template. kube-score is a well-regarded linter that ran cleanly and produced useful pod-hygiene findings — but examines one resource at a time, so it reports zero escalation paths on every chart. Reproducible via docs/COMPARISON.md.",
+        "columns": [
+          "Chart",
+          "kube-score findings",
+          "of which RBAC/escalation",
+          "Bastion escalation paths"
+        ],
+        "rows": [
+          {
+            "chart": "argo-cd",
+            "ks": "107",
+            "ksrbac": "0",
+            "bastion": "19"
+          },
+          {
+            "chart": "kube-prometheus-stack",
+            "ks": "88",
+            "ksrbac": "0",
+            "bastion": "8"
+          },
+          {
+            "chart": "kyverno",
+            "ks": "70",
+            "ksrbac": "0",
+            "bastion": "7"
+          },
+          {
+            "chart": "cert-manager",
+            "ks": "45",
+            "ksrbac": "0",
+            "bastion": "6"
+          },
+          {
+            "chart": "argo-workflows",
+            "ks": "28",
+            "ksrbac": "0",
+            "bastion": "4"
+          },
+          {
+            "chart": "ingress-nginx",
+            "ks": "27",
+            "ksrbac": "0",
+            "bastion": "2"
+          },
+          {
+            "chart": "Total (9 charts)",
+            "ks": "408",
+            "ksrbac": "0",
+            "bastion": "47"
+          }
+        ]
+      },
+      "comparisonFigure": {
+        "src": "/projects/bastion/three-facts.svg",
+        "alt": "9 charts scanned, 0 linter RBAC findings, 47 paths found by Bastion",
+        "caption": "The comparison in three facts: 9 real Helm charts scanned, 0 RBAC/escalation findings from a popular linter, 47 escalation paths found by Bastion on the identical input."
+      },
+      "comparativeAnalysis": [
+        {
+          "approach": "kube-score / Trivy / Checkov / kube-score",
+          "strength": "Offline, pre-merge pod-hygiene linting",
+          "weakness": "No attack paths, no cross-linkage — examine one resource at a time (checkov failed to parse the rendered charts here)"
+        },
+        {
+          "approach": "KubeHound",
+          "strength": "Runtime truth from a live cluster; 26 edge types, deep container-escape taxonomy",
+          "weakness": "Needs a live cluster (post-deploy); queried via Gremlin, not a pre-merge gate"
+        },
+        {
+          "approach": "rbac-police / KubiScan / rbac-tool",
+          "strength": "RBAC-aware (rbac-tool even generates least-privilege Roles)",
+          "weakness": "Live-cluster or collected-JSON; per-identity, not path-connected, and mostly no per-edge justification"
+        },
+        {
+          "approach": "Bastion",
+          "strength": "Offline & pre-merge, attack paths, cross-linkage, per-edge justification with file:line — the only tool here that is all four",
+          "weakness": "Infers from manifests, not runtime; assumes admission enforcement absent unless in the input; conjunctions approximated as single edges"
+        }
+      ],
+      "comparativeConclusion": "Bastion answers the one question the others structurally can't — 'which identity can reach cluster-admin, and through what chain?' — offline, pre-merge, with a cited justification for every hop.",
+      "useCases": [
+        {
+          "title": "Pre-merge RBAC review",
+          "description": "Scan a manifest tree or rendered Helm chart in CI and block a pull request that introduces a new route to cluster-admin with `bastion diff --fail-on-new-path`."
+        },
+        {
+          "title": "Answering 'can X reach Y?'",
+          "description": "`bastion paths ./manifests --from ci-runner --to cluster-admin` returns the exact chain, each hop justified and cited to a file:line, or nothing if no path exists."
+        },
+        {
+          "title": "Helm chart due diligence",
+          "description": "Render a third-party chart with helm template and see which of its ServiceAccounts can escalate before you install it into your cluster."
+        },
+        {
+          "title": "Posture tracking over time",
+          "description": "The saturating score stays useful across the whole range, so teams can track whether an RBAC cleanup actually moved the needle."
+        }
+      ],
+      "knownLimitations": [
+        "Manifests are not a cluster: RBAC that exists in the cluster but not in the scanned files is invisible; bindings defined elsewhere don't exist as far as Bastion is concerned.",
+        "Admission enforcement is assumed absent unless present in the input (it detects PSA labels and Kyverno/Gatekeeper resources, but can't see a webhook deployed elsewhere) — hence E2's MEDIUM confidence.",
+        "Paths are permission-derived possibility, not observed activity — Bastion reports the route, never walks it, and contains no code that could.",
+        "Conjunctions (escalations needing two permissions at once) are approximated as a single edge whose confidence reflects whether both preconditions were found; a hypergraph would model them exactly. A clean scan is evidence, not proof."
+      ],
+      "roadmap": [
+        "Deeper container-escape taxonomy, informed by KubeHound's edge types.",
+        "Optional least-privilege Role suggestions (not just 'which rule to delete').",
+        "Broader admission-policy awareness for enforced-but-external webhooks."
+      ],
+      "engineeringRigor": [
+        {
+          "value": "530+",
+          "label": "tests"
+        },
+        {
+          "value": "1",
+          "label": "runtime dep"
+        },
+        {
+          "value": "9 charts",
+          "label": "calibrated on"
+        },
+        {
+          "value": "47",
+          "label": "real paths found"
+        },
+        {
+          "value": "Apache-2.0",
+          "label": "license"
+        }
+      ],
+      "systemArchitectureDiagram": {
+        "src": "/projects/bastion/linter-vs-graph.svg",
+        "alt": "A linter reports seven disconnected warnings; Bastion reports one connected escalation path",
+        "caption": "Same cluster, two views: a per-resource linter sees seven disconnected warnings; Bastion sees the one connected path — a CI ServiceAccount to cluster-admin — with every step labeled."
+      },
+      "backboneArchitectureDiagram": {
+        "src": "/projects/bastion/path-two-hop.svg",
+        "alt": "A two-hop escalation path",
+        "caption": "A two-hop escalation: an identity that can create pods runs a pod as a more-privileged ServiceAccount, inheriting its token — the smallest example of why escalation is a graph, not a checklist."
+      },
+      "flowDiagram": {
+        "src": "/projects/bastion/path-chain.svg",
+        "alt": "Four-step escalation path from a CI ServiceAccount to cluster-admin",
+        "caption": "The worked example: app/ci-runner creates a pod as app/debugger → execs into Deployment core/controller → which runs as core/controller-sa → which can create ClusterRoleBindings and so reach cluster-admin. Every grant is individually defensible; together they're a route from a CI token to the whole cluster."
+      },
+      "methodologyDiagram": {
+        "src": "/projects/bastion/terminal-paths.svg",
+        "alt": "bastion paths terminal output with per-edge evidence",
+        "caption": "Real `bastion paths` output against the chain fixture: the four-step path, a plain-English justification for each hop, and file:line evidence for every edge — with the whole path marked MEDIUM because its weakest edge is."
+      },
+      "architectureDiagram": {
+        "src": "/projects/bastion/path-node.svg",
+        "alt": "An escalation path to the node",
+        "caption": "A path to a different critical terminal — the node — via a hostPath mount and nodes/proxy: Bastion searches toward cluster-admin, node, and secrets, not just a single sink."
+      },
+      "qualitativeResultsFigure": {
+        "src": "/projects/bastion/terminal-diff.svg",
+        "alt": "bastion diff terminal output showing new escalation paths and a posture drop",
+        "caption": "The CI diff gate: `bastion diff` flags three newly-introduced escalation paths, a posture drop from 89 to 56, and fails the gate — catching the escalation in review, before it ships."
+      },
+      "techStack": [
+        "Python 3.11+",
+        "ruamel.yaml (line numbers)",
+        "Standard-library graph (deterministic BFS)",
+        "SARIF 2.1.0",
+        "Self-contained HTML + inline SVG",
+        "Kubernetes RBAC / PSA",
+        "Helm",
+        "pytest / ruff / mypy"
+      ],
+      "githubUrl": "https://github.com/mk12002/Bastion",
+      "liveUrl": "",
+      "status": "active",
+      "type": "security-scanner"
+    },
+    {
       "slug": "bulwark",
       "title": "Bulwark: The Security Stack for Agentic AI",
       "category": "Cybersecurity",
@@ -1468,7 +1856,7 @@
         ],
         "figures": [
           {
-            "src": "/projects/ir-siem-kql/evaluation-pipeline.png",
+            "src": "/projects/ir-siem-kql/09_evaluation_pipeline.svg",
             "alt": "Research evaluation pipeline",
             "caption": "The research evaluation pipeline: identical NL inputs run through both System A (direct) and System B (IR-mediated), scored on SVR / FVR / Logic Correctness with bootstrap CIs and paired significance testing."
           }
@@ -1547,19 +1935,19 @@
       "status": "active",
       "type": "research",
       "systemArchitectureDiagram": {
-        "src": "/projects/ir-siem-kql/system-architecture.png",
+        "src": "/projects/ir-siem-kql/01_high_level_architecture.svg",
         "alt": "High-level end-to-end system architecture",
-        "caption": "The end-to-end system: natural-language detection intent flows through extraction and typed-IR construction, schema validation against ASIM, deterministic KQL compilation, and a closed-loop repair mechanism."
+        "caption": "High-level end-to-end architecture: natural-language detection intent flows through extraction and typed-IR construction, schema validation against ASIM, deterministic KQL compilation, and a closed-loop repair mechanism."
       },
       "flowDiagram": {
-        "src": "/projects/ir-siem-kql/sop-ir-rule-flow.png",
+        "src": "/projects/ir-siem-kql/04_transformation_flow.svg",
         "alt": "SOP to IR to Rule transformation flow",
         "caption": "The SOP → Security IR → KQL transformation, borrowed from compiler design: the typed, schema-checkable IR is the validation checkpoint that separates 'understand the threat' from 'remember KQL syntax'."
       },
       "architectureDiagram": {
-        "src": "/projects/ir-siem-kql/multi-agent-workflow.png",
+        "src": "/projects/ir-siem-kql/02_agent_workflow.svg",
         "alt": "System B multi-agent workflow",
-        "caption": "The System B multi-agent workflow: Extraction Agent → IR Builder → Schema Validator → deterministic KQL Generator → Syntax Validator, with the repair loop feeding structured errors back to the IR Builder (up to 3 times)."
+        "caption": "The System B multi-agent workflow: Extraction Agent → IR Builder → Schema Validator → deterministic KQL Generator → Syntax Validator, with the repair loop returning structured errors to the IR Builder (up to 3 times)."
       },
       "engineeringRigor": [
         {
@@ -1578,7 +1966,32 @@
           "value": "κ=0.645",
           "label": "inter-rater agreement"
         }
-      ]
+      ],
+      "backboneArchitectureDiagram": {
+        "src": "/projects/ir-siem-kql/05_asim_schema_grounding.svg",
+        "alt": "ASIM schema grounding",
+        "caption": "Schema grounding: the IR Builder selects fields only from a supplied read-only ASIM reference instead of recalling them from parametric memory — the mechanism behind the ~13x field-validity gain."
+      },
+      "methodologyDiagram": {
+        "src": "/projects/ir-siem-kql/06_validation_repair_loop.svg",
+        "alt": "Validation and repair loop",
+        "caption": "The validation + repair loop: schema and syntax validators feed specific structured errors back to the IR Builder for up to 3 targeted retries, recovering 96.2% of first-attempt failures."
+      },
+      "researchProcessingUI": {
+        "src": "/projects/ir-siem-kql/07_abstention_clarification_disambiguation.svg",
+        "alt": "Abstention, clarification, and disambiguation",
+        "caption": "Built to know what it doesn't know: rather than emit a confidently wrong rule, the system abstains, asks for clarification, or disambiguates when the request is underspecified."
+      },
+      "fullPipelineDiagram": {
+        "src": "/projects/ir-siem-kql/03_ir_internal_structure.svg",
+        "alt": "Security IR internal structure",
+        "caption": "The Security IR's internal structure: a typed, schema-checkable object (event_type, filters, aggregation, group_by, threshold, time_window, output_fields) that captures detection logic independently of KQL syntax."
+      },
+      "comparisonFigure": {
+        "src": "/projects/ir-siem-kql/08_system_a_vs_system_b.svg",
+        "alt": "System A vs System B",
+        "caption": "System A (direct generation) vs System B (IR-mediated) on identical inputs, so the measured difference is attributable to the IR layer: field validity 86.7% vs 6.7%."
+      }
     },
     {
       "slug": "agentic-email-security",

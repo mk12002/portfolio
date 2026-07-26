@@ -1,0 +1,10 @@
+<svg viewBox="0 0 514 158" width="514" height="158" role="img" aria-labelledby="node-title" xmlns="http://www.w3.org/2000/svg"><style>
+  .nodekind{font:600 10.5px ui-monospace,Menlo,Consolas,monospace;letter-spacing:.02em;
+    text-transform:uppercase}
+  .nodename{font:600 13px -apple-system,"Segoe UI",Roboto,sans-serif}
+  .edgelabel{font:600 10.5px ui-monospace,Menlo,Consolas,monospace;fill:#5a6478}
+  .edgeconf{font:10px -apple-system,"Segoe UI",Roboto,sans-serif;fill:#8a93a3}
+  .arrowline{stroke:#8a93a3;stroke-width:1.6}
+  .arrowfill{fill:#8a93a3}
+  .caption{font:600 12px -apple-system,"Segoe UI",Roboto,sans-serif;fill:#5a6478}
+</style><text x="12" y="22" class="caption">A privileged DaemonSet whose ServiceAccount is on a path to the node</text><title id="node-title">ServiceAccount telemetry/node-exporter -&gt; cluster nodes (1 step)</title><defs><marker id="arrowhead" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" class="arrowfill"/></marker></defs><line x1="225" y1="74" x2="348" y2="74" class="arrowline" marker-end="url(#arrowhead)"/><text x="286.5" y="62" class="edgelabel" text-anchor="middle">1. CAN_CREATE</text><text x="286.5" y="92" class="edgeconf" text-anchor="middle">medium confidence</text><rect x="8" y="46" width="213" height="56" rx="8" fill="#e8effb" stroke="#2f5fbf" stroke-width="1.5"/><text x="114.5" y="68" text-anchor="middle" class="nodekind" fill="#2f5fbf">ServiceAccount</text><text x="114.5" y="88" text-anchor="middle" class="nodename" fill="#1d3f80">telemetry/node-exporter</text><rect x="354" y="46" width="127" height="56" rx="8" fill="#fbeaea" stroke="#bf3f3f" stroke-width="1.5"/><text x="417.5" y="68" text-anchor="middle" class="nodekind" fill="#bf3f3f">terminal</text><text x="417.5" y="88" text-anchor="middle" class="nodename" fill="#8a2323">cluster node</text></svg>

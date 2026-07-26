@@ -184,6 +184,7 @@ export default function SecurityTools() {
                 </div>
                 <p className="mt-6 text-sm text-gray-400">
                   This is my learning-focused assessment toolkit. For standalone, production-grade open-source scanners with test suites and benchmarks, see{' '}
+                  <Link to="/projects/bastion" className="text-green-400 hover:underline">Bastion</Link>,{' '}
                   <Link to="/projects/bulwark" className="text-green-400 hover:underline">Bulwark</Link>,{' '}
                   <Link to="/projects/lattice" className="text-green-400 hover:underline">Lattice</Link>,{' '}
                   <Link to="/projects/portcullis" className="text-green-400 hover:underline">Portcullis</Link>, and{' '}
