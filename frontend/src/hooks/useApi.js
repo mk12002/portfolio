@@ -89,7 +89,8 @@ export function usePosts() {
 }
 
 export async function submitContactForm(data) {
-  const response = await api.post('/contact', data)
+  // Use a longer timeout for contact form submission to accommodate Render's cold start (can take ~50s)
+  const response = await api.post('/contact', data, { timeout: 60000 })
   return response.data
 }
 
