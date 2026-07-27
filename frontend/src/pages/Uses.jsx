@@ -81,15 +81,15 @@ export default function Uses() {
   return (
     <>
       <SEO
-        title="Uses / Setup | Mohit Kumar"
+        title="Tech Stack | Mohit Kumar"
         description="The security tools, ML frameworks, languages, and dev environment Mohit Kumar uses day to day."
-        keywords="uses, setup, security tools, ML stack, dev environment, Mohit Kumar"
+        keywords="tech stack, setup, security tools, ML stack, dev environment, Mohit Kumar"
         pathname="/uses"
       />
       <div className="min-h-screen pt-24 pb-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold mb-3">Uses &amp; <span className="gradient-text">Setup</span></h1>
+            <h1 className="text-4xl md:text-5xl font-bold mb-3">Tech <span className="gradient-text">Stack</span></h1>
             <p className="text-gray-400 max-w-xl mx-auto">
               The tools, frameworks, and environment I reach for across security and ML work.
             </p>

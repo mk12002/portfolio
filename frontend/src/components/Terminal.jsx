@@ -50,6 +50,7 @@ const NAV = {
   certificates: '/certificates',
   contact: '/contact',
   uses: '/uses',
+  'tech-stack': '/uses',
   home: '/',
 }
 

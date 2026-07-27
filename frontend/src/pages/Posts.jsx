@@ -102,9 +102,13 @@ export default function Posts() {
                   delay={i * 0.1}
                   className="flex flex-col h-full"
                 >
-                  {/* Post Image Placeholder */}
-                  <div className="w-full h-48 bg-gradient-to-br from-vision/20 via-reasoning/20 to-audio/20 rounded-lg mb-4 flex items-center justify-center">
-                    <span className="text-6xl">{post.cover || '📝'}</span>
+                  {/* Post Cover */}
+                  <div className="w-full h-48 bg-gradient-to-br from-vision/20 via-reasoning/20 to-audio/20 rounded-lg mb-4 flex items-center justify-center overflow-hidden">
+                    {post.cover && post.cover.startsWith('http') ? (
+                      <img src={post.cover} alt={post.title} className="w-full h-full object-cover rounded-lg" />
+                    ) : (
+                      <span className="text-6xl">{post.cover || '📝'}</span>
+                    )}
                   </div>
 
                   {/* Category & Date */}

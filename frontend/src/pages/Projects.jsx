@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { FaArrowRight, FaFilter, FaGithub, FaNewspaper, FaSearch } from 'react-icons/fa'
+import { FaArrowRight, FaFilter, FaGithub, FaNewspaper, FaSearch, FaChevronDown } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { useProjects } from '../hooks/useApi'
@@ -15,11 +15,94 @@ const categoryColors = {
   'Full-Stack': 'vision'
 }
 
+// Projects after this slug are grouped into "Older Work"
+const OLDER_WORK_AFTER = 'security-tools'
+
+function ProjectCard({ project, i }) {
+  return (
+    <GlowCard
+      key={project.slug}
+      glowColor={categoryColors[project.category] || 'mixed'}
+      delay={i * 0.1}
+      className="flex flex-col h-full"
+    >
+      <div className="flex items-start justify-between mb-4">
+        <span className={`px-3 py-1 rounded-full text-xs font-medium bg-${categoryColors[project.category] || 'reasoning'}/20 text-${categoryColors[project.category] || 'reasoning'}`}>
+          {project.category}
+        </span>
+        {project.type && (
+          <span className="px-2 py-1 rounded text-xs bg-white/10 text-gray-400">
+            {project.type}
+          </span>
+        )}
+      </div>
+
+      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+      <p className="text-gray-400 text-sm mb-3">{project.tagline}</p>
+
+      {project.metric && (
+        <div className="mb-4 p-3 bg-white/5 rounded-lg">
+          <span className="text-lg font-bold gradient-text">{project.metric}</span>
+        </div>
+      )}
+
+      <div className="flex flex-wrap gap-2 mb-4">
+        {project.tags?.slice(0, 4).map((tag) => (
+          <span
+            key={tag}
+            className="px-2 py-1 bg-white/5 rounded text-xs text-gray-400"
+          >
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div className="mt-auto flex items-center justify-between">
+        <Link
+          to={`/projects/${project.slug}`}
+          className="inline-flex items-center gap-2 text-vision hover:text-white transition-colors"
+        >
+          View Details <FaArrowRight />
+        </Link>
+        {project.githubUrl && (
+          <motion.a
+            href={project.githubUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => e.stopPropagation()}
+            title="View on GitHub"
+          >
+            <FaGithub size={20} />
+          </motion.a>
+        )}
+        {project.articleUrl && (
+          <motion.a
+            href={project.articleUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={(e) => e.stopPropagation()}
+            title="Read Article"
+          >
+            <FaNewspaper size={19} />
+          </motion.a>
+        )}
+      </div>
+    </GlowCard>
+  )
+}
+
 export default function Projects() {
   const [searchParams] = useSearchParams()
   const initialCategory = searchParams.get('category') || 'All'
   const [activeFilter, setActiveFilter] = useState(initialCategory)
   const [searchQuery, setSearchQuery] = useState('')
+  const [olderWorkOpen, setOlderWorkOpen] = useState(false)
   const { data, loading } = useProjects()
 
   useEffect(() => {
@@ -45,6 +128,22 @@ export default function Projects() {
         p.tags?.some(tag => tag.toLowerCase().includes(q))
       )
     })
+
+  // When searching or filtering, show all results flat (no split)
+  const isFiltering = activeFilter !== 'All' || searchQuery.trim()
+
+  // Split into main and older work based on original order in `projects`
+  const cutoffIdx = projects.findIndex(p => p.slug === OLDER_WORK_AFTER)
+  const olderSlugs = cutoffIdx >= 0
+    ? new Set(projects.slice(cutoffIdx + 1).map(p => p.slug))
+    : new Set()
+
+  const mainProjects = isFiltering
+    ? filteredProjects
+    : filteredProjects.filter(p => !olderSlugs.has(p.slug))
+  const olderProjects = isFiltering
+    ? []
+    : filteredProjects.filter(p => olderSlugs.has(p.slug))
 
   if (loading) {
     return (
@@ -134,6 +233,7 @@ export default function Projects() {
             ))}
           </div>
 
+          {/* Main Projects Grid */}
           <AnimatePresence mode="wait">
             <motion.div
               key={activeFilter}
@@ -143,86 +243,51 @@ export default function Projects() {
               transition={{ duration: 0.3 }}
               className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
             >
-              {filteredProjects.map((project, i) => (
-                <GlowCard
-                  key={project.slug}
-                  glowColor={categoryColors[project.category] || 'mixed'}
-                  delay={i * 0.1}
-                  className="flex flex-col h-full"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium bg-${categoryColors[project.category] || 'reasoning'}/20 text-${categoryColors[project.category] || 'reasoning'}`}>
-                      {project.category}
-                    </span>
-                    {project.type && (
-                      <span className="px-2 py-1 rounded text-xs bg-white/10 text-gray-400">
-                        {project.type}
-                      </span>
-                    )}
-                  </div>
-
-                  <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                  <p className="text-gray-400 text-sm mb-3">{project.tagline}</p>
-
-                  {project.metric && (
-                    <div className="mb-4 p-3 bg-white/5 rounded-lg">
-                      <span className="text-lg font-bold gradient-text">{project.metric}</span>
-                    </div>
-                  )}
-
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {project.tags?.slice(0, 4).map((tag) => (
-                      <span
-                        key={tag}
-                        className="px-2 py-1 bg-white/5 rounded text-xs text-gray-400"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-between">
-                    <Link
-                      to={`/projects/${project.slug}`}
-                      className="inline-flex items-center gap-2 text-vision hover:text-white transition-colors"
-                    >
-                      View Details <FaArrowRight />
-                    </Link>
-                    {project.githubUrl && (
-                      <motion.a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={(e) => e.stopPropagation()}
-                        title="View on GitHub"
-                      >
-                        <FaGithub size={20} />
-                      </motion.a>
-                    )}
-                    {project.articleUrl && (
-                      <motion.a
-                        href={project.articleUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="p-2 hover:bg-white/10 rounded-lg transition-colors text-gray-400 hover:text-white"
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        onClick={(e) => e.stopPropagation()}
-                        title="Read Article"
-                      >
-                        <FaNewspaper size={19} />
-                      </motion.a>
-                    )}
-                  </div>
-                </GlowCard>
+              {mainProjects.map((project, i) => (
+                <ProjectCard key={project.slug} project={project} i={i} />
               ))}
             </motion.div>
           </AnimatePresence>
 
-          {filteredProjects.length === 0 && (
+          {/* Older Work collapsible */}
+          {olderProjects.length > 0 && (
+            <div className="mt-16">
+              <button
+                onClick={() => setOlderWorkOpen(!olderWorkOpen)}
+                className="w-full flex items-center justify-center gap-3 py-4 px-6 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all group"
+              >
+                <span className="text-lg font-semibold text-gray-300 group-hover:text-white transition-colors">
+                  Older Work
+                </span>
+                <span className="text-xs text-gray-500">
+                  ({olderProjects.length} project{olderProjects.length !== 1 ? 's' : ''})
+                </span>
+                <FaChevronDown
+                  className={`text-gray-400 transition-transform duration-300 ${olderWorkOpen ? 'rotate-180' : ''}`}
+                />
+              </button>
+
+              <AnimatePresence>
+                {olderWorkOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.35, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-6">
+                      {olderProjects.map((project, i) => (
+                        <ProjectCard key={project.slug} project={project} i={i} />
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {mainProjects.length === 0 && olderProjects.length === 0 && (
             <div className="text-center py-20 text-gray-500">
               No projects found in this category.
             </div>

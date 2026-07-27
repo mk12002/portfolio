@@ -34,7 +34,7 @@ const moreLinks = [
   { name: 'Certificates', path: '/certificates' },
   { name: 'Publications', path: '/publications' },
   { name: 'Reads', path: '/reads' },
-  { name: 'Uses', path: '/uses' },
+  { name: 'Tech Stack', path: '/uses' },
   { name: 'Events', path: '/events' },
   { name: 'Support', path: '/support' },
 ]

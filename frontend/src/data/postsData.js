@@ -6,6 +6,20 @@
 
 export const posts = [
   {
+    slug: 'security-stack-for-ai-agents',
+    title: "I Built a Security Stack for AI Agents — Here's the Architecture",
+    excerpt:
+      "Airlock scans the parts. Warden scans the assembly. Manifest inventories it. How Bulwark's three-tool security suite inspects the uninspected AI supply chain — models, packages, and agentic pipelines — before they ever reach production.",
+    category: 'AI Security',
+    date: '2026-07-27',
+    readTime: '8 min read',
+    tags: ['AI', 'Cybersecurity', 'Agents', 'Architecture'],
+    cover: 'https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2Fvgn6jp5380j13y8bqdel.png',
+    url: 'https://dev.to/mohit_kumar1/i-built-a-security-stack-for-ai-agents-heres-the-architecture-219c',
+    source: 'dev.to · originally on Hashnode',
+    relatedProject: { slug: 'bulwark', title: 'Bulwark' },
+  },
+  {
     slug: 'ai-assistant-downloads-code-from-strangers',
     title: "Your AI Assistant Downloads Code From Strangers. Here's Why That's a Problem.",
     excerpt:
@@ -14,7 +28,7 @@ export const posts = [
     date: '2026-07-20',
     readTime: '7 min read',
     tags: ['AI', 'Cybersecurity', 'Agents', 'Supply Chain'],
-    cover: '📦',
+    cover: 'https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2Fadjhair3l9sgwk06kpub.png',
     url: 'https://dev.to/mohit_kumar1/your-ai-assistant-downloads-code-from-strangers-heres-why-thats-a-problem-2cpf',
     source: 'dev.to · originally on Hashnode',
     relatedProject: { slug: 'bulwark', title: 'Bulwark' },
@@ -28,7 +42,7 @@ export const posts = [
     date: '2026-07-14',
     readTime: '9 min read',
     tags: ['AI', 'Agents', 'Python', 'Cybersecurity'],
-    cover: '🏟️',
+    cover: 'https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2F7uer1ocleug0fmw9bn50.png',
     url: 'https://dev.to/mohit_kumar1/i-gave-an-ai-control-of-an-80000-seat-stadium-heres-how-i-kept-it-on-a-leash-384d',
     source: 'dev.to · originally on Hashnode',
     challenge: 'Hack2skill PromptWars Virtual Challenge',
