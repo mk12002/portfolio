@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   FaKey, FaLock, FaFingerprint, FaShieldAlt, FaExclamationTriangle, FaCheckCircle,
   FaInfoCircle, FaExchangeAlt, FaHashtag, FaCookieBite, FaListUl, FaDice, FaNetworkWired,
+  FaRandom, FaChartBar, FaMask, FaGlobe, FaClock,
 } from 'react-icons/fa'
 import SEO from '../components/SEO'
 
@@ -391,6 +392,191 @@ function CIDRCalculator() {
   )
 }
 
+/* ------------------------------------------------- 11. Classical cipher */
+function shiftText(t, n) {
+  return t.replace(/[a-z]/gi, (c) => {
+    const base = c <= 'Z' ? 65 : 97
+    return String.fromCharCode(((c.charCodeAt(0) - base + n) % 26 + 26) % 26 + base)
+  })
+}
+function CipherLab() {
+  const [text, setText] = useState('Uryyb, Jbeyq!')
+  const [shift, setShift] = useState(13)
+  const brute = useMemo(() => (text ? Array.from({ length: 26 }, (_, i) => ({ k: i, v: shiftText(text, i) })) : []), [text])
+  return (
+    <ToolShell icon={FaRandom} title="Classical Cipher Lab" blurb="Caesar / ROT13 shift cipher with one-click brute-force of all 26 keys — the CTF lesson that a tiny keyspace is no protection at all.">
+      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={2} placeholder="Enter text…" className={inputCls + ' text-sm'} />
+      <div className="flex items-center gap-3 my-3">
+        <span className="text-sm text-gray-400">Shift</span>
+        <input type="range" min="0" max="25" value={shift} onChange={(e) => setShift(+e.target.value)} className="flex-1 accent-accent" />
+        <span className="font-mono text-accent w-8 text-right">{shift}</span>
+        <button onClick={() => setShift(13)} className="text-xs px-2 py-1 rounded bg-accent/10 text-accent border border-accent/20">ROT13</button>
+      </div>
+      <Pre label={`Shift ${shift}`} obj={shiftText(text, shift)} />
+      <details className="mt-3">
+        <summary className="text-xs text-accent cursor-pointer">Brute-force all 26 shifts</summary>
+        <div className="mt-2 space-y-0.5 max-h-52 overflow-y-auto bg-[#0d1117] rounded-lg p-3 border border-white/10">
+          {brute.map(({ k, v }) => <div key={k} className="font-mono text-xs text-gray-400"><span className="text-gray-600 mr-2">{String(k).padStart(2, '0')}</span>{v}</div>)}
+        </div>
+      </details>
+    </ToolShell>
+  )
+}
+
+/* ---------------------------------------------------- 12. Shannon entropy */
+function shannon(s) {
+  if (!s) return 0
+  const m = {}
+  for (const c of s) m[c] = (m[c] || 0) + 1
+  let h = 0
+  for (const k in m) { const p = m[k] / s.length; h -= p * Math.log2(p) }
+  return h
+}
+function EntropyAnalyzer() {
+  const [text, setText] = useState('')
+  const r = useMemo(() => {
+    if (!text) return null
+    const h = shannon(text)
+    const verdict = h >= 4 ? ['ok', 'High per-character entropy — looks random (key / token-like).']
+      : h >= 3 ? ['warn', 'Moderate entropy — could be a hash, id, or encoded blob.']
+        : ['info', 'Low entropy — natural-language or repetitive text.']
+    return { h, total: h * text.length, uniq: new Set(text).size, verdict }
+  }, [text])
+  return (
+    <ToolShell icon={FaChartBar} title="Shannon Entropy" blurb="Measure a string's randomness in bits per character — the exact signal secret-scanners use to flag high-entropy tokens and keys committed in code.">
+      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={3} placeholder="Paste a string, token, or API key…" className={inputCls + ' text-xs'} />
+      {r && (
+        <div className="mt-4 space-y-3">
+          <div className="grid grid-cols-3 gap-3">
+            <Stat label="Bits / char" value={r.h.toFixed(2)} /><Stat label="Total bits" value={r.total.toFixed(0)} /><Stat label="Unique chars" value={r.uniq} />
+          </div>
+          <Findings items={[r.verdict]} />
+        </div>
+      )}
+    </ToolShell>
+  )
+}
+
+/* ----------------------------------------------- 13. IOC defang/extract */
+function defang(t) { return t.replace(/http/gi, 'hxxp').replace(/:\/\//g, '[://]').replace(/\./g, '[.]').replace(/@/g, '[at]') }
+function refang(t) { return t.replace(/\[\.\]/g, '.').replace(/\[at\]/gi, '@').replace(/\[:\/\/\]/g, '://').replace(/hxxp/gi, 'http') }
+function IOCTool() {
+  const [text, setText] = useState('')
+  const [out, setOut] = useState('')
+  const iocs = useMemo(() => {
+    if (!text.trim()) return null
+    const src = refang(text)
+    const grab = (re) => Array.from(new Set(src.match(re) || []))
+    return {
+      ips: grab(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g),
+      urls: grab(/\bhttps?:\/\/[^\s"'<>]+/gi),
+      emails: grab(/\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b/gi),
+      hashes: grab(/\b[a-f0-9]{32,64}\b/gi),
+    }
+  }, [text])
+  return (
+    <ToolShell icon={FaMask} title="IOC Defanger & Extractor" blurb="Defang indicators for safe sharing (hxxp://evil[.]com) or refang them back, and pull IPs, URLs, emails, and hashes out of any text — a SOC-triage staple.">
+      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={3} placeholder="Paste a log line, phishing email, or alert…" className={inputCls + ' text-xs'} />
+      <div className="flex flex-wrap gap-2 mt-2">
+        <button onClick={() => setOut(defang(text))} className="px-3 py-1.5 rounded-lg bg-accent/10 text-accent border border-accent/20 text-xs hover:bg-accent/20 transition-colors">Defang</button>
+        <button onClick={() => setOut(refang(text))} className="px-3 py-1.5 rounded-lg bg-accent/10 text-accent border border-accent/20 text-xs hover:bg-accent/20 transition-colors">Refang</button>
+        <button onClick={() => setText('Suspicious login from 203.0.113.9 to http://paypa1-secure.tk/verify?u=bob@corp.com sha256 44d88612fea8a8f36de82e1278abb02f')} className="text-xs text-accent hover:underline self-center">Load a sample</button>
+      </div>
+      {out && <div className="mt-3"><Pre label="Output" obj={out} /></div>}
+      {iocs && (
+        <div className="mt-4 space-y-2">
+          {Object.entries(iocs).map(([k, v]) => v.length > 0 && (
+            <div key={k}>
+              <div className="text-xs uppercase tracking-wider text-gray-500 mb-1">{k} ({v.length})</div>
+              <div className="flex flex-wrap gap-1.5">{v.slice(0, 24).map((x, i) => <span key={i} className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-xs font-mono text-gray-300 break-all">{defang(x)}</span>)}</div>
+            </div>
+          ))}
+        </div>
+      )}
+    </ToolShell>
+  )
+}
+
+/* --------------------------------------------- 14. Look-alike domains */
+const BRANDS = ['google', 'paypal', 'microsoft', 'apple', 'amazon', 'facebook', 'github', 'netflix', 'instagram', 'linkedin', 'coinbase', 'binance', 'wellsfargo', 'chase', 'outlook']
+function levenshtein(a, b) {
+  const m = a.length, n = b.length
+  const d = Array.from({ length: m + 1 }, () => new Array(n + 1).fill(0))
+  for (let i = 0; i <= m; i++) d[i][0] = i
+  for (let j = 0; j <= n; j++) d[0][j] = j
+  for (let i = 1; i <= m; i++) for (let j = 1; j <= n; j++) d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1))
+  return d[m][n]
+}
+function HomoglyphChecker() {
+  const [dom, setDom] = useState('')
+  const r = useMemo(() => {
+    const d = dom.trim().toLowerCase()
+    if (!d) return null
+    const f = []
+    if (/[^\x00-\x7f]/.test(d)) f.push(['critical', 'Contains non-ASCII characters — possible homoglyph / IDN spoof (e.g. Cyrillic “а” for “a”).'])
+    if (/(^|\.)xn--/.test(d)) f.push(['warn', 'Punycode (xn--) label — decodes to a Unicode name; inspect what it actually renders as.'])
+    const label = d.split('.')[0].replace(/[^a-z0-9]/g, '')
+    for (const b of BRANDS) {
+      const dist = levenshtein(label, b)
+      if (label !== b && dist > 0 && dist <= 2 && Math.abs(label.length - b.length) <= 2) { f.push(['critical', `Look-alike of “${b}” (edit distance ${dist}) — classic typosquat shape.`]); break }
+    }
+    if (/(.)\1{2,}/.test(label)) f.push(['info', 'Repeated characters — a common padding trick (goooogle).'])
+    const tld = d.split('.').pop()
+    if (['tk', 'ml', 'ga', 'cf', 'gq', 'zip', 'mov'].includes(tld)) f.push(['warn', `Risky TLD “.${tld}” — over-represented in abuse and phishing.`])
+    if (f.length === 0) f.push(['ok', 'No obvious homoglyph or typosquat signals.'])
+    return { findings: f }
+  }, [dom])
+  return (
+    <ToolShell icon={FaGlobe} title="Look-alike Domain Checker" blurb="Spot homoglyph, punycode, and typosquat domains — the same heuristics behind my phishing detector and the Stowaway supply-chain scanner.">
+      <input value={dom} onChange={(e) => setDom(e.target.value)} placeholder="e.g. paypa1.com" className={inputCls} />
+      <div className="flex flex-wrap gap-2 mt-2">
+        {['paypa1.com', 'micros0ft.com', 'google.tk', 'gooogle.com'].map((s, i) => <button key={i} onClick={() => setDom(s)} className="text-xs text-accent hover:underline">Sample {i + 1}</button>)}
+      </div>
+      {r && <div className="mt-4"><Findings items={r.findings} /></div>}
+    </ToolShell>
+  )
+}
+
+/* ------------------------------------------------ 15. Epoch converter */
+function relTime(d) {
+  const diff = (d.getTime() - Date.now()) / 1000
+  const abs = Math.abs(diff)
+  for (const [n, s] of [['year', 31536000], ['day', 86400], ['hour', 3600], ['minute', 60]]) {
+    if (abs >= s) { const v = Math.round(diff / s); return v < 0 ? `${-v} ${n}${-v === 1 ? '' : 's'} ago` : `in ${v} ${n}${v === 1 ? '' : 's'}` }
+  }
+  return 'just now'
+}
+function EpochConverter() {
+  const [val, setVal] = useState(String(Math.floor(Date.now() / 1000)))
+  const r = useMemo(() => {
+    const s = val.trim()
+    if (!s) return null
+    if (/^\d+$/.test(s)) {
+      const d = new Date(s.length >= 13 ? Number(s) : Number(s) * 1000)
+      if (isNaN(d.getTime())) return { error: 'Invalid timestamp.' }
+      return { mode: 'date', iso: d.toISOString(), utc: d.toUTCString(), local: d.toLocaleString(), rel: relTime(d) }
+    }
+    const d = new Date(s)
+    if (isNaN(d.getTime())) return { error: 'Enter a Unix timestamp (seconds or ms) or a date like 2026-08-03T00:00:00Z.' }
+    return { mode: 'epoch', sec: Math.floor(d.getTime() / 1000), ms: d.getTime(), iso: d.toISOString() }
+  }, [val])
+  return (
+    <ToolShell icon={FaClock} title="Epoch / Timestamp Converter" blurb="Convert between Unix timestamps and human dates — decode a JWT exp, a log entry, or a cookie Max-Age in one step.">
+      <div className="flex gap-2">
+        <input value={val} onChange={(e) => setVal(e.target.value)} placeholder="1754190000 or 2026-08-03T00:00:00Z" className={inputCls + ' flex-1'} />
+        <button onClick={() => setVal(String(Math.floor(Date.now() / 1000)))} className="px-3 rounded-lg border border-white/10 text-gray-400 hover:text-white text-sm whitespace-nowrap">Now</button>
+      </div>
+      {r?.error && <p className="text-sm text-red-400 mt-3 font-mono">✗ {r.error}</p>}
+      {r && !r.error && r.mode === 'date' && (
+        <div className="grid gap-3 mt-4"><Stat label="ISO 8601 (UTC)" value={r.iso} /><Stat label="UTC" value={r.utc} /><Stat label="Local" value={r.local} /><Stat label="Relative" value={r.rel} /></div>
+      )}
+      {r && !r.error && r.mode === 'epoch' && (
+        <div className="grid grid-cols-2 gap-3 mt-4"><Stat label="Unix (seconds)" value={r.sec} /><Stat label="Unix (ms)" value={r.ms} /><Stat label="ISO 8601" value={r.iso} /></div>
+      )}
+    </ToolShell>
+  )
+}
+
 /* ------------------------------------------------------------ tool shell */
 function ToolShell({ icon: Icon, title, blurb, children }) {
   return (
@@ -406,17 +592,23 @@ function ToolShell({ icon: Icon, title, blurb, children }) {
 }
 
 /* ------------------------------------------------------------------ page */
+const CATS = ['Identity & Auth', 'Web & AppSec', 'Crypto & Encoding', 'Network & SOC']
 const TOOLS = [
-  { id: 'jwt', name: 'JWT', icon: FaKey, C: JWTAnalyzer },
-  { id: 'pw', name: 'Password', icon: FaLock, C: PasswordAnalyzer },
-  { id: 'hashid', name: 'Hash ID', icon: FaFingerprint, C: HashIdentifier },
-  { id: 'codec', name: 'Base64/URL', icon: FaExchangeAlt, C: Codec },
-  { id: 'hashgen', name: 'Hash Gen', icon: FaHashtag, C: HashGenerator },
-  { id: 'cookie', name: 'Cookie', icon: FaCookieBite, C: CookieAnalyzer },
-  { id: 'headers', name: 'Headers', icon: FaListUl, C: HeadersAnalyzer },
-  { id: 'csp', name: 'CSP', icon: FaShieldAlt, C: CSPEvaluator },
-  { id: 'pwgen', name: 'PW Gen', icon: FaDice, C: PasswordGenerator },
-  { id: 'cidr', name: 'CIDR', icon: FaNetworkWired, C: CIDRCalculator },
+  { id: 'jwt', name: 'JWT', icon: FaKey, C: JWTAnalyzer, cat: 'Identity & Auth' },
+  { id: 'pw', name: 'Password', icon: FaLock, C: PasswordAnalyzer, cat: 'Identity & Auth' },
+  { id: 'pwgen', name: 'PW Gen', icon: FaDice, C: PasswordGenerator, cat: 'Identity & Auth' },
+  { id: 'cookie', name: 'Cookie', icon: FaCookieBite, C: CookieAnalyzer, cat: 'Web & AppSec' },
+  { id: 'headers', name: 'Headers', icon: FaListUl, C: HeadersAnalyzer, cat: 'Web & AppSec' },
+  { id: 'csp', name: 'CSP', icon: FaShieldAlt, C: CSPEvaluator, cat: 'Web & AppSec' },
+  { id: 'homoglyph', name: 'Look-alike Domain', icon: FaGlobe, C: HomoglyphChecker, cat: 'Web & AppSec' },
+  { id: 'hashid', name: 'Hash ID', icon: FaFingerprint, C: HashIdentifier, cat: 'Crypto & Encoding' },
+  { id: 'hashgen', name: 'Hash Gen', icon: FaHashtag, C: HashGenerator, cat: 'Crypto & Encoding' },
+  { id: 'codec', name: 'Base64/URL', icon: FaExchangeAlt, C: Codec, cat: 'Crypto & Encoding' },
+  { id: 'cipher', name: 'Cipher Lab', icon: FaRandom, C: CipherLab, cat: 'Crypto & Encoding' },
+  { id: 'entropy', name: 'Entropy', icon: FaChartBar, C: EntropyAnalyzer, cat: 'Crypto & Encoding' },
+  { id: 'cidr', name: 'CIDR', icon: FaNetworkWired, C: CIDRCalculator, cat: 'Network & SOC' },
+  { id: 'ioc', name: 'IOC Defang', icon: FaMask, C: IOCTool, cat: 'Network & SOC' },
+  { id: 'epoch', name: 'Epoch', icon: FaClock, C: EpochConverter, cat: 'Network & SOC' },
 ]
 
 export default function Playground() {
@@ -426,29 +618,36 @@ export default function Playground() {
     <>
       <SEO
         title="Security Playground | Mohit Kumar"
-        description="10 interactive, in-browser security tools — JWT analyzer, password entropy, hash identifier & generator, cookie & CSP & security-header analyzers, Base64/URL codec, password generator, and CIDR calculator. By Mohit Kumar."
-        keywords="JWT analyzer, password strength, hash identifier, CSP evaluator, security headers, CIDR calculator, interactive security tools, Mohit Kumar"
+        description="15 interactive, in-browser security tools — JWT analyzer, password entropy & generator, hash identifier & generator, cookie/CSP/header analyzers, Base64/URL codec, cipher lab, Shannon entropy, IOC defanger, look-alike domain checker, CIDR calculator, and epoch converter. By Mohit Kumar."
+        keywords="JWT analyzer, password strength, hash identifier, CSP evaluator, security headers, CIDR calculator, IOC defang, homoglyph domain, Shannon entropy, cipher, interactive security tools, Mohit Kumar"
         pathname="/playground"
       />
       <div className="min-h-screen pt-24 pb-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/10 text-accent border border-accent/20 text-sm font-medium mb-4">
-              <FaShieldAlt /> 10 tools · live &amp; client-side
+              <FaShieldAlt /> 15 tools · live &amp; client-side
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-3">Security <span className="gradient-text">Playground</span></h1>
             <p className="text-gray-400 max-w-xl mx-auto">A working subset of my security toolkit, running entirely in your browser — nothing you type is ever sent to a server.</p>
           </motion.div>
 
-          {/* Tool selector */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
-            {TOOLS.map((t) => (
-              <button key={t.id} onClick={() => setActive(t.id)}
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
-                  active === t.id ? 'bg-accent/15 text-accent border-accent/40' : 'bg-white/5 text-gray-400 border-white/10 hover:text-white hover:bg-white/10'
-                }`}>
-                <t.icon className="text-xs" /> {t.name}
-              </button>
+          {/* Tool selector, grouped by category */}
+          <div className="space-y-4 mb-8">
+            {CATS.map((cat) => (
+              <div key={cat}>
+                <div className="text-[11px] uppercase tracking-wider text-gray-500 text-center mb-2">{cat}</div>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {TOOLS.filter((t) => t.cat === cat).map((t) => (
+                    <button key={t.id} onClick={() => setActive(t.id)}
+                      className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all border ${
+                        active === t.id ? 'bg-accent/15 text-accent border-accent/40' : 'bg-white/5 text-gray-400 border-white/10 hover:text-white hover:bg-white/10'
+                      }`}>
+                      <t.icon className="text-xs" /> {t.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
 
@@ -459,7 +658,7 @@ export default function Playground() {
           </AnimatePresence>
 
           <p className="text-center text-gray-500 text-xs mt-10">
-            Lightweight demos of concepts from my 14-tool{' '}
+            Lightweight demos of concepts from my 27-tool{' '}
             <a href="/projects/security-tools" className="text-accent hover:underline">Security Engineering Toolkit</a>.
           </p>
         </div>

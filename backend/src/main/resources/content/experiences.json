@@ -4,26 +4,25 @@
       "id": "itc-infotech-fte",
       "organization": "ITC Infotech",
       "role": "Security Engineer (IS2 Grade)",
-      "duration": "July 2026 – Present",
+      "duration": "January 2026 – Present",
       "location": "Bangalore, India (On-Site)",
       "project": "Agentic Email Security & Security Engineering",
-      "problem": "Neutralize advanced email-borne threats and strengthen the enterprise security posture beyond what traditional secure email gateways and reactive SOC alerting can catch.",
-      "approach": "Converted from the cybersecurity internship into a full-time Security Engineer role at the IS2 grade on 16 July 2026, immediately after the internship concluded on 15 July 2026. Leading development of the multi-agentic AI email-security system, conducting VAPT engagements, and engineering SOC detection content across Microsoft Sentinel and Splunk, with a shift-left DevSecOps focus.",
-      "impact": "Delivering autonomous, explainable email threat neutralization and reusable detection engineering, while presenting the architecture and business value to executive leadership.",
-      "tags": ["Cybersecurity", "Security Engineering", "VAPT", "SOC Operations", "Multi-Agent AI", "Email Security", "Microsoft Sentinel", "Splunk", "DevSecOps"],
-      "certificateImage": null
-    },
-    {
-      "id": "itc-infotech",
-      "organization": "ITC Infotech",
-      "role": "Cybersecurity Intern",
-      "duration": "February 2026 – July 2026",
-      "location": "Bangalore, India (On-Site)",
-      "project": "Email Security Evolution",
-      "problem": "Combat sophisticated email-borne exploits that evade traditional security controls, requiring advanced threat intelligence and behavioral analysis.",
-      "approach": "Completed intensive cybersecurity training covering OSI model, TCP/IP, DMZ design, VAPT (Burp Suite, Nmap, sqlmap, Nessus), OWASP Top 10 remediation (SQLi, XSS, Broken Access Control), SOC operations (Microsoft Sentinel, Splunk SPL, Defender EDR/XDR), AWS Shared Responsibility Model, MFA/SSO (SAML/OAuth 2.0), DevSecOps Shift-Left practices, and OS hardening. Engineered a multi-agentic AI system to autonomously orchestrate real-time threat intelligence and behavioral analysis.",
-      "impact": "Built an advanced email security solution to neutralize threats before reaching end-users, developed expertise across security operations, cloud security, and AI-driven defense — and converted to a full-time Security Engineer role at the end of the internship.",
-      "tags": ["Cybersecurity", "VAPT", "SOC Operations", "Multi-Agent AI", "Email Security", "Microsoft Sentinel", "Splunk", "AWS Security", "DevSecOps", "OWASP"],
+      "problem": "Neutralize advanced email-borne threats and strengthen the enterprise security posture beyond what traditional secure email gateways and reactive SOC alerting can catch — while securing the AI systems doing the defending.",
+      "approach": "Started as a Cybersecurity Intern (Jan 2026), engineering a production multi-agent AI email-security system, and converted to a full-time Security Engineer at the IS2 grade on 16 July 2026, immediately after the internship concluded on 15 July 2026. Now working across AI for Security and Security for AI — autonomous detection tooling and ML/agent supply-chain hardening — alongside VAPT engagements, SOC detection engineering across Microsoft Sentinel and Splunk, and GRC control auditing (J-SOX, MICS) with a shift-left DevSecOps focus.",
+      "impact": "The email-security system reached ~96–97% threat-detection accuracy with <0.8% miss rate and cut SOC email triage from ~30 minutes to a few seconds. Now delivering reusable detection engineering and maintaining an open-source security tooling suite, while presenting architecture and business value to executive leadership.",
+      "tags": [
+        "Cybersecurity",
+        "Security Engineering",
+        "AI Security",
+        "VAPT",
+        "SOC Operations",
+        "Multi-Agent AI",
+        "Email Security",
+        "Microsoft Sentinel",
+        "Splunk",
+        "GRC (J-SOX/MICS)",
+        "DevSecOps"
+      ],
       "certificateImage": null
     },
     {
@@ -37,7 +36,14 @@
       "problem": "Develop efficient X-ray normalization across multiple intensity levels using a single unified generator.",
       "approach": "Designed a novel Gated Multi-Domain CUT model with attention-based architecture and hybrid contrastive loss for high anatomical fidelity.",
       "impact": "Outperformed baselines (CycleGAN, StarGAN, CUT) achieving SSIM of 0.9858.",
-      "tags": ["Medical Imaging", "GANs", "CUT", "X-ray Normalization", "Deep Learning", "Machine Learning"],
+      "tags": [
+        "Medical Imaging",
+        "GANs",
+        "CUT",
+        "X-ray Normalization",
+        "Deep Learning",
+        "Machine Learning"
+      ],
       "certificateImage": "/certificates/CHAIR.jpeg"
     },
     {
@@ -51,7 +57,15 @@
       "problem": "Bridge the information gap between farmers and 50+ government welfare schemes through voice-driven AI.",
       "approach": "Built FastAPI backend with Prolog-based rule engine, end-to-end pipeline using Whisper, Azure Translator/TTS, and Gemma LLM for personalized voice interactions.",
       "impact": "Achieved <5s latency per query with 100% deterministic eligibility checks via hybrid Prolog+LLM architecture.",
-      "tags": ["Voice AI", "Prolog", "FastAPI", "Multilingual", "LLM", "AgriTech", "Machine Learning"],
+      "tags": [
+        "Voice AI",
+        "Prolog",
+        "FastAPI",
+        "Multilingual",
+        "LLM",
+        "AgriTech",
+        "Machine Learning"
+      ],
       "certificateImage": "/certificates/ANNAM.AI.png"
     },
     {
@@ -65,7 +79,14 @@
       "problem": "Enable zero-shot analysis of medical body sounds (heart, respiratory, bowel) for healthcare diagnostics.",
       "approach": "Fine-tuned CLAP and CLIP on 20k+ medical audio samples from PhysioNet, BHIC, AudioSet, VGG-Sound. Built annotation + preprocessing pipeline with t-SNE visualization.",
       "impact": "Enabled zero-shot analysis across 10+ body sound classes with, high embedding quality.",
-      "tags": ["Audio AI", "CLIP", "CLAP", "Healthcare", "Zero-Shot Learning", "Machine Learning"], 
+      "tags": [
+        "Audio AI",
+        "CLIP",
+        "CLAP",
+        "Healthcare",
+        "Zero-Shot Learning",
+        "Machine Learning"
+      ],
       "certificateImage": "/certificates/Prism_cert.png"
     },
     {
@@ -79,7 +100,14 @@
       "problem": "Improve Human Activity Recognition accuracy with graph-based spatiotemporal modeling.",
       "approach": "Developed HAR-GCNN model using Graph Convolutional Networks on PAMAP2 sensor dataset with robustness to 66% missing labels.",
       "impact": "Achieved 99.99% accuracy, outperforming CNN (99.75%) and LSTM ,(98.10%) across 3-25 activity classes.",
-      "tags": ["GNN", "HAR", "Signal Processing", "Time-Series", "Sensor Data", "Machine Learning"],
+      "tags": [
+        "GNN",
+        "HAR",
+        "Signal Processing",
+        "Time-Series",
+        "Sensor Data",
+        "Machine Learning"
+      ],
       "certificateImage": "/certificates/CCPS_Internship.png"
     },
     {
@@ -92,7 +120,11 @@
       "problem": "Contribute to ML research projects and knowledge sharing within the university.",
       "approach": "Participated in research initiatives, collaborated on ML projects, and contributed to team knowledge base.",
       "impact": "Built foundation in applied ML research and collaborative development.",
-      "tags": ["Research", "ML", "Collaboration"]
+      "tags": [
+        "Research",
+        "ML",
+        "Collaboration"
+      ]
     }
   ]
 }

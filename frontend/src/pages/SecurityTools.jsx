@@ -34,9 +34,9 @@ function TerminalBlock({ title, children }) {
 }
 
 function ToolCard({ tool, isActive, onToggle }) {
-  const domainIcons = { web: <FaBug className="text-green-400" />, iam: <FaLock className="text-purple-400" />, cloud: <FaCloud className="text-blue-400" />, 'blue-team': <FaShieldAlt className="text-pink-400" /> }
-  const domainLabels = { web: 'Web AppSec', iam: 'Identity & Access', cloud: 'Cloud Security', 'blue-team': 'Blue Team' }
-  const domainColors = { web: '#34d399', iam: '#a78bfa', cloud: '#60a5fa', 'blue-team': '#f472b6' }
+  const domainIcons = { web: <FaBug className="text-green-400" />, iam: <FaLock className="text-purple-400" />, cloud: <FaCloud className="text-blue-400" />, 'blue-team': <FaShieldAlt className="text-pink-400" />, crypto: <FaLock className="text-amber-400" /> }
+  const domainLabels = { web: 'Web AppSec', iam: 'Identity & Access', cloud: 'Cloud & Infra', 'blue-team': 'Blue Team', crypto: 'Cryptography' }
+  const domainColors = { web: '#34d399', iam: '#a78bfa', cloud: '#60a5fa', 'blue-team': '#f472b6', crypto: '#fbbf24' }
   const color = domainColors[tool.domain]
 
   return (
@@ -149,7 +149,7 @@ export default function SecurityTools() {
 
   return (
     <>
-      <SEO title="Security Tools | Mohit Kumar — Security Engineering Portfolio" description="14 CLI-driven security assessment tools across AppSec, IAM, Cloud, and Detection Engineering" pathname="/projects/security-tools" />
+      <SEO title="Security Tools | Mohit Kumar — Security Engineering Portfolio" description="27 CLI-driven security assessment tools across AppSec, IAM, Cloud, Cryptography, and Detection Engineering" pathname="/projects/security-tools" />
       <div className="min-h-screen pt-24 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Back link */}
@@ -164,7 +164,7 @@ export default function SecurityTools() {
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-4">
                   <span className="px-3 py-1 rounded-full text-xs font-bold bg-green-500/20 text-green-400 border border-green-500/30 uppercase tracking-wider">Security Engineering</span>
-                  <span className="px-3 py-1 rounded-full text-xs bg-white/10 text-gray-400">14 Tools · Python · CLI</span>
+                  <span className="px-3 py-1 rounded-full text-xs bg-white/10 text-gray-400">27 Tools · Python · CLI</span>
                 </div>
                 <h1 className="text-4xl md:text-5xl font-bold mb-4 text-white">{heroData.title}</h1>
                 <p className="text-lg text-gray-400 max-w-3xl mb-6">{heroData.subtitle}</p>

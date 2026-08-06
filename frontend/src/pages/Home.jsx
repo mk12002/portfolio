@@ -39,7 +39,7 @@ const featuredProjects = [
     slug: 'bulwark',
     title: 'Bulwark: Security Stack for Agentic AI',
     description: 'Three composable scanners that audit the whole AI-agent supply chain — pickle RCE, MCP risks, and agent excessive-agency — into one CycloneDX AI-BOM',
-    metric: '3 Tools · 14/14 Adversarial · 200+ Tests',
+    metric: '3 Tools · 14/14 Adversarial · 270+ Tests',
     tags: ['AI Supply Chain', 'Pickle RCE', 'MCP Security', 'AI-BOM'],
     color: 'vision',
     icon: FaRobot,
@@ -48,7 +48,7 @@ const featuredProjects = [
     slug: 'lattice',
     title: 'Lattice: Post-Quantum Readiness Scanner',
     description: 'Builds a Cryptographic Bill of Materials, grades every asset for quantum + classical weakness, and emits a NIST post-quantum migration roadmap',
-    metric: '9 Languages · 153 Tests · 0 Deps',
+    metric: '12 Languages · 171 Tests · 0 Deps',
     tags: ['Post-Quantum', 'CBOM', 'HNDL', 'NIST FIPS 203'],
     color: 'reasoning',
     icon: FaLock,
@@ -66,7 +66,7 @@ const featuredProjects = [
     slug: 'stowaway',
     title: 'Stowaway: Supply-Chain Integrity Scanner',
     description: 'Catches the no-CVE attacks — typosquatting, dependency confusion, install-hook malware — across npm, PyPI, Go, and Cargo, fully offline',
-    metric: '4 Ecosystems · 118 Tests · 0 False Positives',
+    metric: '4 Ecosystems · 133 Tests · 0 False Positives',
     tags: ['Typosquatting', 'Dependency Confusion', 'Install Malware', 'Offline'],
     color: 'vision',
     icon: FaBug,
@@ -181,13 +181,13 @@ function AboutMe({ profile }) {
           viewport={{ once: true }}
         >
           <p className="text-gray-300 text-base leading-relaxed">
-            {profile?.longIntro || "I'm a Cybersecurity & AI Engineer at ITC Infotech, blending deep AI/ML expertise with security operations. I specialize in building intelligent defense systems — from multi-agentic email threat neutralization to SOC-grade anomaly detection — while researching adversarial robustness to secure AI from attack."}
+            {profile?.longIntro || "I'm a Security Engineer at ITC Infotech, working across AI for Security and Security for AI — building an open-source security tooling suite, hardening ML & agent supply chains, and running SOC/VAPT and GRC (J-SOX, MICS) work, while researching adversarial robustness to secure AI from attack."}
           </p>
 
           <div className="p-5 bg-white/5 rounded-xl border border-white/10">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-vision mb-3">Current Focus</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
-              Engineering a multi-agentic AI system at ITC Infotech for autonomous email threat neutralization. Running VAPT engagements with Burp Suite & Nmap. Building SOC detection rules in Splunk & Microsoft Sentinel.
+              As a full-time Security Engineer at ITC Infotech, working across AI for Security and Security for AI — building and maintaining an open-source security tooling suite spanning the software supply chain, running VAPT and SOC detection engineering (Splunk, Microsoft Sentinel), and supporting GRC (J-SOX, MICS) control audits. My internship built a production multi-agentic email threat-neutralization system. In parallel, actively building and maintaining an open-source security tooling suite — offline, defensive scanners that span the modern software supply chain.
             </p>
           </div>
 
@@ -371,7 +371,7 @@ function SecuritySuite() {
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500 border-t border-white/10 pt-5">
             <span><span className="text-gray-200 font-semibold">5</span> open-source scanners</span>
-            <span><span className="text-gray-200 font-semibold">1,100+</span> passing tests</span>
+            <span><span className="text-gray-200 font-semibold">1,200+</span> passing tests</span>
             <span><span className="text-gray-200 font-semibold">0–1</span> runtime dependencies</span>
             <span><span className="text-gray-200 font-semibold">Apache-2.0 / MIT</span></span>
           </div>
@@ -515,7 +515,7 @@ export default function Home() {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4 }}
               >
-                {profile?.shortIntro || 'Cybersecurity & AI Engineer building intelligent defense systems. Currently at ITC Infotech — engineering multi-agentic email threat neutralization, conducting VAPT, and running SOC operations.'}
+                {profile?.shortIntro || 'Security Engineer at ITC Infotech working across AI for Security and Security for AI — building an open-source defensive tooling suite, running VAPT and SOC detection engineering, and supporting GRC (J-SOX, MICS) audits.'}
               </motion.p>
 
               <motion.p

@@ -6,6 +6,34 @@
 
 export const posts = [
   {
+    slug: 'ml-model-pickle-rce',
+    title: 'How an ML Model Runs Code on Your Machine (Pickle RCE)',
+    excerpt:
+      "A pickled model file isn't data — it's a program that executes the moment you load it. How pickle-based remote code execution actually works, why the 2025 bypass wave slips past naive scanners, and how a static analyzer can disassemble the opcode stream to catch it without ever deserializing the file.",
+    category: 'AI Security',
+    date: '2026-08-03',
+    readTime: '9 min read',
+    tags: ['AI', 'ML Security', 'Pickle RCE', 'Supply Chain'],
+    cover: '/posts/pickle-rce-scanner.png',
+    url: 'https://mohitkumar1.hashnode.dev/ml-model-pickle-rce-scanner',
+    source: 'Hashnode',
+    relatedProject: { slug: 'bulwark', title: 'Bulwark (Airlock)' },
+  },
+  {
+    slug: 'benchmark-inflating-its-own-score',
+    title: 'The Benchmark That Kept Inflating Its Own Score',
+    excerpt:
+      'When an evaluation harness and the system under test quietly share assumptions, the benchmark can end up grading itself generously — and the numbers drift up for the wrong reasons. A debugging story about catching a benchmark inflating its own score, and what it taught me about honest measurement in ML systems.',
+    category: 'AI Security',
+    date: '2026-08-03',
+    readTime: '8 min read',
+    tags: ['ML Evaluation', 'Benchmarking', 'Testing', 'Security'],
+    cover: '/posts/benchmark-inflating-score.png',
+    url: 'https://dev.to/mohit_kumar1/the-benchmark-that-kept-inflating-its-own-score-200p',
+    source: 'dev.to',
+    relatedProject: { slug: 'ir-siem-kql', title: 'Schema-Grounded NL→KQL' },
+  },
+  {
     slug: 'security-stack-for-ai-agents',
     title: "I Built a Security Stack for AI Agents — Here's the Architecture",
     excerpt:

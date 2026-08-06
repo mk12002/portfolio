@@ -1,14 +1,14 @@
 // Security Tools Portfolio Data
 export const heroData = {
   title: "Security Engineering Toolkit",
-  subtitle: "14 CLI-driven security tools built for real-world AppSec, IAM, Cloud, and Detection Engineering workflows.",
+  subtitle: "27 CLI-driven security tools built for real-world AppSec, IAM, Cloud, Cryptography, and Detection Engineering workflows.",
   stats: [
-    { label: "Tools", value: "14" },
-    { label: "Security Domains", value: "4" },
+    { label: "Tools", value: "27" },
+    { label: "Security Domains", value: "5" },
     { label: "CLI-First", value: "100%" },
-    { label: "Language", value: "Python" }
+    { label: "Zero-Dep Core", value: "Python" }
   ],
-  interviewSummary: "I built a 14-tool security engineering portfolio covering AppSec, IAM, cloud misconfiguration, and detection engineering. Each tool is CLI-driven, explainable, and designed for practical security assessment workflows. The project emphasizes detection quality, signal correlation, operational usefulness, and remediation clarity rather than exploit development."
+  interviewSummary: "I built a 27-tool security engineering portfolio covering AppSec, IAM, cloud & infrastructure, cryptography, and detection engineering. Each tool is CLI-driven, zero-dependency at its core, explainable, and designed for practical security assessment workflows. The project emphasizes detection quality, signal correlation, operational usefulness, and remediation clarity rather than exploit development."
 };
 
 export const principles = [
@@ -25,25 +25,31 @@ export const domains = [
     name: "Identity & Access Security",
     color: "#a78bfa",
     icon: "🔐",
-    toolIds: ["jwt-analyzer", "rate-limiter", "auth-flow", "password-analyzer"]
+    toolIds: ["jwt-analyzer", "rate-limiter", "auth-flow", "password-analyzer", "password-generator", "password-manager", "login-mfa"]
   },
   {
     name: "Web Application Security",
     color: "#34d399",
     icon: "🌐",
-    toolIds: ["web-scanner", "input-fuzzer", "file-upload", "headers-checker", "cookie-analyzer", "http-flow"]
+    toolIds: ["web-scanner", "input-fuzzer", "file-upload", "headers-checker", "cookie-analyzer", "http-flow", "ssl-checker", "phishing-detector"]
   },
   {
-    name: "Cloud Security",
+    name: "Cloud & Infrastructure",
     color: "#60a5fa",
     icon: "☁️",
-    toolIds: ["cloud-bucket", "ssrf-tester"]
+    toolIds: ["cloud-bucket", "ssrf-tester", "port-scanner", "subdomain-scanner", "vuln-scanner"]
   },
   {
     name: "Blue Team & Detection",
     color: "#f472b6",
     icon: "🛡️",
-    toolIds: ["log-analyzer", "simple-ids"]
+    toolIds: ["log-analyzer", "simple-ids", "keylogger-detector", "dir-bruteforce"]
+  },
+  {
+    name: "Cryptography & Encryption",
+    color: "#fbbf24",
+    icon: "🔒",
+    toolIds: ["caesar-cipher", "file-encryption", "rsa-keygen"]
   }
 ];
 
@@ -382,6 +388,233 @@ Grade: C (55/100)
     roadmap: ["Add multi-endpoint grade aggregation", "Add report-only CSP migration planner", "Add CI gate thresholds for release readiness"],
     folder: "headers-hardening",
     domain: "web"
+  },
+  {
+    id: "caesar-cipher",
+    num: "15",
+    title: "Caesar Cipher",
+    purpose: "Classical substitution cipher with encrypt, decrypt, and full brute-force cryptanalysis to teach why obscurity is not security.",
+    problem: "Rolled-your-own 'encryption' and tiny keyspaces still show up in real systems. A cipher with 25 possible keys falls in milliseconds — the lesson maps directly to weak, low-entropy modern schemes.",
+    capabilities: ["Encrypt / decrypt with a chosen shift", "Brute-force all 25 keys automatically", "Frequency-analysis scoring to auto-rank likely plaintext", "Preserves case and non-alphabetic characters"],
+    workflow: ["Take text and mode (encrypt/decrypt/break)", "Apply modular shift per character", "For break mode, enumerate every key", "Score candidates by English letter frequency"],
+    exampleInput: "python caesar_cipher.py --mode break --text \"Khoor Zruog\"",
+    exampleOutput: `=== Brute-force ===
+shift 03  -> \"Hello World\"  (best frequency score)
+shift 07  -> \"Dahhk Sknhz\"`,
+    strengths: ["Demonstrates keyspace exhaustion clearly", "No dependencies", "Frequency analysis mirrors real cryptanalysis"],
+    limitations: ["Educational cipher, not for protection", "English-frequency scoring only", "No polyalphabetic support"],
+    roadmap: ["Add Vigenère + Kasiski examination", "Add multi-language frequency tables", "Add index-of-coincidence scoring"],
+    folder: "caesar-cipher",
+    domain: "crypto"
+  },
+  {
+    id: "file-encryption",
+    num: "16",
+    title: "File Encryption (AES-256)",
+    purpose: "Encrypts and decrypts files with AES-256-CBC and Fernet authenticated encryption, implemented to understand the primitives end-to-end.",
+    problem: "Data at rest is exposed without proper encryption — and naive encryption without authentication is silently malleable. Understanding the difference between confidentiality and integrity is the point.",
+    capabilities: ["AES-256-CBC with random IV per file", "Fernet authenticated (AEAD) mode", "Password-derived keys via KDF", "Round-trip integrity verification"],
+    workflow: ["Derive a key from the password", "Generate a fresh random IV/nonce", "Encrypt and write ciphertext + IV", "Verify by decrypting back on demand"],
+    exampleInput: "python file_encryptor.py --mode encrypt --in secret.pdf --out secret.enc",
+    exampleOutput: `[PASS] Encrypted secret.pdf -> secret.enc (AES-256-CBC)
+[PASS] Integrity self-check: decryption round-trip OK`,
+    strengths: ["Contrasts unauthenticated CBC with AEAD Fernet", "Per-file random IV", "Clear key-derivation step"],
+    limitations: ["Not a file-format-aware vault", "CBC mode included for teaching, prefer AEAD", "No key-escrow or recovery"],
+    roadmap: ["Add AES-GCM streaming for large files", "Add key rotation", "Add per-chunk authentication tags"],
+    folder: "file-encryption",
+    domain: "crypto"
+  },
+  {
+    id: "rsa-keygen",
+    num: "17",
+    title: "RSA Key Pair Generator",
+    purpose: "Generates RSA key pairs in pure Python — primality testing, key construction, and PEM export — to demystify asymmetric key material.",
+    problem: "RSA is used everywhere but treated as a black box. Building it from primes up makes key size, primality, and the public/private relationship concrete.",
+    capabilities: ["Configurable key size", "Miller-Rabin probabilistic primality testing", "Public/private exponent derivation", "PEM export of both keys"],
+    workflow: ["Generate two large probable primes", "Compute the modulus and totient", "Derive public and private exponents", "Export keys in PEM format"],
+    exampleInput: "python rsa_keygen.py --bits 2048 --out mykey",
+    exampleOutput: `[PASS] Generated 2048-bit RSA key pair
+       wrote mykey_public.pem, mykey_private.pem`,
+    strengths: ["Pure-stdlib, transparent implementation", "Miller-Rabin explained inline", "Standard PEM output"],
+    limitations: ["Educational — use vetted libraries in production", "No constant-time guarantees", "No key-usage policy enforcement"],
+    roadmap: ["Add OAEP padding demo", "Add signature/verify example", "Add key-strength advisory vs NIST guidance"],
+    folder: "rsa-keygen",
+    domain: "crypto"
+  },
+  {
+    id: "password-generator",
+    num: "18",
+    title: "Secure Password Generator",
+    purpose: "Generates cryptographically secure passwords and passphrases with real entropy scoring and crack-time estimates.",
+    problem: "Weak, predictable passwords remain a top breach cause. A generator must use a CSPRNG and be honest about the entropy it actually produces.",
+    capabilities: ["Random, passphrase, and pronounceable modes", "CSPRNG-backed generation (secrets module)", "Shannon entropy scoring in bits", "Offline crack-time estimates"],
+    workflow: ["Select mode and length/word count", "Draw from a CSPRNG", "Compute entropy for the chosen alphabet", "Report strength and estimated crack time"],
+    exampleInput: "python password_generator.py --mode passphrase --words 5",
+    exampleOutput: `Generated: correct-harbor-violet-mango-7Q
+[PASS] Entropy: ~74 bits — offline crack time: centuries`,
+    strengths: ["Uses secrets, not random", "Honest entropy math", "Human-friendly passphrase mode"],
+    limitations: ["Entropy assumes attacker knows the scheme", "Wordlist quality affects passphrase strength", "No breach-corpus check"],
+    roadmap: ["Add HaveIBeenPwned k-anonymity check", "Add policy templates per site", "Add QR export for password managers"],
+    folder: "password-generator",
+    domain: "iam"
+  },
+  {
+    id: "password-manager",
+    num: "19",
+    title: "Encrypted Password Vault",
+    purpose: "A local password vault encrypted at rest with AES-256 and a PBKDF2-derived master key — the KeePass/Bitwarden architecture, built small.",
+    problem: "Reused passwords cascade one breach into many. A vault must encrypt at rest under a master password and never store it in plaintext.",
+    capabilities: ["AES-256 encrypted vault file", "PBKDF2 key derivation from a master password", "CRUD + search over entries", "Password health check (weak/reused)"],
+    workflow: ["Derive the vault key from the master password via PBKDF2", "Decrypt the vault into memory only", "Perform CRUD/search operations", "Re-encrypt and persist on save"],
+    exampleInput: "python password_manager.py --vault vault.db --health",
+    exampleOutput: `[HIGH] 2 reused passwords across 3 entries
+[MED]  1 weak password (github.com)`,
+    strengths: ["Master password never stored", "PBKDF2 stretches the key", "Health check surfaces reuse"],
+    limitations: ["No cloud sync or sharing", "Single-device, single-vault", "No hardware-key unlock"],
+    roadmap: ["Add Argon2id KDF option", "Add TOTP secret storage", "Add encrypted export/import"],
+    folder: "password-manager",
+    domain: "iam"
+  },
+  {
+    id: "login-mfa",
+    num: "20",
+    title: "Login System with MFA",
+    purpose: "A reference login flow with PBKDF2 password hashing, TOTP second factor (RFC 6238), account lockout, and session tokens — auth done right.",
+    problem: "Auth is easy to get subtly wrong: plaintext or fast-hashed passwords, no second factor, no lockout. This models the whole flow the way it should be built.",
+    capabilities: ["PBKDF2 salted password hashing", "TOTP MFA implemented from RFC 6238", "Account lockout after failed attempts", "Session-token issuance + optional Flask web mode"],
+    workflow: ["Register with a salted PBKDF2 hash", "Verify password, then TOTP code", "Enforce lockout on repeated failures", "Issue a signed session token"],
+    exampleInput: "python login_mfa_demo.py --mode demo",
+    exampleOutput: `[PASS] Password verified (PBKDF2)
+[PASS] TOTP accepted — session issued
+[WARN] 3 failed attempts -> account locked 15m`,
+    strengths: ["End-to-end auth model", "TOTP built from the spec", "Lockout + session handling included"],
+    limitations: ["Demo store, not a production DB", "No WebAuthn/passkey support yet", "Single-node session model"],
+    roadmap: ["Add WebAuthn/passkeys", "Add refresh-token rotation", "Add risk-based step-up auth"],
+    folder: "login-mfa-demo",
+    domain: "iam"
+  },
+  {
+    id: "keylogger-detector",
+    num: "21",
+    title: "Keylogger Detector",
+    purpose: "Scans a host for keylogging behavior — suspicious processes, startup persistence, keyboard hooks, and log files — a defender's tool.",
+    problem: "Keyloggers hide in plain sight via startup entries and low-level hooks. Detection means correlating process, registry, hook, and file signals.",
+    capabilities: ["Process scan against 50+ signatures", "Registry / startup persistence checks", "Keyboard-hook detection", "Suspicious log-file heuristics"],
+    workflow: ["Enumerate running processes", "Check startup and registry autoruns", "Inspect for installed keyboard hooks", "Correlate signals into a risk verdict"],
+    exampleInput: "python keylogger_detector.py --scan",
+    exampleOutput: `[HIGH] Process 'svhost_log.exe' matches keylogger signature
+[MED]  Startup entry writing to %APPDATA%\\keys.txt`,
+    strengths: ["Multi-signal correlation", "Signature + behavioral checks", "Purely defensive"],
+    limitations: ["Windows-focused checks", "Signature list is not exhaustive", "Cannot see kernel-mode rootkits"],
+    roadmap: ["Add Linux/macOS hook detection", "Add YARA rule support", "Add EDR-style event timeline"],
+    folder: "keylogger-detector",
+    domain: "blue-team"
+  },
+  {
+    id: "port-scanner",
+    num: "22",
+    title: "TCP Port Scanner",
+    purpose: "Multi-threaded TCP connect scanner with banner grabbing, service hints, and presets over 80+ well-known ports.",
+    problem: "You can't defend an attack surface you haven't mapped. Knowing which ports and services are exposed is step zero of any assessment.",
+    capabilities: ["Multi-threaded TCP connect scanning", "Banner grabbing + service identification", "Well-known-port presets", "Basic OS/service hinting"],
+    workflow: ["Resolve the target and select ports", "Open TCP connections concurrently", "Grab banners on open ports", "Summarize services and hints"],
+    exampleInput: "python port_scanner.py --target example.com --preset common",
+    exampleOutput: `[OPEN] 22/tcp   ssh    OpenSSH 9.6
+[OPEN] 443/tcp  https  nginx
+[SAFE] 3306/tcp closed`,
+    strengths: ["Fast concurrent scanning", "Banner + service hints", "Preset port groups"],
+    limitations: ["TCP connect only (noisy, no SYN stealth)", "Authorized targets only", "No UDP scanning"],
+    roadmap: ["Add async SYN scanning", "Add UDP + service probes", "Add nmap-style output export"],
+    folder: "port-scanner",
+    domain: "cloud"
+  },
+  {
+    id: "ssl-checker",
+    num: "23",
+    title: "SSL/TLS Certificate Checker",
+    purpose: "Inspects a TLS endpoint's certificate — expiry, chain, weak ciphers, SANs — and assigns a letter grade.",
+    problem: "Expired or weakly-configured certificates cause outages and downgrade attacks. A quick, gradeable check catches them before users do.",
+    capabilities: ["Expiry and validity-window check", "Certificate chain validation", "Weak cipher / protocol detection", "SAN extraction + A–F grade"],
+    workflow: ["Open a TLS connection to the host", "Read the presented certificate + chain", "Evaluate expiry, ciphers, and SANs", "Assign a letter grade with reasons"],
+    exampleInput: "python ssl_checker.py --host example.com",
+    exampleOutput: `Grade: A-
+[PASS] Valid 61 days remaining, chain OK
+[LOW]  TLS 1.1 still enabled`,
+    strengths: ["Actionable letter grade", "Explains weak-cipher findings", "SAN coverage listing"],
+    limitations: ["Point-in-time snapshot", "No OCSP/CT-log cross-check", "One host per run"],
+    roadmap: ["Add OCSP + CRL checks", "Add CT-log monitoring", "Add bulk endpoint scanning"],
+    folder: "ssl-checker",
+    domain: "web"
+  },
+  {
+    id: "phishing-detector",
+    num: "24",
+    title: "Phishing URL Detector",
+    purpose: "Scores URLs for phishing risk using 17+ heuristic signals — brand impersonation, homoglyphs, suspicious TLDs — into a 0–100 risk score.",
+    problem: "Phishing is the top initial-access vector. Many lures are catchable from the URL alone: look-alike domains, homoglyphs, and credential-bait paths.",
+    capabilities: ["17+ heuristic signals", "Brand-impersonation detection", "Homoglyph / IDN look-alike detection", "0–100 risk scoring with reasons"],
+    workflow: ["Parse the URL structure and host", "Run each heuristic signal", "Check brand and homoglyph patterns", "Aggregate into a risk score + verdict"],
+    exampleInput: "python phishing_detector.py --url \"http://paypal-login.tk/verify\"",
+    exampleOutput: `Risk: 88/100 (HIGH)
+[HIGH] Brand 'paypal' in non-official domain
+[MED]  Suspicious TLD .tk + 'verify' path`,
+    strengths: ["Explainable per-signal scoring", "Homoglyph/IDN aware", "No blocklist dependency"],
+    limitations: ["Heuristic — not a live reputation feed", "Can flag legitimate look-alikes", "URL-only, no page content analysis"],
+    roadmap: ["Add optional reputation-feed enrichment", "Add page-content + form analysis", "Add ML classifier over the signals"],
+    folder: "phishing-detector",
+    domain: "web"
+  },
+  {
+    id: "dir-bruteforce",
+    num: "25",
+    title: "Directory Brute-Force Detector",
+    purpose: "Parses web-server logs to detect directory brute-forcing — 404/403 floods and scanner user-agents — a defensive counterpart to gobuster.",
+    problem: "Content-discovery tools (gobuster, dirbuster) generate a distinctive 404/403 flood. Detecting it early flags reconnaissance in progress.",
+    capabilities: ["Apache / Nginx log parsing", "404 / 403 flood detection per IP", "Scanner user-agent fingerprinting", "Sample-log generator for testing"],
+    workflow: ["Parse access logs into events", "Aggregate error responses per IP/window", "Match known scanner user-agents", "Flag IPs exceeding thresholds"],
+    exampleInput: "python dir_bruteforce_detector.py --logfile access.log",
+    exampleOutput: `[HIGH] 203.0.113.9 — 214 x 404 in 60s (dirbuster UA)
+[MED]  198.51.100.7 — 47 x 403 sequential paths`,
+    strengths: ["Turns raw logs into recon alerts", "UA + rate correlation", "Includes a sample generator"],
+    limitations: ["Log-file based, not live", "Thresholds need tuning per site", "Rotating IPs can evade"],
+    roadmap: ["Add streaming log tailing", "Add fail2ban action hooks", "Add distributed-scan correlation"],
+    folder: "directory-bruteforce-detector",
+    domain: "blue-team"
+  },
+  {
+    id: "subdomain-scanner",
+    num: "26",
+    title: "DNS Subdomain Scanner",
+    purpose: "Brute-forces subdomains from a built-in wordlist with wildcard detection and multi-threaded resolution to map an org's DNS footprint.",
+    problem: "Forgotten subdomains (staging, dev, admin) widen the attack surface and enable subdomain takeover. Enumerating them is core reconnaissance.",
+    capabilities: ["150+ built-in subdomain prefixes", "Multi-threaded DNS resolution", "Wildcard-DNS detection to cut false positives", "Custom wordlist support"],
+    workflow: ["Load prefixes and the target domain", "Detect wildcard DNS first", "Resolve candidates concurrently", "Report live subdomains + IPs"],
+    exampleInput: "python subdomain_scanner.py --domain example.com",
+    exampleOutput: `[FOUND] api.example.com     -> 203.0.113.10
+[FOUND] staging.example.com -> 203.0.113.11
+[SAFE]  wildcard DNS not detected`,
+    strengths: ["Wildcard detection reduces noise", "Concurrent + fast", "Bring-your-own wordlist"],
+    limitations: ["Dictionary-based, misses random names", "Authorized targets only", "No passive/cert-log sources"],
+    roadmap: ["Add CT-log + passive DNS sources", "Add takeover-fingerprint checks", "Add recursive permutation scanning"],
+    folder: "subdomain-scanner",
+    domain: "cloud"
+  },
+  {
+    id: "vuln-scanner",
+    num: "27",
+    title: "Vulnerability Scanner",
+    purpose: "Combines port scanning, service detection, and a CVE lookup into a prioritized, remediation-oriented vulnerability report.",
+    problem: "Open ports plus outdated services equal exploitable risk. Tying detected services to known CVEs turns a scan into an action list.",
+    capabilities: ["Port scan + service/version detection", "Lookup against a bundled CVE set", "Risk rating per finding", "Concrete remediation guidance"],
+    workflow: ["Scan ports and identify services", "Match service versions to CVE entries", "Rate risk and severity", "Emit prioritized remediation report"],
+    exampleInput: "python vuln_scanner.py --target example.com",
+    exampleOutput: `[HIGH] OpenSSH 7.4 -> CVE-2018-15473 (user enumeration)
+[MED]  nginx 1.14 -> upgrade advised`,
+    strengths: ["Ties services to CVEs", "Prioritized + remediation-first", "Single-command assessment"],
+    limitations: ["Bundled CVE set, not a live feed", "Version-based, may false-positive", "Authorized targets only"],
+    roadmap: ["Integrate the live NVD API", "Add authenticated checks", "Add SBOM-based matching"],
+    folder: "vuln-scanner",
+    domain: "cloud"
   }
 ];
 

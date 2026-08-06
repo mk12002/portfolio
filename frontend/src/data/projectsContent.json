@@ -397,7 +397,7 @@
         "AI/ML"
       ],
       "tagline": "Three composable scanners that audit the entire AI-agent supply chain — the parts, the assembly, and the governable whole.",
-      "metric": "3 Tools · 200+ Tests · 14/14 Adversarial",
+      "metric": "3 Tools · 270+ Tests · 14/14 Adversarial",
       "tags": [
         "AI Supply Chain",
         "CycloneDX AI-BOM",
@@ -435,7 +435,7 @@
         },
         {
           "name": "Automated tests across 5 packages",
-          "value": "200+ passing"
+          "value": "270+ passing"
         },
         {
           "name": "Detection rules (Airlock M1–M7/P1–P9, Warden A1–A10, Manifest B1–B9)",
@@ -681,7 +681,7 @@
       "writeupUrl": "https://dev.to/mohit_kumar1/your-ai-assistant-downloads-code-from-strangers-heres-why-thats-a-problem-2cpf",
       "engineeringRigor": [
         {
-          "value": "200+",
+          "value": "270+",
           "label": "tests passing"
         },
         {
@@ -720,7 +720,7 @@
         "Cybersecurity"
       ],
       "tagline": "Statically inventories every cryptographic asset in a codebase, grades each for quantum and classical weakness, and emits a prioritized migration roadmap to the NIST post-quantum standards.",
-      "metric": "9 Languages · 153 Tests · 0 Runtime Deps",
+      "metric": "12 Languages · 171 Tests · 0 Runtime Deps",
       "tags": [
         "Post-Quantum",
         "CBOM",
@@ -741,11 +741,11 @@
       "keyMetrics": [
         {
           "name": "Languages / detectors",
-          "value": "9"
+          "value": "12"
         },
         {
           "name": "Automated tests",
-          "value": "153"
+          "value": "171"
         },
         {
           "name": "Runtime dependencies",
@@ -765,9 +765,9 @@
         }
       ],
       "approach": {
-        "description": "Lattice runs a family of language-aware detectors over a source tree, builds a CBOM of every cryptographic asset it can find, and grades each asset twice — once for quantum status and once for classical status — combining the two into a single migration priority with a one-line justification. It is built for the whole lifecycle of a migration, not just a one-shot scan.",
+        "description": "Lattice runs a family of language-aware detectors over a source tree, builds a CBOM of every cryptographic asset it can find, and grades each asset twice — once for quantum status and once for classical status — combining the two into a single migration priority with a one-line justification. It is built for the whole lifecycle of a migration, not just a one-shot scan. (v0.3.0 adds three more language detectors, machine-readable diff JSON, an in-repo [scan] config block in lattice.toml, and additional compliance policy packs.)",
         "steps": [
-          "Detect crypto across nine surfaces: Python (AST-based), Java/Kotlin (JCA), JS/TS (node:crypto, WebCrypto), Go (import map), C/C++ (OpenSSL/mbedTLS/libsodium), Rust (RustCrypto/openssl/ring), C#/.NET, config & key material (PEM/certs/keystores/TLS), and dependency manifests.",
+          "Detect crypto across twelve surfaces: Python (AST-based), Java/Kotlin (JCA), JS/TS (node:crypto, WebCrypto), Go (import map), C/C++ (OpenSSL/mbedTLS/libsodium), Rust (RustCrypto/openssl/ring), C#/.NET, Ruby, PHP, Swift, config & key material (PEM/certs/keystores/TLS), and dependency manifests.",
           "Grade each asset for quantum status (Shor-broken / Grover-weakened / safe) and classical status (broken / deprecated / secure) from a reviewed knowledge base.",
           "Combine the two grades into a P0–P3 priority, raising quantum-broken key establishment to P0 whenever harvest-now-decrypt-later exposure applies.",
           "Emit CBOM JSON for compliance tooling, a self-contained offline HTML report for humans, and SARIF for code-scanning UIs; gate merges with --fail-on P0.",
@@ -897,7 +897,7 @@
         },
         {
           "approach": "Lattice",
-          "strength": "Offline, zero-dep, 9-language CBOM with two-axis quantum/classical grading + migration lifecycle",
+          "strength": "Offline, zero-dep, 12-language CBOM with two-axis quantum/classical grading + migration lifecycle",
           "weakness": "Static analysis misses dynamically selected algorithms; regex detectors carry documented false positives"
         }
       ],
@@ -985,7 +985,7 @@
           },
           {
             "cap": "Languages",
-            "lattice": "9 + configs/PEM/X.509 + 6 manifest formats",
+            "lattice": "12 + configs/PEM/X.509 + 6 manifest formats",
             "cbomkit": "Java & Python source; container FS",
             "semgrep": "Many (rule-dependent depth)",
             "tls": "None (protocol only)"
@@ -1020,7 +1020,7 @@
       },
       "engineeringRigor": [
         {
-          "value": "153",
+          "value": "171",
           "label": "tests"
         },
         {
@@ -1028,7 +1028,7 @@
           "label": "runtime deps"
         },
         {
-          "value": "9",
+          "value": "12",
           "label": "languages"
         },
         {
@@ -1340,7 +1340,7 @@
       },
       "engineeringRigor": [
         {
-          "value": "116",
+          "value": "130",
           "label": "tests"
         },
         {
@@ -1369,7 +1369,7 @@
         "Cybersecurity"
       ],
       "tagline": "Catches the supply-chain attacks that have no CVE — typosquatting, dependency confusion, install-time malware, and lockfile tampering — across npm, PyPI, Go, and Cargo, fully offline.",
-      "metric": "4 Ecosystems · 118 Tests · 0 False Positives",
+      "metric": "4 Ecosystems · 133 Tests · 0 False Positives",
       "tags": [
         "Typosquatting",
         "Dependency Confusion",
@@ -1394,7 +1394,7 @@
         },
         {
           "name": "Automated tests",
-          "value": "118 passing"
+          "value": "133 passing"
         },
         {
           "name": "Runtime dependencies",
@@ -1659,7 +1659,7 @@
       },
       "engineeringRigor": [
         {
-          "value": "118",
+          "value": "133",
           "label": "tests"
         },
         {
@@ -1702,7 +1702,7 @@
         "Detection Engineering"
       ],
       "description": "SOC analysts routinely translate natural-language detection requirements — a line in an SOP, a sentence in a threat-intel report, an analyst's shorthand — into executable Kusto Query Language (KQL) rules for Microsoft Sentinel. Direct LLM generation of KQL is unreliable: it produces invalid syntax, hallucinated field names, and logically incorrect filters at rates too high for unsupervised SOC use. This project tests a specific hypothesis — that inserting an explicit, schema-validated Intermediate Representation (IR) between the natural language and the KQL reduces hallucination compared to direct generation — and measures how much, where, and why, on a purpose-built dataset derived from Microsoft's public Azure/Azure-Sentinel repository.",
-      "overview": "The idea is borrowed from compiler design: source code isn't translated straight to machine code — it passes through an IR, a structured, language-agnostic form that captures logic independently of source syntax and target instructions, and makes validation tractable. Instead of asking an LLM to go straight from 'detect credential stuffing' to raw KQL, the system first produces a typed, schema-checkable JSON object — the Security IR — describing the detection logic, validates it against the ASIM schema, and only then deterministically compiles it into KQL via templates. The bet: separate 'does the model understand the threat' from 'does the model remember KQL syntax', and solve the second with deterministic code rather than free-form generation.",
+      "overview": "The idea is borrowed from compiler design: source code isn't translated straight to machine code — it passes through an IR, a structured, language-agnostic form that captures logic independently of source syntax and target instructions, and makes validation tractable. Instead of asking an LLM to go straight from 'detect credential stuffing' to raw KQL, the system first produces a typed, schema-checkable JSON object — the Security IR — describing the detection logic, validates it against the ASIM schema, and only then deterministically compiles it into KQL via templates. The bet: separate 'does the model understand the threat' from 'does the model remember KQL syntax', and solve the second with deterministic code rather than free-form generation. A newer capability scans each request for ambiguity and, rather than guess, asks a targeted clarifying question or abstains — so an underspecified prompt yields a question, not a confidently wrong rule.",
       "problem": "Given a natural-language description of a detection requirement and the ASIM/Sentinel schema as ground truth, generate a KQL query that is syntactically valid, uses only fields that exist in the schema, and correctly implements the described logic — while requiring less correction effort than direct single-prompt LLM generation. KQL generation fails along at least three independent dimensions this project measures separately: syntax invalidity, field hallucination (referencing SourceIP when the ASIM field is SrcIpAddr), and table hallucination — plus missing temporal logic and semantic/logic errors.",
       "motivation": [
         "General-purpose assistants hallucinate KQL field and table names confidently, and in a SOC a rule that references a non-existent field silently fails to fire — a false sense of coverage that is worse than no rule at all.",
@@ -2026,8 +2026,8 @@
       "categories": [
         "Cybersecurity"
       ],
-      "tagline": "14 CLI-driven security assessment tools across AppSec, IAM, Cloud, and Detection Engineering",
-      "metric": "14 Tools · 4 Domains",
+      "tagline": "27 CLI-driven security assessment tools across AppSec, IAM, Cloud, Cryptography, and Detection Engineering",
+      "metric": "27 Tools · 5 Domains",
       "tags": [
         "AppSec",
         "Blue Team",
@@ -2038,7 +2038,7 @@
         "Detection Engineering",
         "MITRE ATT&CK"
       ],
-      "description": "A comprehensive, engineering-focused security toolkit demonstrating both offensive awareness and defensive maturity. 14 standalone CLI tools covering web security, identity and access, cloud misconfiguration, and detection engineering — each designed for CI pipelines, security audits, and interview demonstrations.",
+      "description": "A comprehensive, engineering-focused security toolkit demonstrating both offensive awareness and defensive maturity. 27 standalone, zero-dependency CLI tools covering web security, identity and access, cloud & infrastructure, cryptography, and detection engineering — each designed for CI pipelines, security audits, and interview demonstrations.",
       "githubUrl": "https://github.com/mk12002/Security-tools",
       "liveUrl": "",
       "status": "active",
