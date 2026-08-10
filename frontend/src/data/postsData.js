@@ -6,6 +6,20 @@
 
 export const posts = [
   {
+    slug: 'ai-agent-excessive-agency',
+    title: 'Your AI Agent Has Too Much Power: Auditing Excessive Agency',
+    excerpt:
+      "An AI agent assembled from individually reasonable permissions can still end up able to read every secret and reach the open internet in the same breath. Why excessive agency is a graph problem, not a checklist, and how to audit an agent — its tools, scopes, and toxic combinations — down to least privilege before it ships.",
+    category: 'AI Security',
+    date: '2026-08-10',
+    readTime: '8 min read',
+    tags: ['AI', 'Security', 'LLM', 'Agents'],
+    cover: '/posts/ai-agent-excessive-agency.png',
+    url: 'https://dev.to/mohit_kumar1/your-ai-agent-has-too-much-power-auditing-excessive-agency-24ih',
+    source: 'dev.to · originally on Hashnode',
+    relatedProject: { slug: 'bulwark', title: 'Bulwark (Warden)' },
+  },
+  {
     slug: 'ml-model-pickle-rce',
     title: 'How an ML Model Runs Code on Your Machine (Pickle RCE)',
     excerpt:
@@ -30,7 +44,7 @@ export const posts = [
     tags: ['ML Evaluation', 'Benchmarking', 'Testing', 'Security'],
     cover: '/posts/benchmark-inflating-score.png',
     url: 'https://dev.to/mohit_kumar1/the-benchmark-that-kept-inflating-its-own-score-200p',
-    source: 'dev.to',
+    source: 'dev.to · originally on Hashnode',
     relatedProject: { slug: 'ir-siem-kql', title: 'Schema-Grounded NL→KQL' },
   },
   {
