@@ -8,6 +8,7 @@
     "sync-content": "node scripts/sync-content.mjs",
     "prebuild": "node scripts/sync-content.mjs",
     "build": "vite build",
+    "postbuild": "node scripts/prerender.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
