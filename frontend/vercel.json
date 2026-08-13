@@ -2,18 +2,23 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/projects/study-os",
-      "destination": "/projects/study-os/index.html"
-    },
-    {
-      "source": "/projects/study-os/(.*)",
-      "destination": "/projects/study-os/$1"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/index.html"
-    }
+    { "source": "/projects/study-os", "destination": "/projects/study-os/index.html" },
+    { "source": "/projects/study-os/(.*)", "destination": "/projects/study-os/$1" },
+    { "source": "/projects", "destination": "/projects/index.html" },
+    { "source": "/projects/:slug", "destination": "/projects/:slug/index.html" },
+    { "source": "/posts", "destination": "/posts/index.html" },
+    { "source": "/experiences", "destination": "/experiences/index.html" },
+    { "source": "/publications", "destination": "/publications/index.html" },
+    { "source": "/resume", "destination": "/resume/index.html" },
+    { "source": "/certificates", "destination": "/certificates/index.html" },
+    { "source": "/events", "destination": "/events/index.html" },
+    { "source": "/reads", "destination": "/reads/index.html" },
+    { "source": "/uses", "destination": "/uses/index.html" },
+    { "source": "/contact", "destination": "/contact/index.html" },
+    { "source": "/playground", "destination": "/playground/index.html" },
+    { "source": "/ctf", "destination": "/ctf/index.html" },
+    { "source": "/support", "destination": "/support/index.html" },
+    { "source": "/(.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
