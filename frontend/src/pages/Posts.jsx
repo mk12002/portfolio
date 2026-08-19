@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaArrowRight, FaClock, FaCalendar, FaLink, FaTrophy, FaGlobe } from 'react-icons/fa'
+import { FaArrowRight, FaClock, FaCalendar, FaLink, FaTrophy, FaGlobe, FaDev } from 'react-icons/fa'
+import { SiHashnode } from 'react-icons/si'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
 import { posts as localPosts, postCategories } from '../data/postsData'
@@ -44,9 +45,27 @@ export default function Posts() {
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Blog & <span className="gradient-text">Insights</span>
             </h1>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Deep dives into ML systems, hybrid AI, and real-world implementations
+            <p className="text-gray-400 max-w-2xl mx-auto mb-5">
+              Writing on AI security, ML supply chains, agent guardrails, detection engineering, and honest benchmarking.
             </p>
+            <div className="flex items-center justify-center gap-3">
+              <a
+                href="https://dev.to/mohit_kumar1"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:border-vision/40 transition-colors"
+              >
+                <FaDev size={18} /> Follow on Dev.to
+              </a>
+              <a
+                href="https://hashnode.com/@mkd"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:border-vision/40 transition-colors"
+              >
+                <SiHashnode size={15} /> Follow on Hashnode
+              </a>
+            </div>
           </motion.div>
 
           {/* Category Filter */}

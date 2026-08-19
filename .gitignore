@@ -65,3 +65,5 @@ PROJECT_DETAILS.md
 frontend/shots/
 
 mk12002-main/
+# Claude Code (local settings, memory, scratch)
+.claude/

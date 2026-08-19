@@ -6,6 +6,20 @@
 
 export const posts = [
   {
+    slug: 'ai-bill-of-materials',
+    title: "You Can't Govern What You Can't See: Building an AI Bill of Materials",
+    excerpt:
+      "You can't govern an AI system you can't inventory — the models, datasets, prompts, MCP servers, tools, and dependencies it's assembled from. How an AI Bill of Materials (AI-BOM) makes that whole supply chain visible in a standards-based CycloneDX/SPDX inventory, with risk folded in and mapped to NIST AI RMF and the EU AI Act.",
+    category: 'AI Security',
+    date: '2026-08-19',
+    readTime: '8 min read',
+    tags: ['AI', 'Security', 'AI-BOM', 'DevOps'],
+    cover: '/posts/ai-bill-of-materials.png',
+    url: 'https://dev.to/mohit_kumar1/you-cant-govern-what-you-cant-see-building-an-ai-bill-of-materials-1e3a',
+    source: 'dev.to',
+    relatedProject: { slug: 'bulwark', title: 'Bulwark (Manifest)' },
+  },
+  {
     slug: 'ai-agent-excessive-agency',
     title: 'Your AI Agent Has Too Much Power: Auditing Excessive Agency',
     excerpt:

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { toast } from 'react-toastify'
-import { FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaGithub, FaLinkedin, FaInstagram, FaTwitter } from 'react-icons/fa'
+import { FaPaperPlane, FaEnvelope, FaMapMarkerAlt, FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaDev } from 'react-icons/fa'
+import { SiHashnode } from 'react-icons/si'
 import GlowCard from '../components/GlowCard'
-import { useContactInfo, submitContactForm } from '../hooks/useApi'
+import { useContactInfo } from '../hooks/useApi'
 
 export default function Contact() {
   const { data: contactInfo } = useContactInfo()
@@ -14,12 +15,43 @@ export default function Contact() {
     e.preventDefault()
     setLoading(true)
 
+    const to = contactInfo?.email || 'mohit.kr1103@gmail.com'
+    // Optional serverless email service (no Java backend needed). If set, the
+    // message is delivered silently; otherwise we open the visitor's mail app.
+    const key = import.meta.env.VITE_WEB3FORMS_KEY
+
+    const openMailto = () => {
+      const subject = encodeURIComponent(`Portfolio message from ${formData.name || 'a visitor'}`)
+      const body = encodeURIComponent(`${formData.message}\n\n— ${formData.name}${formData.email ? ` (${formData.email})` : ''}`)
+      window.location.href = `mailto:${to}?subject=${subject}&body=${body}`
+    }
+
     try {
-      await submitContactForm(formData)
-      toast.success(contactInfo?.successMessage || 'Message sent successfully!')
-      setFormData({ name: '', email: '', message: '' })
+      if (key) {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: key,
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            subject: `Portfolio message from ${formData.name}`,
+            from_name: 'Portfolio Contact Form',
+          }),
+        })
+        const data = await res.json()
+        if (!data.success) throw new Error(data.message || 'submit failed')
+        toast.success(contactInfo?.successMessage || "Message sent — I'll get back to you soon!")
+        setFormData({ name: '', email: '', message: '' })
+      } else {
+        openMailto()
+        toast.info('Opening your email app with the message ready to send…')
+      }
     } catch (error) {
-      toast.error('Failed to send message. Please try again.')
+      // Guaranteed fallback — never a dead end: open the visitor's mail client.
+      openMailto()
+      toast.info('Opening your email app with the message ready to send…')
     } finally {
       setLoading(false)
     }
@@ -165,6 +197,24 @@ export default function Contact() {
                 >
                   <FaTwitter size={20} />
                 </motion.a>
+                <a
+                  href="https://dev.to/mohit_kumar1"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Dev.to"
+                  className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all"
+                >
+                  <FaDev size={24} />
+                </a>
+                <a
+                  href="https://hashnode.com/@mkd"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Hashnode"
+                  className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-vision hover:bg-white/10 transition-all"
+                >
+                  <SiHashnode size={22} />
+                </a>
                 <a
                   href="https://www.instagram.com/mohit__kr_/"
                   target="_blank"
