@@ -1,12 +1,13 @@
 import { lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaEnvelope, FaDownload, FaArrowRight, FaUser, FaShieldAlt, FaLock, FaBrain, FaRobot, FaEye, FaNetworkWired, FaProjectDiagram, FaSearch, FaTerminal, FaBug, FaServer } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaEnvelope, FaDownload, FaArrowRight, FaUser, FaShieldAlt, FaLock, FaBrain, FaRobot, FaEye, FaNetworkWired, FaProjectDiagram, FaSearch, FaTerminal, FaBug, FaServer, FaClock, FaNewspaper } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import TerminalHero from '../components/TerminalHero'
 import StatsCounter from '../components/StatsCounter'
 import SEO from '../components/SEO'
 import { useProfile } from '../hooks/useApi'
+import { posts } from '../data/postsData'
 
 // Lazy load the single heavy Three.js component
 const NodeGraph = lazy(() => import('../components/NodeGraph'))
@@ -150,13 +151,30 @@ function ProfilePicture({ profilePicture }) {
   )
 }
 
+function relativeDate(dateStr) {
+  const now = new Date()
+  const d = new Date(dateStr)
+  const diffMs = now - d
+  const diffDays = Math.floor(diffMs / 86400000)
+  if (diffDays === 0) return 'Today'
+  if (diffDays === 1) return 'Yesterday'
+  if (diffDays < 7) return `${diffDays} days ago`
+  if (diffDays < 14) return '1 week ago'
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`
+  if (diffDays < 60) return '1 month ago'
+  return `${Math.floor(diffDays / 30)} months ago`
+}
+
+const categoryColors = {
+  'AI Security': 'text-vision border-vision/30 bg-vision/10',
+  'Security': 'text-reasoning border-reasoning/30 bg-reasoning/10',
+  'Multi-Agent Systems': 'text-audio border-audio/30 bg-audio/10',
+  'AI Research': 'text-accent border-accent/30 bg-accent/10',
+  'Social Impact': 'text-green-400 border-green-400/30 bg-green-400/10',
+}
+
 function AboutMe({ profile }) {
-  const focusAreas = [
-    { icon: FaShieldAlt, title: 'VAPT & Pen Testing', detail: 'Burp Suite, Nmap, sqlmap, Nessus' },
-    { icon: FaServer, title: 'SOC Operations', detail: 'Splunk, Sentinel, Defender EDR/XDR' },
-    { icon: FaRobot, title: 'AI-Powered Defense', detail: 'Multi-Agent threat neutralization' },
-    { icon: FaBug, title: 'Adversarial ML', detail: 'Model hardening & robustness testing' },
-  ]
+  const latestPosts = posts.slice(0, 4)
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -185,13 +203,6 @@ function AboutMe({ profile }) {
           </p>
 
           <div className="p-5 bg-white/5 rounded-xl border border-white/10">
-            <h3 className="text-sm font-semibold uppercase tracking-wider text-vision mb-3">Current Focus</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">
-              As a full-time Security Engineer at ITC Infotech, working across AI for Security and Security for AI — building and maintaining an open-source security tooling suite spanning the software supply chain, running VAPT and SOC detection engineering (Splunk, Microsoft Sentinel), and supporting GRC (J-SOX, MICS) control audits. My internship built a production multi-agentic email threat-neutralization system. In parallel, actively building and maintaining an open-source security tooling suite — offline, defensive scanners that span the modern software supply chain.
-            </p>
-          </div>
-
-          <div className="p-5 bg-white/5 rounded-xl border border-white/10">
             <h3 className="text-sm font-semibold uppercase tracking-wider text-reasoning mb-3">My Approach</h3>
             <p className="text-gray-400 text-sm leading-relaxed">
               I believe the future of security is AI-native — and the future of AI must be secure. My ML background (PyTorch, Transformers, GNN) gives me a unique edge in building intelligent security systems that think like attackers and defend like experts.
@@ -199,32 +210,70 @@ function AboutMe({ profile }) {
           </div>
         </motion.div>
 
-        {/* Focus Areas — 2 cols */}
+        {/* Latest Updates — 2 cols */}
         <motion.div
-          className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4"
+          className="lg:col-span-2"
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
-          {focusAreas.map((area, i) => (
-            <motion.div
-              key={area.title}
-              className="group p-4 bg-secondary/50 rounded-xl border border-white/5 hover:border-vision/30 transition-all duration-300"
-              whileHover={{ scale: 1.02, y: -2 }}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                <div className="w-10 h-10 rounded-lg bg-vision/10 flex items-center justify-center group-hover:bg-vision/20 transition-colors">
-                  <area.icon className="text-vision text-lg" />
-                </div>
-                <h4 className="font-semibold text-sm text-white">{area.title}</h4>
-              </div>
-              <p className="text-gray-500 text-xs pl-13">{area.detail}</p>
-            </motion.div>
-          ))}
+          <div className="rounded-xl border border-white/10 bg-white/[0.02] overflow-hidden">
+            <div className="flex items-center gap-2 px-5 py-3.5 border-b border-white/10 bg-white/[0.03]">
+              <FaNewspaper className="text-vision text-sm" />
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-200">Latest Updates</h3>
+            </div>
+            <div className="divide-y divide-white/5">
+              {latestPosts.map((post, i) => {
+                const href = post.url || `/posts/${post.slug}`
+                const isExternal = !!post.url
+                const isNewest = i === 0
+                const catColor = categoryColors[post.category] || 'text-gray-400 border-white/10 bg-white/5'
+                return (
+                  <motion.div
+                    key={post.slug}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08 }}
+                  >
+                    <a
+                      href={href}
+                      target={isExternal ? '_blank' : undefined}
+                      rel={isExternal ? 'noopener noreferrer' : undefined}
+                      className="group flex gap-3 px-5 py-4 hover:bg-white/[0.04] transition-colors"
+                    >
+                      {/* Timeline dot */}
+                      <div className="flex flex-col items-center pt-1.5 flex-shrink-0">
+                        <span className={`block w-2.5 h-2.5 rounded-full ${isNewest ? 'bg-vision shadow-[0_0_8px_rgba(var(--color-vision-rgb,74,222,128),0.5)]' : 'bg-white/20'}`} />
+                        {i < latestPosts.length - 1 && (
+                          <span className="block w-px flex-1 bg-white/10 mt-1.5" />
+                        )}
+                      </div>
+                      {/* Content */}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          <FaClock className="text-gray-600 text-[10px] flex-shrink-0" />
+                          <span className="text-xs text-gray-500">{relativeDate(post.date)}</span>
+                        </div>
+                        <p className="text-sm text-gray-200 font-medium leading-snug group-hover:text-white transition-colors line-clamp-2">
+                          {post.title}
+                        </p>
+                        <span className={`inline-block mt-2 px-2 py-0.5 text-[10px] font-medium rounded-full border ${catColor}`}>
+                          {post.category}
+                        </span>
+                      </div>
+                      <FaArrowRight className="text-gray-700 group-hover:text-vision text-xs mt-2 flex-shrink-0 transition-colors" />
+                    </a>
+                  </motion.div>
+                )
+              })}
+            </div>
+            <div className="px-5 py-3 border-t border-white/10 bg-white/[0.02]">
+              <Link to="/posts" className="text-xs text-gray-500 hover:text-vision transition-colors flex items-center gap-1.5">
+                View all posts <FaArrowRight className="text-[10px]" />
+              </Link>
+            </div>
+          </div>
         </motion.div>
       </div>
     </section>

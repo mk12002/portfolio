@@ -6,6 +6,32 @@
 
 export const posts = [
   {
+    slug: 'agentic-browsers-same-origin-policy',
+    title: "Agentic Browsers Deleted the Same-Origin Policy. The Industry Can't Agree That's a Bug.",
+    excerpt:
+      "Agentic browsers removed the same-origin policy — on purpose, as a feature. Why the PleaseFix vulnerability class demonstrated at Black Hat USA 2026 isn't an AI problem but a web security problem, and what it means when the load-bearing wall of the browser security model is deleted by design.",
+    category: 'AI Security',
+    date: '2026-08-31',
+    readTime: '5 min read',
+    tags: ['AI', 'Security', 'WebDev', 'Browser'],
+    cover: 'https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2F9a5j6cglw1lbme9jezky.png',
+    url: 'https://dev.to/mohit_kumar1/agentic-browsers-deleted-the-same-origin-policy-the-industry-cant-agree-thats-a-bug-20g2',
+    source: 'dev.to · originally on Hashnode',
+  },
+  {
+    slug: 'owasp-llm-top-10-2026-blast-radius',
+    title: "The OWASP LLM Top 10 2026 Is Not a Vulnerability List. It's a Blast Radius Document",
+    excerpt:
+      "The 2026 OWASP Top 10 for LLM Applications didn't just reorder — it changed its own thesis. Stop trying to build a model that cannot be fooled; build the system so that when the model is fooled, nothing important breaks. Why this quietly invalidates half the AI security tooling being sold right now.",
+    category: 'AI Security',
+    date: '2026-08-24',
+    readTime: '5 min read',
+    tags: ['AI', 'Security', 'LLM', 'Architecture'],
+    cover: 'https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2Fa9ub0pqbol0qd4arkb7c.png',
+    url: 'https://dev.to/mohit_kumar1/the-owasp-llm-top-10-2026-is-not-a-vulnerability-list-its-a-blast-radius-document-1j6o',
+    source: 'dev.to · originally on Hashnode',
+  },
+  {
     slug: 'ai-bill-of-materials',
     title: "You Can't Govern What You Can't See: Building an AI Bill of Materials",
     excerpt:
