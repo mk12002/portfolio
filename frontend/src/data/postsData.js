@@ -14,7 +14,7 @@ export const posts = [
     date: '2026-08-31',
     readTime: '5 min read',
     tags: ['AI', 'Security', 'WebDev', 'Browser'],
-    cover: 'https://media2.dev.to/dynamic/image/width=1200,height=627,fit=cover,gravity=auto,format=auto/https%3A%2F%2Fdev-to-uploads.s3.us-east-2.amazonaws.com%2Fuploads%2Farticles%2F9a5j6cglw1lbme9jezky.png',
+    cover: '/posts/agentic-browsers-same-origin-policy.png',
     url: 'https://dev.to/mohit_kumar1/agentic-browsers-deleted-the-same-origin-policy-the-industry-cant-agree-thats-a-bug-20g2',
     source: 'dev.to · originally on Hashnode',
   },
