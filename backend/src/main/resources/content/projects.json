@@ -8,7 +8,7 @@
         "Cybersecurity"
       ],
       "tagline": "Reads your Kubernetes manifests and tells you who can become cluster-admin, and how — treating privilege escalation as the graph problem it actually is.",
-      "metric": "9 Charts · 47 Escalation Paths · 530+ Tests",
+      "metric": "9 Charts · 47 Escalation Paths · 590+ Tests",
       "tags": [
         "Kubernetes",
         "RBAC",
@@ -19,7 +19,7 @@
         "Graph Analysis",
         "Offline"
       ],
-      "description": "Bastion is an offline Kubernetes RBAC and pod-security attack-path analyzer. It reads a manifest directory, `helm template` output, or a `kubectl get -o yaml` export — never a kubeconfig, never an API server, no network at scan time — and answers the question nobody's linter can: which identity can reach cluster-admin, and through what chain? Escalation in Kubernetes is a graph problem, not a checklist, so Bastion builds the privilege graph and reports the connected path instead of a pile of disconnected warnings.",
+      "description": "Bastion is an offline Kubernetes RBAC and pod-security attack-path analyzer. It reads a manifest directory, `helm template` output, or a `kubectl get -o yaml` export — never a kubeconfig, never an API server, no network at scan time — and answers the question nobody's linter can: which identity can reach cluster-admin, and through what chain? Escalation in Kubernetes is a graph problem, not a checklist, so Bastion builds the privilege graph and reports the connected path instead of a pile of disconnected warnings. Packaged as production-ready open-source software (PyPI-ready src-layout, MkDocs docs site, CodeQL CI, citable via CITATION.cff), and every escalation finding now ships a least-privilege remediation suggestion — a narrowed-rule YAML snippet synthesised from the offending rule.",
       "overview": "`create pods` in a namespace is not 'can start a pod' — it is 'can become any ServiceAccount in that namespace', because a pod spec names the account it runs as. Chain a few individually-defensible grants (CI runs test pods, on-call execs into pods, a controller provisions RBAC) and you have a route from a build token to the whole cluster that no per-resource linter will ever flag. Bastion finds those routes with a deterministic breadth-first search over the privilege graph, explains each hop in prose, cites a file and a line for every edge, tells you which rule to delete, and marks its own confidence when an escalation depends on an assumption it can't verify statically.",
       "problem": "Kubernetes RBAC grants compose in ways nobody reviews for, and the highest-impact misconfigurations are invisible one resource at a time. A tool that examines a single Role can't see that the ServiceAccount a pod runs as is two hops from every Secret in the cluster. The result is that teams ship escalation paths — a CI token that can reach cluster-admin — while their linters report four hundred pod-hygiene findings and zero about RBAC.",
       "motivation": [
@@ -46,7 +46,7 @@
         },
         {
           "name": "Automated tests",
-          "value": "530+"
+          "value": "590+"
         },
         {
           "name": "Runtime dependencies",
@@ -317,13 +317,14 @@
         "Conjunctions (escalations needing two permissions at once) are approximated as a single edge whose confidence reflects whether both preconditions were found; a hypergraph would model them exactly. A clean scan is evidence, not proof."
       ],
       "roadmap": [
+        "Research manuscript in preparation: “Bastion: Offline Attack-Path Analysis of Kubernetes RBAC and Pod Security” — targeting arXiv (cs.CR / cs.SE).",
         "Deeper container-escape taxonomy, informed by KubeHound's edge types.",
         "Optional least-privilege Role suggestions (not just 'which rule to delete').",
         "Broader admission-policy awareness for enforced-but-external webhooks."
       ],
       "engineeringRigor": [
         {
-          "value": "530+",
+          "value": "590+",
           "label": "tests"
         },
         {
@@ -386,7 +387,8 @@
       "githubUrl": "https://github.com/mk12002/Bastion",
       "liveUrl": "",
       "status": "active",
-      "type": "security-scanner"
+      "type": "security-scanner",
+      "caseStudyUrl": "/case-study"
     },
     {
       "slug": "bulwark",
@@ -397,7 +399,7 @@
         "AI/ML"
       ],
       "tagline": "Three composable scanners that audit the entire AI-agent supply chain — the parts, the assembly, and the governable whole.",
-      "metric": "3 Tools · 270+ Tests · 14/14 Adversarial",
+      "metric": "3 Tools · 320 Tests · 14/14 Adversarial",
       "tags": [
         "AI Supply Chain",
         "CycloneDX AI-BOM",
@@ -408,7 +410,7 @@
         "MITRE ATLAS",
         "SARIF"
       ],
-      "description": "Bulwark is a defensive security suite for agentic AI systems. A modern AI agent is assembled from third-party parts nobody wrote and can't see inside — a model off the Hub, an MCP server from a gist, a pile of tools wired into an autonomous loop, an unaudited requirements.txt. Each is a trust boundary, and a system built entirely from individually benign parts can still be dangerous because of how they're wired together. Bulwark answers the three questions that actually matter, with three tools that share one engine, one finding taxonomy, and one report format.",
+      "description": "Bulwark is a defensive security suite for agentic AI systems. A modern AI agent is assembled from third-party parts nobody wrote and can't see inside — a model off the Hub, an MCP server from a gist, a pile of tools wired into an autonomous loop, an unaudited requirements.txt. Each is a trust boundary, and a system built entirely from individually benign parts can still be dangerous because of how they're wired together. Bulwark answers the three questions that actually matter, with three tools that share one engine, one finding taxonomy, and one report format. Packaged for PyPI under the bulwark-* namespace (bulwark-airlock / bulwark-warden / bulwark-manifest / bulwark-suite), with a MkDocs docs site, CodeQL CI, and a CITATION.cff for citable releases.",
       "overview": "The suite is three composable scanners. Airlock scans the parts — is this model / MCP server / tool-spec itself malicious or unsafe? Warden scans the assembly — given how the agent is wired, does it have more power than its job needs? Manifest inventories the whole system — what is my AI made of, and is it governable? They compose literally: `bulwark scan ./project --scan-risk --govern` builds a CycloneDX AI-BOM of a project, calls Airlock on each model/MCP component and Warden on each agent assembly, and folds their findings inline into one governance report mapped to NIST AI RMF and the EU AI Act. Every tool is deterministic-first (fully useful with zero AI), CI-friendly (--fail-on exit codes + SARIF for GitHub code scanning), and defensive-only — it detects and reports, and never executes or imports the artifacts it scans.",
       "problem": "AI agents are now assembled from untrusted third-party components — pickled model weights that can execute arbitrary code on load, MCP servers whose tool descriptions can carry hidden prompt-injection, and autonomous tool loops that quietly acquire the ability to read secrets and reach the open internet in the same breath. Existing scanners look at one artifact type in isolation (a pickle scanner here, an SBOM tool there) and none of them reason about the assembled whole. The result is that the most dangerous property of an agent — emergent excessive agency from wiring benign parts together — is exactly the property nobody measures.",
       "motivation": [
@@ -435,7 +437,7 @@
         },
         {
           "name": "Automated tests across 5 packages",
-          "value": "270+ passing"
+          "value": "320 passing"
         },
         {
           "name": "Detection rules (Airlock M1–M7/P1–P9, Warden A1–A10, Manifest B1–B9)",
@@ -613,6 +615,7 @@
         "The corpus study (19 models) is a snapshot of hygiene, not an exhaustive census of the Hub."
       ],
       "roadmap": [
+        "Research manuscript in preparation: “Compositional Risk in AI Agent Supply Chains.”",
         "PyPI publishing for all packages.",
         "A larger cross-tool corpus study of AI-supply-chain hygiene.",
         "A hosted BOM dashboard for tracking AI-BOM drift across releases."
@@ -681,7 +684,7 @@
       "writeupUrl": "https://dev.to/mohit_kumar1/your-ai-assistant-downloads-code-from-strangers-heres-why-thats-a-problem-2cpf",
       "engineeringRigor": [
         {
-          "value": "270+",
+          "value": "320",
           "label": "tests passing"
         },
         {
@@ -730,7 +733,7 @@
         "SARIF",
         "Static Analysis"
       ],
-      "description": "Lattice is a crypto-agility and post-quantum-readiness scanner. It statically analyzes a codebase, produces a Cryptographic Bill of Materials (CBOM), grades every cryptographic usage for both quantum vulnerability and classical weakness, and emits a prioritized migration roadmap toward the NIST post-quantum standards. It is defensive and fully offline: it reads files locally, writes reports locally, makes no network calls, never attempts to break cryptography, and never writes key material into a report.",
+      "description": "Lattice is a crypto-agility and post-quantum-readiness scanner. It statically analyzes a codebase, produces a Cryptographic Bill of Materials (CBOM), grades every cryptographic usage for both quantum vulnerability and classical weakness, and emits a prioritized migration roadmap toward the NIST post-quantum standards. It is defensive and fully offline: it reads files locally, writes reports locally, makes no network calls, never attempts to break cryptography, and never writes key material into a report. Released as an installable product (v0.4.0, src-layout) with a MkDocs docs site, a reproducible benchmarks harness, CodeQL CI, and a citable Zenodo DOI (CITATION.cff).",
       "overview": "The post-quantum threat in three sentences: adversaries can record encrypted traffic today and decrypt it once a cryptographically relevant quantum computer exists — 'harvest now, decrypt later'. Shor's algorithm breaks RSA, Diffie-Hellman, and all elliptic-curve cryptography outright, while Grover's algorithm halves the effective strength of symmetric keys and hashes. NIST has standardized the replacements — ML-KEM (FIPS 203) for key establishment and ML-DSA (FIPS 204) / SLH-DSA (FIPS 205) for signatures — and migrating to them starts with knowing what cryptography you actually have. Lattice builds that inventory, grades it, and turns it into an actionable, CI-gate-able roadmap.",
       "problem": "Most organizations cannot answer a simple question: where is our vulnerable cryptography? RSA and ECC are woven through TLS configs, signing code, certificates, and dependency trees, and there is no single place that lists them. Without an inventory, a post-quantum migration is impossible to plan and impossible to prioritize — and every day of delay extends the window in which today's captured ciphertext can be decrypted later.",
       "motivation": [
@@ -927,6 +930,7 @@
         "Key sizes are often undeterminable and are reported conservatively (bare AES treated as <256-bit, with a note explaining why)."
       ],
       "roadmap": [
+        "Tool paper in preparation: “Lattice: A Zero-Dependency, Prioritized Cryptographic Bill of Materials Generator for Multi-Language Codebases” — plus a citable Zenodo DOI release.",
         "Broaden dynamic-usage detection where AST information is available.",
         "Additional compliance policy packs beyond CNSA 2.0.",
         "Expanded key-material and certificate-chain analysis."
@@ -1065,7 +1069,7 @@
         "SARIF",
         "Supply Chain"
       ],
-      "description": "CI/CD pipelines hold repository secrets, carry write-capable tokens, and routinely execute code from untrusted pull requests. One misconfiguration — a pull_request_target job that checks out PR code, a PR title interpolated into a shell line, a third-party action on a mutable tag — turns that combination into full repository compromise. Portcullis detects those misconfigurations statically and, unlike a linter, scores them by context: the same flaw is one severity level more dangerous wherever attacker-controlled input can reach it.",
+      "description": "CI/CD pipelines hold repository secrets, carry write-capable tokens, and routinely execute code from untrusted pull requests. One misconfiguration — a pull_request_target job that checks out PR code, a PR title interpolated into a shell line, a third-party action on a mutable tag — turns that combination into full repository compromise. Portcullis detects those misconfigurations statically and, unlike a linter, scores them by context: the same flaw is one severity level more dangerous wherever attacker-controlled input can reach it. Packaged as a PEP 561-typed, src-layout PyPI distribution with a MkDocs docs site and CodeQL CI — its own SHA-pinned, least-privilege release/CI workflows pass Portcullis's own dogfood scan at 100/100.",
       "overview": "Portcullis normalizes GitHub Actions, GitLab CI, and Jenkins into a single Pipeline model, then runs one set of rules (R1–R6) across all three platforms. Its distinguishing idea is trigger-context escalation: a `curl | bash` step on `push` is P2 hygiene, but the identical step reachable from `pull_request_target` escalates toward P0 because an attacker can now control what runs. Confidence is a first-class property — LOW-confidence findings hard-cap at P3 (surface, don't block), hygiene findings can't corroborate into P0, and Jenkins/Groovy findings are honestly capped at MEDIUM. Output is deterministic JSON, self-contained HTML, SARIF 2.1.0, and PR-comment Markdown, each with a documented 0–100 score.",
       "problem": "The 2026 comparative study of nine pipeline scanners found that no single scanner covers all weakness categories, and most are single-platform (zizmor and actionlint are GitHub-only). Meanwhile the highest-impact CI vulnerabilities are precisely the ones that depend on context — an injection sink is only critical if an untrusted trigger can reach it — and per-rule severities can't express that. Teams running GitLab and Jenkins were left with far less tooling than GitHub users, and the tools they did have produced noise that buried the findings that mattered.",
       "motivation": [
@@ -1255,6 +1259,7 @@
         "High-entropy secret detection has false positives, surfaced at LOW confidence; .gitignore support is a pragmatic subset."
       ],
       "roadmap": [
+        "Research manuscript in preparation: “Portcullis: Trigger-Context Reachability for Multi-Platform CI/CD Pipeline Security Analysis” — targeting an arXiv preprint / software-security workshop.",
         "Deeper reusable-workflow following across repositories.",
         "More platforms behind the same normalized model.",
         "Expanded taint sources for emerging trigger types."
@@ -1340,7 +1345,7 @@
       },
       "engineeringRigor": [
         {
-          "value": "130",
+          "value": "175",
           "label": "tests"
         },
         {
@@ -1358,6 +1363,10 @@
         {
           "value": "deterministic",
           "label": "byte-identical"
+        },
+        {
+          "value": "95%",
+          "label": "coverage"
         }
       ]
     },
@@ -1369,7 +1378,7 @@
         "Cybersecurity"
       ],
       "tagline": "Catches the supply-chain attacks that have no CVE — typosquatting, dependency confusion, install-time malware, and lockfile tampering — across npm, PyPI, Go, and Cargo, fully offline.",
-      "metric": "4 Ecosystems · 133 Tests · 0 False Positives",
+      "metric": "4 Ecosystems · 136 Tests · 0 False Positives",
       "tags": [
         "Typosquatting",
         "Dependency Confusion",
@@ -1379,7 +1388,7 @@
         "SARIF",
         "Offline"
       ],
-      "description": "Stowaway is an offline software supply-chain integrity scanner. It catches the attacks that have no CVE: attackers publish typosquats one keystroke from famous names and wait for a mistyped install; they exploit dependency confusion by registering your internal package names on public registries so resolvers fetch their code instead of yours; and they hide install-hook malware — code that runs the moment a package is installed, before you ever import it — behind obfuscation and tampered lockfiles. Stowaway detects all four, across npm, PyPI, Go, and Cargo.",
+      "description": "Stowaway is an offline software supply-chain integrity scanner. It catches the attacks that have no CVE: attackers publish typosquats one keystroke from famous names and wait for a mistyped install; they exploit dependency confusion by registering your internal package names on public registries so resolvers fetch their code instead of yours; and they hide install-hook malware — code that runs the moment a package is installed, before you ever import it — behind obfuscation and tampered lockfiles. Stowaway detects all four, across npm, PyPI, Go, and Cargo. Publicly released as v0.1.0 (Aug 2026): PyPI-packaged (src-layout), documented with a MkDocs site, CodeQL-hardened in CI, and citable via CITATION.cff.",
       "overview": "Stowaway is fully offline (zero network I/O at scan time), fully static (scanned code is never executed), and deterministic (same input → byte-identical output). A single pass walks the tree with size caps and .gitignore awareness, hands each ecosystem's manifests/lockfiles/install-hooks to its parser, runs all five rule families over the resulting ScanContext, folds findings into per-package priorities via a transparent risk model, and emits JSON, self-contained HTML, and SARIF 2.1.0 with a --fail-on CI merge gate. It complements CVE/SCA scanners rather than replacing them.",
       "problem": "Classic vulnerability scanners match known CVEs — but the fastest-growing supply-chain attacks have no CVE at all. A typosquat, a confused internal dependency, or a malicious postinstall hook is a brand-new package doing exactly what its author intended; there is nothing in a vulnerability database to match. These attacks succeed at install time, before any code review or import, and they are invisible to tools built around a CVE feed.",
       "motivation": [
@@ -1394,7 +1403,7 @@
         },
         {
           "name": "Automated tests",
-          "value": "133 passing"
+          "value": "136 passing"
         },
         {
           "name": "Runtime dependencies",
@@ -1573,6 +1582,7 @@
         "Partial parsers (pnpm-lock.yaml is limited under the stdlib-only policy; .gitignore handling is a conservative subset), both surfaced as scan warnings. Not an SCA/CVE matcher, sandbox, or license scanner."
       ],
       "roadmap": [
+        "Research manuscript in preparation: “Stowaway: Offline, Deterministic Static Detection of Software Supply-Chain Attacks Without Registry Metadata.”",
         "Broaden lockfile parser coverage within the stdlib-only constraint.",
         "Expand the behavioral rule catalog (B-series) for new install-time patterns.",
         "Corpus tooling to keep popularity lists fresh (a stale corpus degrades typosquat recall)."
@@ -1659,7 +1669,7 @@
       },
       "engineeringRigor": [
         {
-          "value": "133",
+          "value": "136",
           "label": "tests"
         },
         {

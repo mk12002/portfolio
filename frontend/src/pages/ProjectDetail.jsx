@@ -118,6 +118,14 @@ export default function ProjectDetail() {
                   <FaBookOpen /> Read the Writeup
                 </motion.a>
               )}
+              {project.caseStudyUrl && (
+                <Link
+                  to={project.caseStudyUrl}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-red-600/20 to-audio/20 border border-red-500/30 rounded-lg hover:border-red-500/60 transition-all"
+                >
+                  <FaShieldAlt /> Read the Case Study
+                </Link>
+              )}
               {project.githubUrl && (
                 <motion.a
                   href={project.githubUrl}

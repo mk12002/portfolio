@@ -4,7 +4,7 @@ const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', webp: 'i
 
 export default function SEO({
   title = "Mohit Kumar | Cybersecurity & AI Engineer",
-  description = "Cybersecurity & AI Engineer at ITC Infotech — building AI-native defense systems: multi-agentic email security, VAPT, SOC operations, and open-source security tooling. Deep ML background in PyTorch, Transformers, and GNN.",
+  description = "Security Engineer working across AI for Security and Security for AI — creator of an open-source security tooling suite spanning the software supply chain, plus VAPT, SOC detection engineering, and published ML research.",
   keywords = "Cybersecurity Engineer, AI Engineer, Security Engineer, AI for Security, Security for AI, VAPT, SOC Operations, Adversarial ML, Threat Detection, Multi-Agent Systems, PyTorch, Mohit Kumar",
   ogImage = "/og-image.png",
   pathname = "/"

@@ -23,6 +23,7 @@ function ThemeToggle({ className = '' }) {
 const primaryLinks = [
   { name: 'Home', path: '/' },
   { name: 'Projects', path: '/projects' },
+  { name: 'Demos', path: '/demos' },
   { name: 'Playground', path: '/playground' },
   { name: 'Experience', path: '/experiences' },
   { name: 'Blog', path: '/posts' },
@@ -36,7 +37,6 @@ const moreLinks = [
   { name: 'Reads', path: '/reads' },
   { name: 'Tech Stack', path: '/uses' },
   { name: 'Events', path: '/events' },
-  { name: 'Support', path: '/support' },
 ]
 
 export default function Navbar() {

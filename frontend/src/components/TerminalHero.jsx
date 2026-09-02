@@ -3,13 +3,15 @@ import { motion } from 'framer-motion'
 
 const terminalLines = [
     { type: 'command', text: 'root@kali:~# whoami' },
-    { type: 'result', text: '→ Mohit Kumar — Cybersecurity & AI Engineer' },
+    { type: 'result', text: '→ Mohit Kumar — Security Engineer · AI for Security & Security for AI' },
     { type: 'command', text: 'root@kali:~# cat /etc/mission' },
-    { type: 'result', text: '→ AI for Security. Security for AI.' },
-    { type: 'command', text: 'root@kali:~# nmap -sV --script=vuln portfolio' },
-    { type: 'result', text: '→ PORT 443/tcp OPEN — 12+ projects | 4 publications | 15+ certs' },
+    { type: 'result', text: '→ Defend with AI. Secure the AI that defends.' },
+    { type: 'command', text: 'root@kali:~# ls ~/open-source/security-suite/' },
+    { type: 'result', text: '→ bulwark  bastion  lattice  portcullis  stowaway   (5 scanners · 1,350+ tests)' },
+    { type: 'command', text: 'root@kali:~# nmap -sV portfolio' },
+    { type: 'result', text: '→ PORT 443/tcp OPEN — 18 projects | 5 papers | 14 certs' },
     { type: 'command', text: 'root@kali:~# cat focus.conf' },
-    { type: 'result', text: '→ [ACTIVE] VAPT | SOC Ops | Adversarial ML | Multi-Agent Threat Systems' },
+    { type: 'result', text: '→ [ACTIVE] AI Supply-Chain Security | VAPT | SOC Detection Eng | GRC (J-SOX/MICS)' },
 ]
 
 export default function TerminalHero() {

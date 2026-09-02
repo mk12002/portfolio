@@ -20,6 +20,8 @@ const Home = lazy(() => import('./pages/Home'))
 const Resume = lazy(() => import('./pages/Resume'))
 const Projects = lazy(() => import('./pages/Projects'))
 const Playground = lazy(() => import('./pages/Playground'))
+const Demos = lazy(() => import('./pages/Demos'))
+const CaseStudy = lazy(() => import('./pages/CaseStudy'))
 const SecurityTools = lazy(() => import('./pages/SecurityTools'))
 const EmailSecurity = lazy(() => import('./pages/EmailSecurity'))
 const ProjectDetail = lazy(() => import('./pages/ProjectDetail'))
@@ -32,7 +34,6 @@ const Publications = lazy(() => import('./pages/Publications'))
 const Reads = lazy(() => import('./pages/Reads'))
 const Uses = lazy(() => import('./pages/Uses'))
 const Contact = lazy(() => import('./pages/Contact'))
-const BuyMeCoffee = lazy(() => import('./pages/BuyMeCoffee'))
 const CTF = lazy(() => import('./pages/CTF'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -97,6 +98,8 @@ function App() {
                 <Route path="/resume" element={<PageTransition><Resume /></PageTransition>} />
                 <Route path="/projects" element={<PageTransition><Projects /></PageTransition>} />
                 <Route path="/playground" element={<PageTransition><Playground /></PageTransition>} />
+                <Route path="/demos" element={<PageTransition><Demos /></PageTransition>} />
+                <Route path="/case-study" element={<PageTransition><CaseStudy /></PageTransition>} />
                 <Route path="/projects/security-tools" element={<PageTransition><SecurityTools /></PageTransition>} />
                 <Route path="/projects/agentic-email-security" element={<PageTransition><EmailSecurity /></PageTransition>} />
                 <Route path="/projects/tara-email-security" element={<Navigate to="/projects/agentic-email-security" replace />} />
@@ -110,7 +113,6 @@ function App() {
                 <Route path="/reads" element={<PageTransition><Reads /></PageTransition>} />
                 <Route path="/uses" element={<PageTransition><Uses /></PageTransition>} />
                 <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
-                <Route path="/support" element={<PageTransition><BuyMeCoffee /></PageTransition>} />
                 <Route path="/ctf" element={<PageTransition><CTF /></PageTransition>} />
                 <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
               </Routes>

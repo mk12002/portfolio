@@ -16,6 +16,8 @@
     { "source": "/uses", "destination": "/uses/index.html" },
     { "source": "/contact", "destination": "/contact/index.html" },
     { "source": "/playground", "destination": "/playground/index.html" },
+    { "source": "/demos", "destination": "/demos/index.html" },
+    { "source": "/case-study", "destination": "/case-study/index.html" },
     { "source": "/ctf", "destination": "/ctf/index.html" },
     { "source": "/support", "destination": "/support/index.html" },
     { "source": "/(.*)", "destination": "/index.html" }

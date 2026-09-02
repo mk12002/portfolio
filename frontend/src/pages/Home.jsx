@@ -1,13 +1,13 @@
 import { lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaEnvelope, FaDownload, FaArrowRight, FaUser, FaShieldAlt, FaLock, FaBrain, FaRobot, FaEye, FaNetworkWired, FaProjectDiagram, FaSearch, FaTerminal, FaBug, FaServer, FaClock, FaNewspaper } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaInstagram, FaTwitter, FaEnvelope, FaDownload, FaArrowRight, FaUser, FaShieldAlt, FaLock, FaBrain, FaRobot, FaEye, FaNetworkWired, FaProjectDiagram, FaSearch, FaTerminal, FaBug, FaServer, FaClock, FaNewspaper, FaRocket, FaFileAlt, FaCertificate, FaBolt } from 'react-icons/fa'
 import GlowCard from '../components/GlowCard'
 import TerminalHero from '../components/TerminalHero'
 import StatsCounter from '../components/StatsCounter'
 import SEO from '../components/SEO'
 import { useProfile } from '../hooks/useApi'
-import { posts } from '../data/postsData'
+import { getUpdates } from '../data/updatesData'
 
 // Lazy load the single heavy Three.js component
 const NodeGraph = lazy(() => import('../components/NodeGraph'))
@@ -31,7 +31,7 @@ const featuredProjects = [
     slug: 'bastion',
     title: 'Bastion: Kubernetes RBAC Attack-Path Analyzer',
     description: 'Reads your Kubernetes manifests and tells you who can become cluster-admin, and how — modeling privilege escalation as a graph, not a checklist',
-    metric: '9 Charts · 47 Escalation Paths · 530+ Tests',
+    metric: '9 Charts · 47 Escalation Paths · 590+ Tests',
     tags: ['Kubernetes', 'RBAC', 'Privilege Escalation', 'Attack Paths'],
     color: 'audio',
     icon: FaProjectDiagram,
@@ -40,7 +40,7 @@ const featuredProjects = [
     slug: 'bulwark',
     title: 'Bulwark: Security Stack for Agentic AI',
     description: 'Three composable scanners that audit the whole AI-agent supply chain — pickle RCE, MCP risks, and agent excessive-agency — into one CycloneDX AI-BOM',
-    metric: '3 Tools · 14/14 Adversarial · 270+ Tests',
+    metric: '3 Tools · 14/14 Adversarial · 320 Tests',
     tags: ['AI Supply Chain', 'Pickle RCE', 'MCP Security', 'AI-BOM'],
     color: 'vision',
     icon: FaRobot,
@@ -67,7 +67,7 @@ const featuredProjects = [
     slug: 'stowaway',
     title: 'Stowaway: Supply-Chain Integrity Scanner',
     description: 'Catches the no-CVE attacks — typosquatting, dependency confusion, install-hook malware — across npm, PyPI, Go, and Cargo, fully offline',
-    metric: '4 Ecosystems · 133 Tests · 0 False Positives',
+    metric: '4 Ecosystems · 136 Tests · 0 False Positives',
     tags: ['Typosquatting', 'Dependency Confusion', 'Install Malware', 'Offline'],
     color: 'vision',
     icon: FaBug,
@@ -173,8 +173,17 @@ const categoryColors = {
   'Social Impact': 'text-green-400 border-green-400/30 bg-green-400/10',
 }
 
+// Latest-Updates feed: type → badge label, icon, and colour.
+const updateMeta = {
+  blog: { label: 'Blog', icon: FaNewspaper, color: 'text-vision border-vision/30 bg-vision/10' },
+  release: { label: 'Release', icon: FaRocket, color: 'text-green-400 border-green-400/30 bg-green-400/10' },
+  paper: { label: 'Research', icon: FaFileAlt, color: 'text-reasoning border-reasoning/30 bg-reasoning/10' },
+  cert: { label: 'Cert', icon: FaCertificate, color: 'text-audio border-audio/30 bg-audio/10' },
+  milestone: { label: 'Update', icon: FaBolt, color: 'text-accent border-accent/30 bg-accent/10' },
+}
+
 function AboutMe({ profile }) {
-  const latestPosts = posts.slice(0, 4)
+  const updates = getUpdates(6)
 
   return (
     <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -223,21 +232,21 @@ function AboutMe({ profile }) {
               <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-200">Latest Updates</h3>
             </div>
             <div className="divide-y divide-white/5">
-              {latestPosts.map((post, i) => {
-                const href = post.url || `/posts/${post.slug}`
-                const isExternal = !!post.url
+              {updates.map((item, i) => {
+                const isExternal = !!item.external
                 const isNewest = i === 0
-                const catColor = categoryColors[post.category] || 'text-gray-400 border-white/10 bg-white/5'
+                const meta = updateMeta[item.type] || updateMeta.milestone
+                const TypeIcon = meta.icon
                 return (
                   <motion.div
-                    key={post.slug}
+                    key={`${item.type}-${i}`}
                     initial={{ opacity: 0, y: 10 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: i * 0.08 }}
+                    transition={{ delay: i * 0.06 }}
                   >
                     <a
-                      href={href}
+                      href={item.href}
                       target={isExternal ? '_blank' : undefined}
                       rel={isExternal ? 'noopener noreferrer' : undefined}
                       className="group flex gap-3 px-5 py-4 hover:bg-white/[0.04] transition-colors"
@@ -245,7 +254,7 @@ function AboutMe({ profile }) {
                       {/* Timeline dot */}
                       <div className="flex flex-col items-center pt-1.5 flex-shrink-0">
                         <span className={`block w-2.5 h-2.5 rounded-full ${isNewest ? 'bg-vision shadow-[0_0_8px_rgba(var(--color-vision-rgb,74,222,128),0.5)]' : 'bg-white/20'}`} />
-                        {i < latestPosts.length - 1 && (
+                        {i < updates.length - 1 && (
                           <span className="block w-px flex-1 bg-white/10 mt-1.5" />
                         )}
                       </div>
@@ -253,13 +262,13 @@ function AboutMe({ profile }) {
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2 mb-1">
                           <FaClock className="text-gray-600 text-[10px] flex-shrink-0" />
-                          <span className="text-xs text-gray-500">{relativeDate(post.date)}</span>
+                          <span className="text-xs text-gray-500">{relativeDate(item.date)}</span>
                         </div>
                         <p className="text-sm text-gray-200 font-medium leading-snug group-hover:text-white transition-colors line-clamp-2">
-                          {post.title}
+                          {item.title}
                         </p>
-                        <span className={`inline-block mt-2 px-2 py-0.5 text-[10px] font-medium rounded-full border ${catColor}`}>
-                          {post.category}
+                        <span className={`inline-flex items-center gap-1 mt-2 px-2 py-0.5 text-[10px] font-medium rounded-full border ${meta.color}`}>
+                          <TypeIcon className="text-[9px]" /> {meta.label}
                         </span>
                       </div>
                       <FaArrowRight className="text-gray-700 group-hover:text-vision text-xs mt-2 flex-shrink-0 transition-colors" />
@@ -418,11 +427,16 @@ function SecuritySuite() {
             ))}
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500 border-t border-white/10 pt-5">
-            <span><span className="text-gray-200 font-semibold">5</span> open-source scanners</span>
-            <span><span className="text-gray-200 font-semibold">1,200+</span> passing tests</span>
-            <span><span className="text-gray-200 font-semibold">0–1</span> runtime dependencies</span>
-            <span><span className="text-gray-200 font-semibold">Apache-2.0 / MIT</span></span>
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-gray-500">
+              <span><span className="text-gray-200 font-semibold">5</span> open-source scanners</span>
+              <span><span className="text-gray-200 font-semibold">1,350+</span> passing tests</span>
+              <span><span className="text-gray-200 font-semibold">0–1</span> runtime dependencies</span>
+              <span><span className="text-gray-200 font-semibold">Apache-2.0 / MIT</span></span>
+            </div>
+            <Link to="/demos" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-gradient-to-r from-vision to-reasoning text-primary hover:opacity-90 transition-opacity whitespace-nowrap">
+              ▶ Try the scanners live
+            </Link>
           </div>
         </div>
       </motion.div>
@@ -513,9 +527,9 @@ export default function Home() {
   return (
     <>
       <SEO
-        title="Mohit Kumar | Cybersecurity & AI Engineer"
-        description="Cybersecurity & AI Engineer specializing in AI for Security, Security for AI, VAPT, SOC Operations, and Multi-Agent Systems. Deep ML background in PyTorch, Transformers, and GNN."
-        keywords="Cybersecurity Engineer, AI Engineer, AI for Security, Security for AI, Adversarial ML, VAPT, SOC, Threat Detection, PyTorch, ML Security, Mohit Kumar"
+        title="Mohit Kumar | Security Engineer — AI for Security & Security for AI"
+        description="Security Engineer at the AI × Security intersection — creator of five open-source defensive scanners (Bulwark, Bastion, Lattice, Portcullis, Stowaway), plus VAPT, SOC detection engineering, and published ML research."
+        keywords="Security Engineer, Cybersecurity Engineer, AI for Security, Security for AI, AI Supply Chain Security, VAPT, SOC, Detection Engineering, Adversarial ML, Bulwark, Bastion, Lattice, Portcullis, Stowaway, Mohit Kumar"
         pathname="/"
       />
       <div className="min-h-screen pt-20 relative overflow-hidden">
@@ -640,6 +654,30 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Proof band — the 3-second scan */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-4 mb-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-4 text-center"
+          >
+            {[
+              ['5', 'open-source scanners'],
+              ['1,350+', 'passing tests'],
+              ['47', 'real escalation paths found'],
+              ['13', 'blog posts'],
+              ['5', 'research papers'],
+            ].map(([n, label], i) => (
+              <div key={label} className="flex items-center gap-2">
+                {i > 0 && <span className="hidden sm:block text-white/10">|</span>}
+                <span className="text-lg md:text-xl font-bold gradient-text">{n}</span>
+                <span className="text-xs md:text-sm text-gray-400">{label}</span>
+              </div>
+            ))}
+          </motion.div>
+        </section>
+
         {/* About Me */}
         <AboutMe profile={profile} />
 
@@ -665,9 +703,9 @@ export default function Home() {
             className="text-center mb-8"
           >
             <h2 className="text-2xl md:text-3xl font-bold mb-2">
-              Explore My <span className="gradient-text">Security Domains</span>
+              The Software Supply Chain I <span className="gradient-text">Defend</span>
             </h2>
-            <p className="text-gray-400">Click on a node to explore projects in that domain</p>
+            <p className="text-gray-400">Click a layer to open the open-source scanner that secures it</p>
           </motion.div>
           <div className="h-[500px] w-full rounded-xl overflow-hidden border border-white/10 relative">
             <Suspense fallback={

@@ -98,8 +98,8 @@ const ROLE = 'Security Engineer · AI for Security & Security for AI'
 pages.push({
   route: '/',
   title: 'Mohit Kumar | Security Engineer — AI for Security & Security for AI',
-  description: profile.shortIntro,
-  body: `<h1>${esc(NAME)}</h1><h2>${esc(ROLE)}</h2>${P([profile.shortIntro, profile.longIntro])}
+  description: 'Security Engineer at the AI × Security intersection — creator of five open-source defensive scanners (Bulwark, Bastion, Lattice, Portcullis, Stowaway), plus VAPT, SOC detection engineering, and published ML research.',
+  body: `<h1>${esc(NAME)}</h1><h2>${esc(ROLE)}</h2><p>5 open-source scanners · 1,350+ passing tests · 47 real escalation paths found · 13 blog posts · 5 research papers.</p>${P([profile.shortIntro, profile.longIntro])}
     <h2>Featured Projects</h2>${li(projects.slice(0, 6).map((p) => `<a href="/projects/${p.slug}"><strong>${esc(p.title)}</strong></a> — ${esc(p.tagline || p.description || '')}`))}
     <p><a href="/projects">All projects</a> · <a href="/experiences">Experience</a> · <a href="/posts">Blog</a> · <a href="/resume">Resume</a></p>`,
 })
@@ -115,6 +115,8 @@ pages.push({
 // Project detail pages
 for (const p of projects) {
   const metrics = Array.isArray(p.keyMetrics) ? p.keyMetrics.map((m) => `${esc(m.name)}: ${esc(m.value)}`) : []
+  const rigor = Array.isArray(p.engineeringRigor) ? p.engineeringRigor.map((r) => `${esc(r.value)} ${esc(r.label)}`) : []
+  const roadmap = Array.isArray(p.roadmap) ? p.roadmap.map(esc) : []
   pages.push({
     route: `/projects/${p.slug}`,
     title: `${p.title} | Mohit Kumar`,
@@ -122,7 +124,9 @@ for (const p of projects) {
     ogImage: ogFor(p),
     body: `<h1>${esc(p.title)}</h1>${P([p.tagline, p.description, p.overview])}
       ${metrics.length ? `<h2>Key metrics</h2>${li(metrics)}` : ''}
+      ${rigor.length ? `<h2>Engineering rigor</h2>${li(rigor)}` : ''}
       ${p.techStack ? `<h2>Tech stack</h2><p>${esc((p.techStack || []).join(', '))}</p>` : ''}
+      ${roadmap.length ? `<h2>Roadmap</h2>${li(roadmap)}` : ''}
       ${p.githubUrl ? `<p><a href="${esc(p.githubUrl)}">View on GitHub</a></p>` : ''}
       <p><a href="/projects">← All projects</a></p>`,
   })
@@ -173,6 +177,18 @@ pages.push({
   body: `<h1>Publications</h1>${publications.map((pub) => `<section><h2>${esc(pub.title)}</h2><p>${esc((pub.authors || []).join(', '))}</p><p>${esc(pub.venue)}${pub.date ? ' · ' + esc(pub.date) : ''}</p>${P([pub.abstract])}</section>`).join('')}`,
 })
 
+// Flagship case study — rich body for SEO / non-JS clients
+pages.push({
+  route: '/case-study',
+  title: "Finding: argo-cd's Controller Can Reach cluster-admin | Mohit Kumar",
+  description: 'A vuln-report walkthrough: how my open-source scanner Bastion found argo-cd’s application controller bound to a wildcard ClusterRole — a direct path to cluster-admin — on a real Helm chart a pod-hygiene linter said nothing about.',
+  body: `<h1>How Bastion Found argo-cd's Controller Can Reach cluster-admin</h1>
+    <p>CRITICAL · Privilege Escalation — a real finding on the public argo/argo-cd Helm chart.</p>
+    <p><strong>TL;DR:</strong> Rendering argo/argo-cd and scanning it with Bastion surfaced 19 escalation paths to cluster-admin — the headline being the argocd-application-controller ServiceAccount, bound to a ClusterRole granting verbs:[*] on resources:[*]. It doesn't reach cluster-admin; it is cluster-admin. On the same manifests, kube-score produced 107 findings and 0 about RBAC or escalation.</p>
+    <p>Escalation is a graph problem, not a per-resource checklist: Bastion builds the privilege graph and runs deterministic BFS to cluster-admin, the node, and secrets, citing file:line for every edge. It reports the path; it never walks it. The fix is to replace the wildcard rule with the specific resources the controller reconciles, and to gate pull requests with <code>bastion diff --fail-on-new-path</code>.</p>
+    <p><a href="/demos">Try the analysis yourself</a> · <a href="/projects/bastion">About Bastion</a></p>`,
+})
+
 // Utility routes — correct head + a lightweight body
 const utility = [
   ['/certificates', 'Certificates | Mohit Kumar', 'Professional certifications across cybersecurity, cloud, and machine learning.'],
@@ -180,9 +196,9 @@ const utility = [
   ['/reads', 'Reading List | Mohit Kumar', 'Books, papers, and resources I recommend.'],
   ['/uses', 'Uses | Mohit Kumar', 'The tools, hardware, and software I use day to day.'],
   ['/contact', 'Contact | Mohit Kumar', 'Get in touch for collaboration on security and AI.'],
-  ['/playground', 'Security Playground | Mohit Kumar', '15 interactive, in-browser security tools — JWT, hashing, CSP, IOC defang, entropy, and more.'],
+  ['/playground', 'Security Playground | Mohit Kumar', '18 interactive, in-browser security tools — a pickle-RCE inspector, prompt-injection tester, AI-BOM inspector, JWT, hashing, CSP, IOC defang, entropy, and more.'],
+  ['/demos', 'Try the Scanners | Mohit Kumar', 'Run my open-source scanners live in your browser: Bastion finds Kubernetes RBAC escalation paths to cluster-admin; Stowaway flags dependency typosquats and confusion. Client-side, nothing leaves your browser.'],
   ['/ctf', 'Mini CTF | Mohit Kumar', 'A tiny capture-the-flag with three security challenges.'],
-  ['/support', 'Support | Mohit Kumar', 'Support my open-source security work.'],
 ]
 // Note: /projects/security-tools and /projects/agentic-email-security are
 // generated by the project-detail loop above (they exist in the projects data).

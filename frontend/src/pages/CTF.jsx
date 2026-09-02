@@ -11,6 +11,7 @@ const LEVEL_3_HINT = '0c0e07010d3b10360f364e331b16330f3d'
 const LEVEL_4_ROT13 = 'synt{e0g13_e0yyf}'
 const LEVEL_5_HEX = '666c61677b6833785f643363306433647d'
 const LEVEL_6_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdGYiLCJmbGFnIjoiZmxhZ3tqd3RfcDR5bDA0ZH0ifQ.c2lnbmF0dXJl'
+const LEVEL_7_USER_JWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjdGYiLCJyb2xlIjoidXNlciJ9.bm90dGhla2V5'
 
 const FLAG_HASHES = {
   1: '23f09ec62da8205be83c0dcc4431e3adac50ec8103e4468613805d5a7adf0a1d',
@@ -76,6 +77,29 @@ const levels = [
     color: '#10b981',
     writeup: 'JWT header and payload are only base64url-encoded, not encrypted — anyone can read the claims without the signing key. The flag lives in the payload "flag" claim. This is exactly why you must never put secrets in a JWT payload.',
   },
+  {
+    id: 7,
+    title: 'Level 7: Forge the Token (alg:none)',
+    description: "This app trusts whatever JWT it's handed. Here's a normal user's token — forge an admin one it will accept, and paste the forged token below (not a flag{...} this time).",
+    hint: `User token: ${LEVEL_7_USER_JWT}`,
+    extraHint: 'The classic alg:none bypass: set the header to {"alg":"none","typ":"JWT"}, rewrite the payload so role is "admin" (or admin:true), base64url-encode both, and leave the signature empty — submit header.payload. with a trailing dot. Decode the parts with the JWT Analyzer in my Playground.',
+    color: '#ef4444',
+    writeup: 'A verifier that honours the token\'s own "alg" header can be told alg:none, which means "accept an unsigned token." If the algorithm isn\'t pinned server-side, an attacker rewrites the payload (role:admin), sets alg:none, drops the signature, and is trusted. The fix: pin the expected algorithm on the server and reject "none".',
+    // Custom validator — you must actually forge a valid alg:none admin token.
+    verify: (input) => {
+      const parts = input.trim().split('.')
+      if (parts.length < 2) return false
+      try {
+        const dec = (s) => JSON.parse(decodeURIComponent(atob(s.replace(/-/g, '+').replace(/_/g, '/')).split('').map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')))
+        const header = dec(parts[0])
+        const payload = dec(parts[1])
+        const algNone = String(header.alg || '').toLowerCase() === 'none'
+        const noSig = !parts[2] || parts[2] === ''
+        const isAdmin = payload.role === 'admin' || payload.admin === true
+        return algNone && isAdmin && noSig
+      } catch { return false }
+    },
+  },
 ]
 
 const STORAGE_KEY = 'ctf-solved-levels'
@@ -108,10 +132,16 @@ export default function CTF() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    const guess = input.trim().toLowerCase()
-    const expected = FLAG_HASHES[levels[currentLevel].id]
-    const hashed = await sha256hex(guess)
-    if (hashed === expected) {
+    const level = levels[currentLevel]
+    // Levels with a custom validator (e.g. the alg:none forge) check the submitted
+    // artifact directly; the rest compare a SHA-256 of the flag string.
+    let ok
+    if (typeof level.verify === 'function') {
+      ok = level.verify(input)
+    } else {
+      ok = (await sha256hex(input.trim().toLowerCase())) === FLAG_HASHES[level.id]
+    }
+    if (ok) {
       const next = Array.from(new Set([...solvedLevels, currentLevel]))
       setSolvedLevels(next)
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next))
@@ -131,7 +161,7 @@ export default function CTF() {
     <>
       <SEO
         title="CTF Challenge | Mohit Kumar"
-        description="A small capture-the-flag: 3 client-side cybersecurity challenges (Base64, source inspection, XOR) with writeups. Built by Mohit Kumar."
+        description="A 7-level client-side capture-the-flag — Base64, source inspection, single-byte XOR, ROT13, hex, JWT claims, and a JWT alg:none forge — each with a writeup. Built by Mohit Kumar."
         pathname="/ctf"
       />
       {/* Hidden flag for Level 2 — finding this is the point. */}
@@ -144,7 +174,7 @@ export default function CTF() {
           <h1 className="text-3xl md:text-5xl font-bold mb-3">
             <span className="gradient-text">Can You Hack It?</span>
           </h1>
-          <p className="text-gray-400">6 levels · 6 flags · validated by SHA-256, so no peeking at the source.</p>
+          <p className="text-gray-400">7 levels — from Base64 to a JWT <span className="font-mono">alg:none</span> forge. SHA-256-validated, so no peeking at the source.</p>
         </motion.div>
 
         {/* Progress */}
@@ -207,7 +237,7 @@ export default function CTF() {
                   type="text"
                   value={input}
                   onChange={(e) => { setInput(e.target.value); setError('') }}
-                  placeholder="Enter flag{...}"
+                  placeholder={levels[currentLevel].verify ? 'Paste your forged token (header.payload.)' : 'Enter flag{...}'}
                   className="flex-1 bg-[#0d1117] border border-white/10 rounded-lg px-4 py-3 font-mono text-sm text-white placeholder:text-gray-600 focus:outline-none focus:border-accent/50"
                 />
                 <motion.button
@@ -223,7 +253,7 @@ export default function CTF() {
             <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center">
               <FaTrophy className="text-7xl text-yellow-400 mx-auto mb-6" />
               <h2 className="text-3xl md:text-4xl font-bold mb-3"><span className="gradient-text">All Flags Captured! 🎉</span></h2>
-              <p className="text-gray-300 text-lg mb-2">You solved all 6 challenges.</p>
+              <p className="text-gray-300 text-lg mb-2">You solved all 7 challenges — including the alg:none forge.</p>
               <p className="text-gray-500 mb-8">You clearly know your way around. Let's connect!</p>
               <div className="flex gap-4 justify-center flex-wrap">
                 <a href="https://www.linkedin.com/in/mohitkumar111/" target="_blank" rel="noopener noreferrer"
