@@ -22,7 +22,6 @@ const files = [
   ['events.json', 'eventsContent.json'],
   ['publications.json', 'publicationsContent.json'],
   ['contact.json', 'contactContent.json'],
-  ['buymeacoffee.json', 'buymeacoffeeContent.json'],
 ]
 
 let synced = 0

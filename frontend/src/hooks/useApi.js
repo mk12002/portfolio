@@ -9,7 +9,6 @@ import {
   fallbackEvents,
   fallbackPublications,
   fallbackContactInfo,
-  fallbackBuyMeACoffee,
   fallbackReads,
   fallbackPosts,
 } from '../data/fallbackData'
@@ -74,10 +73,6 @@ export function usePublications() {
 
 export function useContactInfo() {
   return useApiWithFallback('/contact-info', fallbackContactInfo)
-}
-
-export function useBuyMeACoffee() {
-  return useApiWithFallback('/buymeacoffee', fallbackBuyMeACoffee)
 }
 
 export function useReads() {

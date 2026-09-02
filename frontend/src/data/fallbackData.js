@@ -20,7 +20,6 @@ import certificatesContent from './certificatesContent.json'
 import eventsContent from './eventsContent.json'
 import publicationsContent from './publicationsContent.json'
 import contactContent from './contactContent.json'
-import buymeacoffeeContent from './buymeacoffeeContent.json'
 
 export const fallbackProfile = profileContent
 export const fallbackResume = resumeContent
@@ -29,7 +28,6 @@ export const fallbackPublications = publicationsContent
 export const fallbackCertificates = certificatesContent
 export const fallbackEvents = eventsContent
 export const fallbackContactInfo = contactContent
-export const fallbackBuyMeACoffee = buymeacoffeeContent
 export const fallbackReads = readsContent
 export const fallbackProjects = projectsContent
 
