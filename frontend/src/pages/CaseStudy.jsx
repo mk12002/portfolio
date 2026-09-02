@@ -17,6 +17,41 @@ function Code({ children }) {
   return <pre className="bg-[#0d1117] text-emerald-300 rounded-lg p-4 text-xs overflow-x-auto border border-white/10 font-mono whitespace-pre-wrap">{children}</pre>
 }
 
+// Grounded in the calibration run: same rendered argo-cd manifests, two tools.
+function Comparison() {
+  const rows = [
+    { tool: 'Bastion', label: '19 escalation paths to cluster-admin', value: 19, tone: 'bg-red-500', sub: 'deterministic BFS over RBAC subjects, roles & bindings' },
+    { tool: 'kube-score', label: '0 RBAC / escalation findings', value: 0, tone: 'bg-gray-500', sub: '107 pod-hygiene findings — none model RBAC relationships' },
+  ]
+  const max = 19
+  return (
+    <div className="p-5 rounded-xl bg-white/5 border border-white/10 my-5">
+      <div className="text-xs uppercase tracking-wider text-gray-400 mb-4">Same rendered <span className="font-mono">argo/argo-cd</span> manifests · escalation paths surfaced</div>
+      <div className="space-y-4">
+        {rows.map((r) => (
+          <div key={r.tool}>
+            <div className="flex justify-between text-sm mb-1.5">
+              <span className="font-mono text-white">{r.tool}</span>
+              <span className="text-gray-300">{r.label}</span>
+            </div>
+            <div className="h-3 rounded-full bg-white/5 overflow-hidden">
+              <motion.div
+                className={`h-full ${r.tone}`}
+                initial={{ width: 0 }}
+                whileInView={{ width: r.value === 0 ? '2%' : `${(r.value / max) * 100}%` }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.9, ease: 'easeOut' }}
+              />
+            </div>
+            <div className="text-xs text-gray-500 mt-1">{r.sub}</div>
+          </div>
+        ))}
+      </div>
+      <p className="text-[11px] text-gray-600 mt-4">Both tools are correct at what they measure — they measure different things. The point isn't 19 &gt; 107; it's that escalation to <span className="font-mono">cluster-admin</span> is invisible to per-resource hygiene checks by construction.</p>
+    </div>
+  )
+}
+
 export default function CaseStudy() {
   return (
     <>
@@ -82,6 +117,7 @@ bastion scan argo-cd.yaml --format sarif --fail-on P0`}</Code>
             <Section title="Why a pod-hygiene linter misses it">
               <p>Linters like <span className="font-mono">kube-score</span> examine one resource at a time: is this container running as root, does it set resource limits, is there a readiness probe? Those are real checks — kube-score returned 107 of them on argo-cd. But none of them model <em>RBAC subjects, bindings, or the relationships between them</em>, so "this ServiceAccount can become cluster-admin" is invisible to them by construction.</p>
               <p>Escalation is a <strong className="text-white">graph</strong> problem, not a per-resource checklist. Bastion builds the privilege graph and runs a deterministic breadth-first search toward cluster-admin, the node, and secrets — which is how a one-hop wildcard binding, and 18 longer paths, surface at all.</p>
+              <Comparison />
             </Section>
 
             <Section title="The finding, with evidence">

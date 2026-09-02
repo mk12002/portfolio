@@ -65,6 +65,13 @@ export default function Contact() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
+          <img
+            src="/assets/profile.jpg"
+            alt="Mohit Kumar"
+            loading="lazy"
+            decoding="async"
+            className="w-24 h-24 rounded-full object-cover border-4 border-white/15 shadow-xl mx-auto mb-5"
+          />
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="gradient-text">{contactInfo?.title || 'Contact Me'}</span>
           </h1>

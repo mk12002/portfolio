@@ -207,6 +207,20 @@ function AboutMe({ profile }) {
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
         >
+          <div className="flex items-center gap-4">
+            <img
+              src="/assets/profile.jpg"
+              alt="Mohit Kumar"
+              loading="lazy"
+              decoding="async"
+              className="w-16 h-16 rounded-full object-cover border-2 border-white/15 shadow-lg shrink-0"
+            />
+            <div>
+              <div className="font-semibold text-white leading-tight">Mohit Kumar</div>
+              <div className="text-sm text-vision">Security Engineer · AI for Security &amp; Security for AI</div>
+            </div>
+          </div>
+
           <p className="text-gray-300 text-base leading-relaxed">
             {profile?.longIntro || "I'm a Security Engineer at ITC Infotech, working across AI for Security and Security for AI — building an open-source security tooling suite, hardening ML & agent supply chains, and running SOC/VAPT and GRC (J-SOX, MICS) work, while researching adversarial robustness to secure AI from attack."}
           </p>
@@ -216,6 +230,25 @@ function AboutMe({ profile }) {
             <p className="text-gray-400 text-sm leading-relaxed">
               I believe the future of security is AI-native — and the future of AI must be secure. My ML background (PyTorch, Transformers, GNN) gives me a unique edge in building intelligent security systems that think like attackers and defend like experts.
             </p>
+          </div>
+
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <FaCertificate className="text-vision text-sm" />
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-gray-200">Certifications</h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[
+                'IBM Cybersecurity Analyst',
+                'Azure AI Engineer Associate',
+                'Azure Data Scientist Associate',
+                'OCI Generative AI Professional',
+                'ML Specialization — DeepLearning.AI',
+              ].map((c) => (
+                <span key={c} className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-gray-300">{c}</span>
+              ))}
+              <Link to="/certificates" className="px-3 py-1.5 rounded-full bg-vision/10 border border-vision/30 text-xs text-vision hover:bg-vision/20 transition-colors">+ more →</Link>
+            </div>
           </div>
         </motion.div>
 
@@ -605,12 +638,13 @@ export default function Home() {
                   </Link>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                  <Link
-                    to="/resume"
+                  <a
+                    href="/resume/Mohit_Kumar.pdf"
+                    download
                     className="inline-flex items-center gap-2 px-6 py-3 border border-white/20 rounded-lg font-medium hover:bg-white/10 transition-all"
                   >
-                    <FaDownload /> Resume
-                  </Link>
+                    <FaDownload /> Download CV
+                  </a>
                 </motion.div>
               </motion.div>
 
@@ -733,7 +767,7 @@ export default function Home() {
                 Let's build secure, intelligent systems
               </h2>
               <p className="text-gray-400 mb-6 max-w-xl mx-auto">
-                Open to cybersecurity & AI engineering roles, security research, and red/blue team collaborations.
+                Always happy to talk security research, open-source, and building intelligent defenses.
               </p>
               <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} className="inline-block">
                 <Link

@@ -122,6 +122,8 @@ export default function Navbar() {
             <div ref={dropdownRef} className="relative">
               <button
                 onClick={() => setMoreOpen(!moreOpen)}
+                aria-expanded={moreOpen}
+                aria-haspopup="true"
                 className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-300 whitespace-nowrap ${
                   isMoreActive
                     ? 'text-white bg-white/5'
