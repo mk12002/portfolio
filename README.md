@@ -1,413 +1,160 @@
-# 🛡️ Portfolio — Cybersecurity × ML
+# 🛡️ Mohit Kumar — Security Engineer Portfolio
 
-> **🌐 Live Site:** [https://mohitkumar-mu.vercel.app](https://mohitkumar-mu.vercel.app/)
+> **🌐 Live:** [mohitkumar-mu.vercel.app](https://mohitkumar-mu.vercel.app/)
 
-A cybersecurity-themed interactive portfolio showcasing security research, ML projects, publications, and technical expertise. Features a hacker-aesthetic dark UI with dynamic theme switching, a Cyber Kill Chain visualization, animated terminal hero, mini CTF challenge, and interactive security tool graph. Built with React + Vite frontend and Spring Boot backend.
+An interactive, security-themed portfolio built around a real body of work: an open-source **security tooling suite**, live in-browser scanner demos, a vuln-report case study, technical writing, and published research. Positioned around **AI for Security & Security for AI** — building intelligent security tooling, and hardening ML/agent supply chains.
+
+Built as a React + Vite SPA that is **fully prerendered per route** (so it serves real content and correct canonicals to crawlers and no-JS clients) and **hardened at the serving layer** (CSP, HSTS, and a CDN-free runtime). A Spring Boot backend is optional — the site runs entirely on bundled fallback content without it.
 
 ![Portfolio Preview](./frontend/public/assets/Screenshot.png)
 
-## ✨ Features
+---
 
-### 🎯 Core Pages
-- **Home** - Animated terminal hero with typing commands, glitch text effect, stats counter, and Cyber Kill Chain visualization
-- **Resume** - Downloadable resume with skills visualization and timeline
-- **Projects** - Detailed project cards with filtering, search, and comprehensive writeups
-- **Experience** - Internship timeline with clickable project links
-- **Certificates** - Achievement showcase with credential verification
-- **Publications** - Research papers and technical writing
-- **Blog** - Technical articles and insights (Coming Soon)
-- **Reads** - Curated reading list and recommendations
-- **Contact** - Gmail-integrated contact form with social links
-- **CTF** - Hidden 3-level Capture The Flag challenge (Base64, HTML inspection, XOR cipher)
-- **Support** - UPI payment integration with QR code
+## ✨ Highlights
 
-### 🚀 Technical Features
-- **Terminal Hero** - Typing animation simulating security commands (`whoami`, `nmap`)
-- **Cyber Kill Chain** - Interactive SVG visualization of security domains
-- **4 Security Themes** - Offensive (red), Defensive (blue), Forensics (green), Adversarial ML (purple)
-- **Stats Counter** - Animated count-up numbers triggered on scroll
-- **Glitch Text Effect** - CSS-powered cybersecurity-style text animation
-- **Mini CTF** - Hidden `/ctf` route with 3 puzzle levels
-- **3D Animations** - Three.js/React Three Fiber for immersive experiences
-- **Particle System** - Dynamic WebGL particle background with binary characters
-- **Terminal Interface** - Press `/` for interactive security-themed terminal with hacker humor
-- **Dark Theme** - Cybersecurity-inspired neon green, electric blue, red gradient theme
-- **Responsive Design** - Mobile-first Tailwind CSS styling
-- **SEO Optimized** - React Helmet for meta tags and social sharing
-- **Email Integration** - Gmail SMTP for contact form notifications
-- **Performance** - Code splitting, lazy loading, optimized assets
+### 🔐 Security Tooling Suite (the core of the site)
+Five open-source scanners, each with a detailed project page, real evaluation data, and engineering-rigor notes:
+
+| Scanner | Domain | Signature capability |
+|---|---|---|
+| **Bastion** | Kubernetes RBAC | Builds a privilege graph and runs deterministic BFS to `cluster-admin` — finds real escalation *paths*, not per-resource lint |
+| **Bulwark** | AI/ML supply chain | Scans models & pipelines (pickle opcode analysis, AI-BOM) for unsafe deserialization and provenance gaps |
+| **Stowaway** | Dependencies | Typosquat (Levenshtein), dependency-confusion, and homoglyph detection across `package.json` / `requirements.txt` |
+| **Lattice** | Cryptography | Post-quantum readiness and crypto-misuse analysis across many languages |
+| **Portcullis** | CI/CD | Pipeline & workflow hardening checks |
+
+Plus **IR-SIEM** — a schema-grounded NL→KQL intermediate representation for SIEM rule generation.
+
+### 🧪 Try it, don't just read it
+- **`/demos` — Live scanner demos.** Paste real input and watch it work, 100% client-side:
+  - *Bastion:* paste Kubernetes RBAC YAML → renders the escalation edges and the path to `cluster-admin`.
+  - *Stowaway:* paste a manifest → flags typosquats / dependency confusion / homoglyphs.
+- **`/case-study` — Flagship finding.** A vuln-report walkthrough: *"How Bastion found argo-cd's controller can reach cluster-admin"* — path, evidence, why a hygiene linter misses it, an honest "is it a bug?" read, and the fix.
+- **`/playground` — 18 client-side security tools**, including an **AI Security** category (pickle inspector, prompt-injection tester, AI-BOM inspector).
+- **`/ctf` — a hidden 7-level CTF** (Base64, header inspection, XOR, JWT `alg:none` forge, …).
+
+### 📚 Everything else recruiters check
+- **Home** — terminal hero, a scannable proof band (5 scanners · 1,350+ tests · 47 real escalation paths · 13 posts · 5 papers), an animated software-supply-chain map linking to each scanner, and a mixed "Latest Updates" feed (posts + releases + papers), one-click **Download CV**.
+- **Projects / Experience / Publications / Certificates** — full detail pages; publications include **HINT-Net** (*Scientific Reports*, Nature Portfolio — accepted).
+- **Blog** — 13 technical posts (AI-BOM, excessive agency, pickle RCE, OWASP LLM Top 10, agentic browsers, …) with local cover images and cross-links to the relevant scanner.
+- **Contact** — serverless (Web3Forms) with a graceful `mailto` fallback; no backend required.
+
+---
 
 ## 🛠️ Tech Stack
 
-### Frontend
-- **React 19** - Modern UI library with latest features
-- **Vite 7** - Lightning-fast build tool and dev server
-- **Tailwind CSS 3** - Utility-first styling framework
-- **Framer Motion 12** - Production-ready animation library
-- **Three.js + React Three Fiber** - 3D graphics and WebGL
-- **Axios** - HTTP client for API requests
-- **React Router 7** - Client-side routing
-- **React Icons** - Comprehensive icon library
-- **React Toastify** - Toast notifications
+**Frontend:** React 19 · Vite 7 · Tailwind CSS 3 · Framer Motion 12 · React Router 7 · react-helmet-async · @vercel/analytics · React Icons · React Toastify
 
-### Backend
-- **Spring Boot 3.2** - Enterprise Java framework
-- **Java 17** - Latest LTS version
-- **Spring Mail** - Gmail SMTP integration
-- **Jackson** - JSON parsing and serialization
-- **Maven** - Dependency management and build tool
-- **Spring Dotenv** - Environment variable management
+**Backend (optional):** Spring Boot 3.2 · Java 17 · Jackson · Maven — serves the same JSON the frontend already bundles as fallback.
 
-### DevOps & Deployment
-- **Docker** - Multi-stage containerization
-- **Vercel** - Frontend hosting with automatic deployments
-- **Render** - Backend hosting with Docker support
-- **UptimeRobot** - Free monitoring to prevent cold starts
-- **Git/GitHub** - Version control and CI/CD
+**Hosting:** Vercel (frontend) · Render (optional backend).
+
+> Three.js/R3F was **removed** — the supply-chain map is pure SVG/Framer, keeping the bundle lean.
+
+---
+
+## 🔒 Security & SEO pipeline
+
+This is a security engineer's site, so it's built to pass the scans a security engineer would run.
+
+### Serving-layer hardening (`frontend/vercel.json`)
+- **Content-Security-Policy** — `default-src 'self'`; **no `unsafe-inline`/`unsafe-eval` for scripts** (the one inline theme script is allowed by **SHA-256 hash**, not a wildcard); tight `img`/`font`/`style`/`connect`/`form-action`; `frame-ancestors 'none'`; `object-src 'none'`; `upgrade-insecure-requests`.
+- **HSTS** — `max-age=63072000; includeSubDomains; preload`.
+- `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`, `X-XSS-Protection: 0` (modern guidance — CSP supersedes it).
+- **No third-party CDN in the runtime.** Mermaid diagrams (on the legacy email-security page) are served from a **self-hosted, version-pinned** `public/vendor/mermaid-10.9.1.min.js` — so no external origin appears in the CSP.
+- **XSS-safe by construction** — no `dangerouslySetInnerHTML`, React auto-escaping, `rel="noopener"` on external links.
+
+### Per-route prerendering (`frontend/scripts/prerender.mjs`, postbuild)
+The SPA is prerendered to **46 static routes**, each with a route-correct `<title>`, meta, **canonical**, `og:`/`twitter:` tags, and real fallback body content — so crawlers and no-JS clients get a real page, not an empty shell. The script **fails the build loudly** on an empty body, a missing canonical, a failed injection, or a duplicate route.
+
+### Post-deploy verification (`frontend/scripts/verify-deploy.mjs` → `npm run verify:prod`)
+Runs against the **live URL** and asserts each route serves per-route canonical + `og:url` + `twitter:url` + real body content, **and** that all six security headers are actually present. Exits non-zero so it can gate a deploy.
+
+### Content sync (`frontend/scripts/sync-content.mjs`, prebuild)
+Copies `backend/src/main/resources/content/*.json` → `frontend/src/data/*Content.json` so the frontend renders identical content **with or without** the backend running. (Blog posts live in `frontend/src/data/postsData.js`.)
+
+---
 
 ## 📦 Project Structure
 
 ```
 portfolio/
-├── frontend/                 # React + Vite application
-│   ├── src/
-│   │   ├── components/      # Reusable UI components
-│   │   │   ├── Navbar.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   ├── Terminal.jsx
-│   │   │   ├── ParticleBackground.jsx
-│   │   │   ├── ThemeSwitcher.jsx
-│   │   │   └── ...
-│   │   ├── pages/           # Route pages
-│   │   │   ├── Home.jsx
-│   │   │   ├── Projects.jsx
-│   │   │   ├── ProjectDetail.jsx
-│   │   │   ├── Contact.jsx
-│   │   │   └── ...
-│   │   ├── hooks/           # Custom React hooks
-│   │   │   └── useApi.js    # API integration hooks
-│   │   ├── contexts/        # React Context providers
-│   │   │   └── ThemeContext.jsx
-│   │   ├── App.jsx          # Main app component
-│   │   └── main.jsx         # Entry point
+├── frontend/                      # React + Vite SPA (deployed to Vercel)
 │   ├── public/
-│   │   └── assets/          # Static images, PDFs, QR codes
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-│   └── .npmrc              # npm configuration
+│   │   ├── assets/                # profile.jpg, og-image.png, screenshots
+│   │   ├── posts/                 # local blog cover images
+│   │   ├── resume/Mohit_Kumar.pdf # served CV (hero "Download CV")
+│   │   ├── vendor/                # self-hosted mermaid (no CDN)
+│   │   └── sitemap.xml
+│   ├── scripts/
+│   │   ├── sync-content.mjs        # prebuild: backend JSON → src/data
+│   │   ├── prerender.mjs           # postbuild: per-route static HTML + SEO
+│   │   └── verify-deploy.mjs       # post-deploy live-URL + header checks
+│   ├── src/
+│   │   ├── pages/                  # Home, Projects, Demos, CaseStudy, Playground, CTF, …
+│   │   ├── components/             # Navbar, NodeGraph (supply-chain map), SEO, …
+│   │   ├── data/                   # *Content.json (synced) + postsData.js
+│   │   ├── hooks/useApi.js         # backend-first, fallback-to-bundled-JSON
+│   │   └── App.jsx
+│   └── vercel.json                 # rewrites + security headers
 │
-├── backend/                 # Spring Boot API
-│   ├── src/main/java/com/mohit/portfolio/
-│   │   ├── PortfolioApplication.java
-│   │   ├── controller/
-│   │   │   └── ApiController.java    # REST endpoints
-│   │   ├── service/
-│   │   │   ├── ContentService.java   # JSON file loader
-│   │   │   └── EmailService.java     # Gmail integration
-│   │   ├── config/
-│   │   │   └── CorsConfig.java       # CORS settings
-│   │   └── model/
-│   │       └── ContactMessage.java   # DTO models
-│   ├── src/main/resources/
-│   │   ├── application.properties    # App configuration
-│   │   └── data/                     # JSON content files
-│   │       ├── profile.json
-│   │       ├── projects.json
-│   │       ├── experiences.json
-│   │       ├── certificates.json
-│   │       └── ...
-│   ├── .env                          # Environment variables (gitignored)
-│   ├── Dockerfile                    # Multi-stage Docker build
-│   └── pom.xml                       # Maven dependencies
+├── backend/                        # Spring Boot API (optional)
+│   └── src/main/resources/content/ # source-of-truth JSON content
 │
-├── .gitignore
+├── Resume/main.tex                 # résumé source (LaTeX)
 └── README.md
 ```
 
+---
+
 ## 🚀 Getting Started
 
-### Prerequisites
-- **Node.js** 18+ and npm
-- **Java** 17+
-- **Maven** 3.9+
-- **Docker**
-- **Gmail Account** (for contact form)
-
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/yourusername/portfolio.git
-cd portfolio
-```
-
-### 2. Frontend Setup
-
+### Frontend (all you need)
 ```bash
 cd frontend
 npm install
+npm run dev          # http://localhost:5000
 ```
-
-Create `.env.local` (optional for local development):
+Optional `.env.local`:
 ```env
-VITE_API_URL=http://localhost:8080/api
+VITE_API_URL=http://localhost:8080/api      # else the site uses bundled fallback content
+VITE_WEB3FORMS_KEY=your-web3forms-key        # else the contact form falls back to mailto
 ```
 
-**Run development server:**
+**Build & verify:**
 ```bash
-npm run dev
-```
-Frontend runs at `http://localhost:5000`
-
-### 3. Backend Setup
-
-```bash
-cd backend
+npm run build        # prebuild syncs content, build, postbuild prerenders 46 routes
+npm run verify:prod  # checks routes + security headers on the live URL
 ```
 
-Create `.env` file:
-```env
-GMAIL_USERNAME=your-email@gmail.com
-GMAIL_APP_PASSWORD=your-16-char-app-password
-```
-
-**Get Gmail App Password:**
-1. Go to [Google Account Security](https://myaccount.google.com/security)
-2. Enable 2-Step Verification
-3. Search "App passwords"
-4. Create app password for "Mail"
-5. Copy 16-character password to `.env`
-
-**Run Spring Boot:**
-```bash
-./mvnw spring-boot:run
-# Or on Windows:
-mvnw.cmd spring-boot:run
-```
-
-Backend runs at `http://localhost:8080`
-
-### 4. Test Locally
-
-- Frontend: `http://localhost:5000`
-- Backend API: `http://localhost:8080/api/profile`
-- Test all pages and contact form
-
-## 🐳 Docker Deployment
-
-### Build and Run Backend
-
+### Backend (optional)
 ```bash
 cd backend
-docker build -t portfolio-backend .
-docker run -p 8080:8080 \
-  -e GMAIL_USERNAME=your-email@gmail.com \
-  -e GMAIL_APP_PASSWORD=your-app-password \
-  portfolio-backend
+# .env: GMAIL_USERNAME / GMAIL_APP_PASSWORD (only if you wire the Java mail path)
+./mvnw spring-boot:run   # http://localhost:8080
 ```
-
-## ☁️ Production Deployment
-
-### Backend → Render.com (Free Forever)
-
-1. **Sign up at [render.com](https://render.com)** with GitHub
-2. **New + → Web Service**
-3. **Connect your repository**
-4. **Configure:**
-   - Name: `mohitkumar-portfolio-backend`
-   - Root Directory: `backend`
-   - Runtime: **Docker**
-   - Instance Type: **Free**
-5. **Environment Variables:**
-   - `GMAIL_USERNAME` = `your-email@gmail.com`
-   - `GMAIL_APP_PASSWORD` = `your-16-char-password`
-6. **Deploy** (wait 5-10 minutes)
-7. **Copy URL**: `https://mohitkumar-portfolio-backend.onrender.com`
-
-### Frontend → Vercel (Free)
-
-1. **Sign up at [vercel.com](https://vercel.com)** with GitHub
-2. **Import Repository**
-3. **Configure:**
-   - Project Name: `mohitkumar-portfolio`
-   - Root Directory: `frontend`
-   - Framework: **Vite**
-4. **Environment Variables:**
-   - `VITE_API_URL` = `https://mohitkumar-portfolio-backend.onrender.com/api`
-5. **Deploy**
-6. **Get URL**: `https://mohitkumar-portfolio.vercel.app`
-
-### Keep Backend Alive with UptimeRobot (Free)
-
-1. **Sign up at [uptimerobot.com](https://uptimerobot.com)**
-2. **Add Monitor:**
-   - Type: **HTTP(s)**
-   - URL: `https://mohitkumar-portfolio-backend.onrender.com/api/profile`
-   - Interval: **5 minutes**
-3. **Done!** Backend stays warm 24/7
-
-## 📝 Content Management
-
-All content is stored as JSON files in `backend/src/main/resources/data/`:
-
-- **profile.json** - Personal info, bio, social links
-- **projects.json** - Project portfolio with detailed writeups
-- **experiences.json** - Internships and work experience
-- **certificates.json** - Achievements and credentials
-- **publications.json** - Research papers and articles
-- **skills.json** - Technical skills and proficiencies
-- **events.json** - Conferences, workshops, talks
-- **posts.json** - Blog articles
-- **reads.json** - Book recommendations
-- **buymeacoffee.json** - Support page configuration
-
-**To update content:**
-1. Edit JSON files in `backend/src/main/resources/data/`
-2. Commit and push to GitHub
-3. Render auto-deploys backend
-4. Content updates instantly
-
-## 🎨 Customization
-
-### Theme Colors (Tailwind Config)
-
-Located in `frontend/tailwind.config.js`:
-
-```js
-colors: {
-  vision: '#22d3ee',    // Cyan - Computer Vision
-  reasoning: '#f97316', // Orange - Reasoning
-  audio: '#a855f7',     // Purple - Audio
-  // Customize these to match your brand
-}
-```
-
-### Adding New Pages
-
-1. Create component in `frontend/src/pages/NewPage.jsx`
-2. Add route in `frontend/src/App.jsx`
-3. Add nav link in `frontend/src/components/Navbar.jsx`
-4. Create data endpoint in `backend/controller/ApiController.java`
-5. Add JSON file in `backend/src/main/resources/data/`
-
-### Terminal Commands
-
-Edit `frontend/src/components/Terminal.jsx`:
-- Add commands to `COMMANDS` object
-- Add ML puns to `ML_PUNS` array
-- Customize terminal UI and behavior
-
-## 🔧 API Endpoints
-
-All endpoints prefixed with `/api`:
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/profile` | User profile and social links |
-| GET | `/projects` | All projects |
-| GET | `/projects/{slug}` | Single project by slug |
-| GET | `/experiences` | Work experience timeline |
-| GET | `/certificates` | Certificates and achievements |
-| GET | `/publications` | Research papers |
-| GET | `/skills` | Technical skills |
-| GET | `/events` | Events and talks |
-| GET | `/posts` | Blog posts |
-| GET | `/reads` | Reading list |
-| GET | `/buymeacoffee` | Support page config |
-| POST | `/contact` | Submit contact form (sends email) |
-
-## 🎯 Environment Variables
-
-### Frontend (.env.local)
-```env
-VITE_API_URL=http://localhost:8080/api
-```
-
-### Backend (.env)
-```env
-GMAIL_USERNAME=your-email@gmail.com
-GMAIL_APP_PASSWORD=your-16-char-app-password
-```
-
-### Vercel (Production)
-```env
-VITE_API_URL=https://your-backend.onrender.com/api
-```
-
-### Render (Production)
-```env
-GMAIL_USERNAME=your-email@gmail.com
-GMAIL_APP_PASSWORD=your-16-char-app-password
-```
-
-## 🐛 Troubleshooting
-
-### Frontend not loading content?
-- Check `VITE_API_URL` is set in Vercel
-- Redeploy frontend after setting env var
-- Test backend URL directly: `https://your-backend.onrender.com/api/profile`
-
-### Contact form not sending emails?
-- Verify Gmail App Password is correct
-- Check `.env` file exists in `backend/`
-- Ensure 2FA enabled on Google account
-- Check Render environment variables
-
-### Backend cold starts?
-- Set up UptimeRobot monitoring
-- Use `/api/profile` endpoint (not root `/`)
-- 5-minute interval prevents Render shutdown
-
-### CORS errors?
-- Backend `CorsConfig.java` allows `localhost:*` and `*.vercel.app`
-- Add custom domain to allowed origins if needed
-
-## 📊 Performance
-
-- **Lighthouse Score:** 95+ (Desktop)
-- **First Contentful Paint:** <1.5s
-- **Time to Interactive:** <3s
-- **Bundle Size:** ~585 KB (can be optimized with code splitting)
-- **Cold Start:** <1s with UptimeRobot
-- **API Response:** <200ms
-
-## 🔒 Security
-
-- ✅ Environment variables for sensitive data
-- ✅ `.gitignore` excludes `.env` files
-- ✅ CORS configured for specific domains
-- ✅ Input validation on contact form
-- ✅ No sensitive data in frontend bundle
-- ✅ Gmail App Password instead of account password
-
-## 📄 License
-
-This project is open source and available under the [MIT License](LICENSE).
-
-## 🤝 Contributing
-
-Contributions, issues, and feature requests are welcome!
-
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/AmazingFeature`
-3. Commit changes: `git commit -m 'Add AmazingFeature'`
-4. Push to branch: `git push origin feature/AmazingFeature`
-5. Open Pull Request
-
-## 👤 Author
-
-**Mohit Kumar**
-- GitHub: [@mk12002](https://github.com/mk12002)
-- LinkedIn: [mohitkumar111](https://www.linkedin.com/in/mohitkumar111/)
-- Email: mohit.kr1103@gmail.com
-
-## 🙏 Acknowledgments
-
-- React Three Fiber community for 3D examples
-- Tailwind CSS for utility-first styling
-- Spring Boot documentation
-- Vercel and Render for free hosting
 
 ---
 
-⭐ Star this repo if you find it helpful!
+## 🧭 Deployment (Vercel)
+
+1. Import the repo, set **Root Directory** = `frontend`, framework **Vite**.
+2. (Optional) env: `VITE_API_URL`, `VITE_WEB3FORMS_KEY`.
+3. Deploy. `vercel.json` applies the rewrites (per-route → prerendered HTML, then SPA fallback) and the security headers.
+4. Run `npm run verify:prod` to confirm the live serving layer.
+
+> **To update the CV:** replace `frontend/public/resume/Mohit_Kumar.pdf`.
+> **To refresh the social card:** edit `frontend/public/og-image.svg` and export it to `og-image.png` at 1200×630.
+> **HSTS preload:** the header is set; to join the browser preload list, submit once at [hstspreload.org](https://hstspreload.org).
+
+---
+
+## 👤 Author
+
+**Mohit Kumar** — Security Engineer
+- GitHub: [@mk12002](https://github.com/mk12002) · LinkedIn: [mohitkumar111](https://www.linkedin.com/in/mohitkumar111/) · Email: mohit.kr1103@gmail.com
+- Writing: [dev.to/mohit_kumar1](https://dev.to/mohit_kumar1) · [hashnode.com/@mkd](https://hashnode.com/@mkd)
+
+---
+
+⭐ Star the repo if it's useful.
