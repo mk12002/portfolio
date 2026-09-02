@@ -10,39 +10,59 @@ function MermaidDiagram({ chart }) {
   const containerRef = useRef(null)
   
   useEffect(() => {
-    // Dynamically inject Mermaid script
+    let cancelled = false
+
+    function showFallback() {
+      if (cancelled || !containerRef.current) return
+      // Only replace if we never rendered a real diagram
+      if (!containerRef.current.querySelector('svg')) {
+        containerRef.current.innerHTML =
+          '<div style="color:#94a3b8;font-size:13px;text-align:center;padding:8px 4px">Interactive diagram unavailable in this environment. ' +
+          'View the full architecture on <a href="https://github.com/mk12002" target="_blank" rel="noopener noreferrer" style="color:#22d3ee">GitHub</a>.</div>'
+      }
+    }
+
+    // Dynamically inject Mermaid script (author-controlled chart data only — no user input)
     if (!document.getElementById('mermaid-script')) {
       const script = document.createElement('script')
       script.id = 'mermaid-script'
-      script.src = 'https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js'
+      // Self-hosted, version-pinned — no third-party CDN in the runtime supply chain,
+      // which keeps the site's CSP free of any external script origin.
+      script.src = '/vendor/mermaid-10.9.1.min.js'
       script.async = true
       script.onload = () => {
         if (window.mermaid) {
-          window.mermaid.initialize({ 
-            startOnLoad: false, 
+          window.mermaid.initialize({
+            startOnLoad: false,
             theme: 'dark',
-            securityLevel: 'loose',
+            securityLevel: 'strict',
             fontFamily: 'Inter, system-ui, sans-serif'
           })
           renderChart()
         }
       }
+      script.onerror = showFallback
       document.body.appendChild(script)
     } else if (window.mermaid) {
       renderChart()
     }
+
+    // Safety net: if nothing rendered within 8s (e.g. blocked script), degrade gracefully
+    const timeout = setTimeout(showFallback, 8000)
 
     function renderChart() {
       if (containerRef.current && window.mermaid) {
         // Generate a unique ID for this diagram
         const id = 'mermaid-' + Math.random().toString(36).substr(2, 9)
         window.mermaid.render(id, chart).then(({ svg }) => {
-          if (containerRef.current) {
+          if (!cancelled && containerRef.current) {
             containerRef.current.innerHTML = svg
           }
-        }).catch(e => console.error("Mermaid rendering failed", e))
+        }).catch((e) => { console.error('Mermaid rendering failed', e); showFallback() })
       }
     }
+
+    return () => { cancelled = true; clearTimeout(timeout) }
   }, [chart])
 
   return (

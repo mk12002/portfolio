@@ -12,6 +12,8 @@ const SITE = (process.argv[2] || process.env.SITE || 'https://mohitkumar-mu.verc
 const routes = [
   ['/', 'Security Tooling Suite'],
   ['/projects', 'Bulwark'],
+  ['/demos', 'typosquat'],
+  ['/case-study', 'cluster-admin'],
   ['/projects/bastion', 'cluster-admin'],
   ['/projects/lattice', 'post-quantum'],
   ['/posts', 'Excessive Agency'],
@@ -53,10 +55,35 @@ for (const [path, needle] of routes) {
   console.log(`${ok ? '✓' : '✗'} ${path}${ok ? '' : '  — ' + bad.join(', ')}`)
 }
 
+// Security headers — assert the hardening actually reaches the browser.
+// (A security engineer's site failing a headers scan is the worst look; this gates it.)
+const requiredHeaders = {
+  'content-security-policy': /default-src 'self'/,
+  'strict-transport-security': /max-age=\d{6,}/,
+  'x-content-type-options': /nosniff/,
+  'x-frame-options': /DENY/i,
+  'referrer-policy': /strict-origin/,
+  'permissions-policy': /camera=\(\)/,
+}
+console.log('\nSecurity headers (on /):')
+try {
+  const res = await fetch(SITE + '/', { headers: { 'user-agent': 'prerender-verify/1.0' } })
+  for (const [name, re] of Object.entries(requiredHeaders)) {
+    const val = res.headers.get(name)
+    const ok = val && re.test(val)
+    if (!ok) failed++
+    console.log(`  ${ok ? '✓' : '✗'} ${name}${ok ? '' : `  — ${val ? `got "${val}"` : 'missing'}`}`)
+  }
+} catch (e) {
+  failed++
+  console.log(`  ✗ header fetch failed: ${e.message}`)
+}
+
 console.log('')
 if (failed) {
-  console.error(`FAILED: ${failed}/${routes.length} route(s) are not served as prerendered content on ${SITE}.`)
+  console.error(`FAILED: ${failed} check(s) failed on ${SITE} (routes and/or security headers).`)
   console.error('If canonical/og:url point at the homepage or body text is missing, the route is falling back to the SPA shell.')
+  console.error('If a security header is missing, confirm vercel.json headers deployed and no proxy stripped them.')
   process.exit(1)
 }
-console.log(`OK: all ${routes.length} routes on ${SITE} serve per-route canonical + og:url + twitter:url + real body content.`)
+console.log(`OK: all ${routes.length} routes serve per-route canonical + og:url + twitter:url + real body, and security headers are present on ${SITE}.`)
