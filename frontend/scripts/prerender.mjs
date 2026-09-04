@@ -298,5 +298,8 @@ const urls = sitemapPages
   .join('\n')
 const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
 writeFileSync(join(dist, 'sitemap.xml'), sitemap)
+// Also write a committed copy into public/ so the sitemap is visible in source
+// control (and, being regenerated every build, can never drift from reality).
+writeFileSync(resolve(here, '../public/sitemap.xml'), sitemap)
 console.log(`[prerender] sitemap.xml — ${sitemapPages.length} indexable URLs (excluded ${pages.length - sitemapPages.length} external stubs)`)
 
