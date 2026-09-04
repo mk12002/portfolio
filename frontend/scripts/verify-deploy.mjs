@@ -10,14 +10,16 @@ const SITE = (process.argv[2] || process.env.SITE || 'https://mohitkumar-mu.verc
 
 // [path, expected body substring that only the real page contains]
 const routes = [
-  ['/', 'Security Tooling Suite'],
+  ['/', 'Featured Projects'],
   ['/projects', 'Bulwark'],
   ['/demos', 'typosquat'],
   ['/case-study', 'cluster-admin'],
   ['/projects/bastion', 'cluster-admin'],
   ['/projects/lattice', 'post-quantum'],
   ['/posts', 'Excessive Agency'],
-  ['/posts/ai-agent-excessive-agency', 'excessive agency'],
+  // Use an INTERNAL (self-canonical) post — external posts now canonical to the
+  // original (dev.to), which is correct and would fail a self-canonical check.
+  ['/posts/base64-is-not-encryption', 'Base64'],
   ['/experiences', 'Security Engineer'],
   ['/publications', 'Scientific Reports'],
   ['/resume', 'Security Engineer'],
