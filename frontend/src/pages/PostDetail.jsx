@@ -31,6 +31,19 @@ const mdComponents = {
       <code className="block bg-[#0d1117] border border-white/10 rounded-lg p-4 my-5 overflow-x-auto font-mono text-sm text-emerald-300">{children}</code>
     ),
   strong: ({ children }) => <strong className="text-text font-semibold">{children}</strong>,
+  img: ({ src, alt }) => (
+    // span-based so it stays valid inside markdown's <p> wrapper
+    <span className="block my-8">
+      <img
+        src={src}
+        alt={alt || ''}
+        loading="lazy"
+        decoding="async"
+        className="block w-full rounded-xl border border-white/10 bg-white"
+      />
+      {alt && <span className="block text-center text-xs text-gray-500 mt-2.5">{alt}</span>}
+    </span>
+  ),
 }
 
 export default function PostDetail() {
@@ -89,6 +102,19 @@ export default function PostDetail() {
               {post.readTime && <span className="flex items-center gap-1.5"><FaClock size={12} /> {post.readTime}</span>}
             </div>
           </motion.div>
+
+          {post.cover && (post.cover.startsWith('/') || post.cover.startsWith('http')) && (
+            <motion.img
+              src={post.cover}
+              alt={post.title}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              loading="eager"
+              decoding="async"
+              className="w-full rounded-xl border border-white/10 bg-white mb-10"
+            />
+          )}
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
             <ReactMarkdown remarkPlugins={[remarkGfm]} components={mdComponents}>

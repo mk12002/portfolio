@@ -132,73 +132,89 @@ export const posts = [
   },
   {
     slug: 'inside-a-7-agent-email-security-system',
-    title: 'Inside a 7-Agent Email Security System',
+    title: 'We Gave Email Security a Team of Analysts That Never Sleep',
     excerpt:
-      'How I decomposed email threat-neutralization into seven cooperating AI agents, the orchestration that keeps it fast, and the engineering trade-offs that made it run in 30GB of RAM.',
+      'How a multi-agent AI system investigates suspicious emails in seconds — and, unlike traditional tools, tells you exactly why.',
     category: 'Multi-Agent Systems',
-    date: '2026-05-20',
-    readTime: '11 min read',
-    tags: ['Agentic AI', 'LangGraph', 'Email Security', 'XGBoost', 'TinyBERT'],
-    cover: '🛡️',
-    content: `Most "AI email security" is a single classifier bolted onto a mail server. That works until an attacker rephrases the lure, swaps the payload, or splits intent across the headers, the body, and a look-alike domain. A monolithic model has to be good at *everything at once* — and is therefore reliably mediocre at the cases that actually matter.
+    date: '2026-09-04',
+    readTime: '8 min read',
+    tags: ['Agentic AI', 'Email Security', 'Explainable AI', 'MITRE ATT&CK', 'Applied AI'],
+    cover: '/posts/email-security/fig1_old_vs_agentic.png',
+    content: `Almost every serious cyberattack still begins the same humble way: someone receives an email. A convincing message, a link that looks almost right, an attachment that seems routine. Email remains the number-one way attackers get their first foothold inside an organization — and defenders have spent years playing catch-up.
 
-When I started this work at ITC Infotech, the brief was blunt: catch advanced phishing, credential harvesting, and business-email-compromise (BEC) that the existing gateway was missing — without ballooning latency or cost. The design I landed on treats detection as a **team of seven specialised agents**, each responsible for exactly one decision, coordinated by an orchestrator.
+The frustrating part isn't that we lack tools. It's that the tools we have tend to work in isolation and then hand a security analyst a verdict with no explanation. "This email is risky." Okay — but why? Which part? What would change the answer? To find out, an analyst opens one console after another, copies findings between them, and pieces the story together by hand. It routinely takes 30 minutes or more per email, and there are thousands of them.
 
-## Why multi-agent (and not one big model)
+We took a different approach. Instead of one tool doing everything in sequence, we built a coordinated team of **seven specialized AI agents** that examine an email at the same time, combine what they find, and produce a clear, explained decision in seconds.
 
-A single large model conflates unrelated signals. A spoofed display name, a freshly-registered domain, and urgent "reset your password now" language are *different kinds* of evidence, and forcing one network to weigh them jointly makes it brittle and unexplainable.
+## The core idea: a team of specialists, not a single gatekeeper
 
-Splitting the problem lets each agent stay small, fast, independently testable, and — crucially — independently *improvable*. When a new BEC pattern slips through, I retrain one agent, not the whole system.
+Think about how a good security team actually works. You don't ask one person to be simultaneously the world expert on sender authentication, malicious links, dangerous file types, attacker infrastructure, and human behavior. You bring together specialists, let each look at the problem through their own lens, and then compare notes.
 
-- **Triage** — a cheap first pass that drops obviously-benign mail before any expensive analysis runs. This is where most of the latency budget is saved.
-- **Header & auth** — SPF/DKIM/DMARC alignment, routing anomalies, Reply-To/From mismatches, and display-name spoofing.
-- **URL & domain** — look-alike (homoglyph/typosquat) detection, redirect-chain unrolling, and reputation lookups.
-- **Content intent** — a fine-tuned **TinyBERT** reads the body specifically for credential-harvesting and BEC language, not generic "spam-ness."
-- **Attachment** — engineered static features over file metadata fed to an **XGBoost** model (polyglots, macro-bearing Office files, suspicious archives).
-- **Correlation** — fuses the per-agent verdicts into a single calibrated risk score.
-- **Response** — quarantine, rewrite, or release — each with a human-readable justification.
+Our system works the same way. Seven independent agents each focus on one dimension of an email. Crucially, they run **in parallel** — all at once, not one after another — so adding more depth of analysis doesn't slow things down. Their findings are then fused into a single, coherent verdict by a decision layer that is deliberately predictable and auditable.
 
-## The orchestration
+> The shift in one sentence: we moved from a system that asks "is this email malicious?" to one that answers "why is this malicious, what evidence supports it, and what should we do about it?"
 
-The agents run as a graph in **LangGraph**. The edges are *conditional*, which is the whole trick: triage can short-circuit straight to *release*, while a suspicious URL escalates only the agents that are relevant to that signal. You never pay for the heavy language and attachment agents on clean mail.
+## How it works: four clean stages
 
-\`\`\`python
-# Conditional escalation — heavy agents run only when signals warrant it
-state = triage_agent.run(email)
-if state.risk < LOW_THRESHOLD:
-    return Verdict.RELEASE                  # ~70% of mail exits here, cheaply
+Every email travels through the same four-stage pipeline. Keeping these stages separate is what makes the system fast, resilient, and easy to reason about.
 
-graph.run([header_agent, url_agent])        # always-cheap structural checks
-if any_signal_suspicious(state):
-    graph.run([content_agent, attachment_agent])   # expensive, conditional
+![Figure 1 — An email's journey from arrival to resolution.](/posts/email-security/fig2_four_stage_journey.png)
 
-verdict = correlation_agent.fuse(state)
-return response_agent.act(verdict)
-\`\`\`
+In plain terms: the **Ingestion** stage opens the email and extracts everything worth checking — including text hidden inside images and QR codes — while quietly skipping anything it has already analyzed. The **Analysis** stage is where the seven specialists do their work. The **Decision** stage weighs and cross-checks all the evidence and writes the verdict. Finally, the **Action** stage does something useful with that verdict instead of just raising yet another alert.
 
-Because the graph is explicit, every decision has a *trace*: which agents fired, what each contributed, and why the correlation agent landed where it did.
+## Meet the seven specialists
 
-## Fitting seven models in 30GB
+Each agent is backed by its own machine-learning model and a set of expert rules. Here's what each one is really asking:
 
-Running seven models naively blows the memory budget instantly. Three decisions kept it lean:
+![Figure 2 — Seven agents, each an expert on one part of the email.](/posts/email-security/fig3_seven_agents.png)
 
-1. **Distilled, quantised models.** TinyBERT over a full transformer for the content agent — a fraction of the footprint with negligible loss on this narrow task.
-2. **Lazy residency.** An agent's weights are only resident while it's on the active path. On the ~70% of mail that exits at triage, the language and attachment models never load.
-3. **Classical ML where it wins.** XGBoost over engineered attachment features beat a neural model at a fraction of the cost — a good reminder that "agentic" doesn't mean "an LLM for everything."
+No single one of these signals is conclusive on its own. A slightly odd sending pattern, a shortened link, a mildly urgent tone — individually, each is easy to dismiss. The power comes from **correlation**: when several weak signals line up, the system recognizes the composite attack that any single check would have missed. Just as importantly, when the agents disagree — say, alarming content but a perfectly legitimate sender — the decision layer applies a penalty rather than crying wolf.
 
-## Calibration beats raw accuracy
+## The real breakthrough: it explains itself
 
-Early on, the system was "accurate" but untrustworthy: it would block a legitimate invoice with the same confidence it blocked a phishing kit. The fix was **score calibration** at the correlation stage — making the risk score mean what it says — plus per-tenant thresholds so a bank and a startup can tune their own tolerance for false positives.
+This is where the system departs most sharply from conventional email security. A typical product tells you an email was blocked and stops there. Ours produces an **analyst-ready explanation** for every decision, built from three ingredients.
 
-## What I'd tell my past self
+![Figure 3 — A sample verdict, with evidence, a counterfactual, and a storyline.](/posts/email-security/fig4_explained_verdict.png)
 
-The biggest win wasn't a model — it was **making every verdict explainable**. When the correlation agent can say *"flagged: DMARC fail + look-alike domain + credential-harvest language,"* analysts trust it, and a false positive becomes a five-second conversation instead of a black-box argument.
+- **The evidence.** A ranked list of exactly which agents contributed to the verdict and how strongly — so the reasoning is transparent, not a black box.
+- **The counterfactual.** In plain English, the single most useful sentence in security: what would have had to be different for the verdict to change. *"If the sender had passed authentication and the link led to the real domain, this would have been rated likely-safe."* That turns a score into understanding.
+- **The storyline.** The attack retold as a short narrative — delivery, lure, weaponization, containment — with each step mapped to the industry-standard **MITRE ATT&CK** framework, so seasoned analysts get the rigor they expect while everyone else gets a story they can follow.
 
-> Security tooling lives or dies on whether a human can act on its output. Build the explanation in from day one — retrofitting it is painful.
+> Why this matters to the business: explanations are what let a security team trust automation. When people can see the reasoning, they act faster, second-guess less, and stop drowning in alerts they can't interpret.
 
-If I were starting again I'd invest even earlier in a **replay harness**: a corpus of real (sanitised) threats and benign mail that I can re-run the whole graph against on every change. Agentic systems have a lot of moving parts, and the only way to refactor one confidently is to be able to prove you didn't regress.
+## Acting with care, not with a sledgehammer
 
-*This is a writeup of my work on agentic email security at ITC Infotech. Want the deeper architecture or a walkthrough? [Get in touch](/contact).*`,
+A verdict is only useful if something happens next. But automation in security has to be handled responsibly — you do not want a system deleting a CEO's legitimate mail because it was slightly over-eager. So the response is **graduated**: the more confident and severe the verdict, the stronger the action.
+
+![Figure 4 — The response escalates in step with the verdict.](/posts/email-security/fig5_graduated_response.png)
+
+Low-risk mail is delivered, sometimes with a gentle warning banner. Genuinely dangerous mail can be quarantined, deleted, or have its sender blocked automatically — and high-risk cases can even trigger a deeper investigation on the affected device. Every one of these live actions can be gated behind human approval, and the system ships in a "simulated mode" that logs precisely what it would do before it is ever trusted to touch a real mailbox.
+
+## Does it actually work?
+
+Short answer: yes — and it holds up under both statistical and practical scrutiny. Across the individual agent models, detection quality is consistently high, and end-to-end testing against a spread of real-world email types (credential phishing, business-email-compromise fraud, malicious-invoice scams, and legitimate mail) produced accurate verdicts with all seven agents participating.
+
+![Figure 5 — Key outcomes from model evaluation and end-to-end testing.](/posts/email-security/fig6_results.png)
+
+Beyond the headline accuracy, two numbers tend to catch a leader's attention: the collapse of investigation time from tens of minutes to seconds, and the potential to cut repetitive alerts by up to 80%. That is not just a detection improvement — it is a direct reduction in the operational burden and burnout that quietly cripples security teams.
+
+## Built for the real world
+
+Impressive lab numbers mean little if a system can't be deployed and trusted. Three design choices make this one practical for real organizations:
+
+- **It runs on ordinary hardware.** No expensive, scarce GPUs are required — which lowers cost and makes adoption far easier for most enterprises.
+- **It fails gracefully.** If one or more agents are temporarily unavailable, the system still reaches a responsible decision from the agents it does have — and it labels that decision as partial, so no one is misled.
+- **It respects the data.** Because it processes sensitive communications, it is built with data-minimization, encryption, role-based access, immutable audit trails, and deletion workflows for regulations like GDPR and CCPA in mind.
+
+## What's next
+
+The architecture is designed to keep learning. On the roadmap: a **visual agent** that screenshots and "looks at" suspicious login pages to catch brand impersonation that text analysis misses; finer-grained feature-level attributions for analysts; an automated **red-team** that invents novel phishing to find and fix blind spots; and privacy-preserving learning that lets multiple organizations improve the models together without ever sharing raw email.
+
+## The bottom line
+
+Email security has spent a long time as a **filter** — a wall that silently blocks things and hopes you trust it. This work reframes it as an **investigator**: a system that detects, explains, and responds, and that treats the human analyst as a partner to be informed rather than a bottleneck to be bypassed. Detection alone was never the hard part. Understanding, at scale, was — and that is the gap this closes.
+
+*This is a writeup of my work on agentic email security at ITC Infotech. See the [project deep-dive](/projects/agentic-email-security) or [get in touch](/contact).*`,
   },
   {
     slug: 'base64-is-not-encryption',
