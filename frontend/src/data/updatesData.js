@@ -8,8 +8,7 @@ export const milestones = [
   { type: 'release', date: '2026-08-25', title: 'Bulwark packaged for PyPI under the bulwark-* namespace', href: 'https://github.com/mk12002/Bulwark' },
   { type: 'release', date: '2026-08-22', title: 'Portcullis — 175 tests + SARIF 2.1.0 schema validation', href: 'https://github.com/mk12002/Portcullis' },
   { type: 'release', date: '2026-08-21', title: 'Bastion — least-privilege remediation synthesis (590+ tests)', href: 'https://github.com/mk12002/Bastion' },
-  // TODO: set the real acceptance date once the journal confirms it.
-  { type: 'paper', date: '2026-08-20', title: 'Paper accepted: HINT-Net — Scientific Reports (Nature Portfolio)', href: '/publications' },
+  { type: 'paper', date: '2026-09-04', title: 'Paper published: HINT-Net — Scientific Reports (Nature Portfolio), DOI 10.1038/s41598-026-67051-6', href: 'https://www.nature.com/articles/s41598-026-67051-6' },
   { type: 'release', date: '2026-08-07', title: 'Stowaway v0.1.0 — first public release (npm · PyPI · Go · Cargo)', href: 'https://github.com/mk12002/Stowaway' },
   { type: 'release', date: '2026-08-01', title: 'Lattice v0.4.0 — 12 languages + citable Zenodo DOI', href: 'https://github.com/mk12002/Lattice' },
 ]

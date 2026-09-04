@@ -43,8 +43,13 @@ export default function Publications() {
                     <FaBook className="text-reasoning text-xl" />
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-semibold text-lg mb-2">{pub.title}</h3>
-                    
+                    <div className="flex items-start justify-between gap-3 mb-2">
+                      <h3 className="font-semibold text-lg">{pub.title}</h3>
+                      {pub.status && (
+                        <span className="shrink-0 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 whitespace-nowrap">{pub.status}</span>
+                      )}
+                    </div>
+
                     <div className="flex items-center gap-2 text-sm text-gray-400 mb-3">
                       <FaUsers />
                       <span>{pub.authors?.join(', ')}</span>
@@ -55,6 +60,16 @@ export default function Publications() {
                       <span className="flex items-center gap-1">
                         <FaCalendar /> {pub.date}
                       </span>
+                      {pub.doi && (
+                        <a
+                          href={`https://doi.org/${pub.doi}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-mono text-xs text-gray-400 hover:text-vision transition-colors"
+                        >
+                          DOI: {pub.doi}
+                        </a>
+                      )}
                     </div>
 
                     {pub.abstract && (
