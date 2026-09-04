@@ -7,7 +7,9 @@ export default function SEO({
   description = "Security Engineer working across AI for Security and Security for AI — creator of an open-source security tooling suite spanning the software supply chain, plus VAPT, SOC detection engineering, and published ML research.",
   keywords = "Cybersecurity Engineer, AI Engineer, Security Engineer, AI for Security, Security for AI, VAPT, SOC Operations, Adversarial ML, Threat Detection, Multi-Agent Systems, PyTorch, Mohit Kumar",
   ogImage = "/og-image.png",
-  pathname = "/"
+  pathname = "/",
+  ogType = "website",
+  article = null   // { publishedTime, modifiedTime, section, tags: [] } for blog posts
 }) {
   const siteUrl = "https://mohitkumar-mu.vercel.app"
   const canonicalUrl = `${siteUrl}${pathname}`
@@ -28,7 +30,7 @@ export default function SEO({
       <meta name="author" content="Mohit Kumar" />
 
       {/* Open Graph / Facebook */}
-      <meta property="og:type" content="website" />
+      <meta property="og:type" content={ogType} />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:site_name" content="Mohit Kumar Portfolio" />
       <meta property="og:title" content={title} />
@@ -50,51 +52,19 @@ export default function SEO({
       <meta name="twitter:image" content={resolvedOgImage} />
       <meta name="twitter:image:alt" content={title} />
 
+      {/* Article metadata for blog posts (site-wide Person + WebSite JSON-LD
+          live in index.html; per-post BlogPosting JSON-LD is emitted by the
+          prerender, so this component stays free of duplicate structured data). */}
+      {article && <meta property="article:published_time" content={article.publishedTime} />}
+      {article && article.modifiedTime && <meta property="article:modified_time" content={article.modifiedTime} />}
+      {article && <meta property="article:author" content="Mohit Kumar" />}
+      {article && article.section && <meta property="article:section" content={article.section} />}
+      {article && (article.tags || []).map((t) => (
+        <meta key={t} property="article:tag" content={t} />
+      ))}
+
       {/* Canonical */}
       <link rel="canonical" href={canonicalUrl} />
-
-      {/* JSON-LD Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Person",
-          "name": "Mohit Kumar",
-          "url": siteUrl,
-          "image": `${siteUrl}/og-image.png`,
-          "jobTitle": "Cybersecurity & AI Engineer",
-          "description": description,
-          "worksFor": {
-            "@type": "Organization",
-            "name": "ITC Infotech"
-          },
-          "alumniOf": {
-            "@type": "CollegeOrUniversity",
-            "name": "VIT Chennai"
-          },
-          "knowsAbout": [
-            "Cybersecurity",
-            "AI for Security",
-            "Security for AI",
-            "VAPT",
-            "SOC Operations",
-            "Threat Detection",
-            "Adversarial Machine Learning",
-            "Multi-Agent Systems",
-            "AI Supply Chain Security",
-            "Post-Quantum Cryptography",
-            "Machine Learning",
-            "PyTorch",
-            "Deep Learning"
-          ],
-          "sameAs": [
-            "https://github.com/mk12002",
-            "https://www.linkedin.com/in/mohitkumar111/",
-            "https://x.com/mohitkr111",
-            "https://dev.to/mohit_kumar1",
-            "https://www.instagram.com/mohit__kr_/"
-          ]
-        })}
-      </script>
     </Helmet>
   )
 }

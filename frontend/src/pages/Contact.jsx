@@ -235,11 +235,21 @@ export default function Contact() {
 
             <GlowCard glowColor="vision">
               <h3 className="font-semibold mb-4">LinkedIn Profile</h3>
-              <div className="badge-base LI-profile-badge" data-locale="en_US" data-size="large" data-theme="dark" data-type="HORIZONTAL" data-vanity="mohitkumar111" data-version="v1">
-                <a className="badge-base__link LI-simple-link" href="https://in.linkedin.com/in/mohitkumar111?trk=profile-badge">
-                  Mohit Kumar
-                </a>
-              </div>
+              <a
+                href="https://www.linkedin.com/in/mohitkumar111/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-4 p-4 rounded-xl bg-white/5 border border-white/10 hover:border-vision/40 hover:bg-white/[0.07] transition-all group"
+              >
+                <img src="/assets/profile.jpg" alt="Mohit Kumar" loading="lazy" decoding="async" className="w-14 h-14 rounded-full object-cover border-2 border-white/15" />
+                <div className="min-w-0">
+                  <div className="font-semibold text-white flex items-center gap-2">
+                    <FaLinkedin className="text-[#0A66C2]" /> Mohit Kumar
+                  </div>
+                  <div className="text-sm text-gray-400 truncate">Security Engineer · AI for Security &amp; Security for AI</div>
+                  <div className="text-xs text-vision mt-1 group-hover:underline">Connect on LinkedIn →</div>
+                </div>
+              </a>
             </GlowCard>
           </motion.div>
         </div>

@@ -54,12 +54,14 @@ function setMeta(html, attr, key, value) {
   return re.test(html) ? html.replace(re, tag) : html.replace('</head>', `  ${tag}\n</head>`)
 }
 
-function render({ route, title, description, ogImage = DEFAULT_OG, body = '' }) {
+function render({ route, title, description, ogImage = DEFAULT_OG, body = '', canonical, ogType = 'website', articleMeta = null, jsonLd = null }) {
   const url = SITE + (route === '/' ? '/' : route)
+  const canon = canonical || url
   let html = template
   html = html.replace(/<title>[\s\S]*?<\/title>/, `<title>${esc(title)}</title>`)
   html = setMeta(html, 'name', 'title', title)
   html = setMeta(html, 'name', 'description', description)
+  html = setMeta(html, 'property', 'og:type', ogType)
   html = setMeta(html, 'property', 'og:title', title)
   html = setMeta(html, 'property', 'og:description', description)
   html = setMeta(html, 'property', 'og:url', url)
@@ -69,9 +71,32 @@ function render({ route, title, description, ogImage = DEFAULT_OG, body = '' }) 
   html = setMeta(html, 'name', 'twitter:description', description)
   html = setMeta(html, 'name', 'twitter:url', url)
   html = setMeta(html, 'name', 'twitter:image', ogImage)
+  // og:image dimensions are only guaranteed for the default 1200x630 card; strip
+  // them for arbitrary per-page images so we never declare a size we can't back.
+  if (ogImage !== DEFAULT_OG) {
+    html = html.replace(/\s*<meta property="og:image:width"[^>]*>/i, '')
+      .replace(/\s*<meta property="og:image:height"[^>]*>/i, '')
+  }
+  // Article metadata for blog posts (Open Graph article:* tags).
+  if (articleMeta) {
+    const tagMeta = (articleMeta.tags || []).map((t) => `<meta property="article:tag" content="${esc(t)}" />`)
+    const block = [
+      `<meta property="article:published_time" content="${esc(articleMeta.publishedTime || '')}" />`,
+      `<meta property="article:modified_time" content="${esc(articleMeta.modifiedTime || articleMeta.publishedTime || '')}" />`,
+      `<meta property="article:author" content="Mohit Kumar" />`,
+      articleMeta.section ? `<meta property="article:section" content="${esc(articleMeta.section)}" />` : '',
+      ...tagMeta,
+    ].filter(Boolean).join('\n  ')
+    html = html.replace('</head>', `  ${block}\n</head>`)
+  }
   if (!/<link rel="canonical"[^>]*>/.test(html)) throw new Error(`[prerender] ${route}: no <link rel="canonical"> in built index.html to rewrite`)
-  html = html.replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${url}" />`)
-  if (!html.includes(`<link rel="canonical" href="${url}" />`)) throw new Error(`[prerender] ${route}: canonical rewrite produced no change`)
+  html = html.replace(/<link rel="canonical"[^>]*>/, `<link rel="canonical" href="${canon}" />`)
+  if (!html.includes(`<link rel="canonical" href="${canon}" />`)) throw new Error(`[prerender] ${route}: canonical rewrite produced no change`)
+  // Per-page structured data (e.g. BlogPosting) — site-wide Person + WebSite
+  // already live in the index.html template and are inherited by every page.
+  if (jsonLd) {
+    html = html.replace('</head>', `  <script type="application/ld+json">${JSON.stringify(jsonLd)}</script>\n</head>`)
+  }
   // Fallback content lives inside #root; React's createRoot().render() clears it
   // on mount. display:none keeps it out of the visual first paint (no flash) while
   // remaining in the HTML source for non-JS text extractors and archives.
@@ -150,11 +175,35 @@ pages.push({
 
 // Post detail pages
 for (const post of posts) {
+  const isExternal = !!post.url
+  const cover = post.cover && (post.cover.startsWith('http') || post.cover.startsWith('/')) ? abs(post.cover) : DEFAULT_OG
+  // Externally-hosted posts are thin stubs — point their canonical at the
+  // original so ranking consolidates there, and keep them out of the sitemap.
+  const jsonLd = isExternal ? null : {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: post.title,
+    description: post.excerpt || post.title,
+    image: cover,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: { '@type': 'Person', name: 'Mohit Kumar', url: SITE },
+    publisher: { '@type': 'Person', name: 'Mohit Kumar', url: SITE },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `${SITE}/posts/${post.slug}` },
+    keywords: (post.tags || []).join(', '),
+    articleSection: post.category || 'Blog',
+  }
   pages.push({
     route: `/posts/${post.slug}`,
     title: `${post.title} | Mohit Kumar`,
     description: (post.excerpt || post.title).slice(0, 200),
-    ogImage: post.cover && (post.cover.startsWith('http') || post.cover.startsWith('/')) ? abs(post.cover) : DEFAULT_OG,
+    ogImage: cover,
+    ogType: 'article',
+    canonical: isExternal ? post.url : undefined,
+    articleMeta: { publishedTime: post.date, modifiedTime: post.date, section: post.category, tags: post.tags || [] },
+    jsonLd,
+    lastmod: /^\d{4}-\d{2}-\d{2}/.test(post.date || '') ? post.date.slice(0, 10) : undefined,
+    sitemap: !isExternal,
     body: `<h1>${esc(post.title)}</h1><p>${esc(post.date)} · ${esc(post.category || '')}</p><p>${esc(post.excerpt || '')}</p>${post.tags ? `<p>${esc(post.tags.join(', '))}</p>` : ''}${post.url ? `<p><a href="${esc(post.url)}">Read the full article on ${esc(post.source || 'the original site')}</a></p>` : ''}<p><a href="/posts">← All posts</a></p>`,
   })
 }
@@ -226,4 +275,28 @@ for (const page of pages) {
   n++
 }
 console.log(`[prerender] OK — ${n} routes prerendered with per-route canonical, meta, and validated body content`)
+
+// ---- sitemap ------------------------------------------------------------
+// Generated from the same route list, so it can never drift from what exists.
+// External-post stubs (canonical points off-domain) are excluded.
+const today = new Date().toISOString().slice(0, 10)
+const priorityFor = (r) => {
+  if (r === '/') return '1.0'
+  if (['/projects', '/posts', '/playground', '/demos', '/resume'].includes(r)) return '0.9'
+  if (r === '/case-study' || r.startsWith('/projects/') || r.startsWith('/posts/')) return '0.8'
+  if (['/publications', '/experiences', '/certificates'].includes(r)) return '0.8'
+  return '0.6'
+}
+const changefreqFor = (r) => (['/', '/posts', '/projects'].includes(r) ? 'weekly' : 'monthly')
+const sitemapPages = pages.filter((p) => p.sitemap !== false)
+const urls = sitemapPages
+  .map((p) => {
+    const loc = SITE + (p.route === '/' ? '/' : p.route)
+    const lastmod = p.lastmod || today
+    return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod><changefreq>${changefreqFor(p.route)}</changefreq><priority>${priorityFor(p.route)}</priority></url>`
+  })
+  .join('\n')
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`
+writeFileSync(join(dist, 'sitemap.xml'), sitemap)
+console.log(`[prerender] sitemap.xml — ${sitemapPages.length} indexable URLs (excluded ${pages.length - sitemapPages.length} external stubs)`)
 

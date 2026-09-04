@@ -83,6 +83,9 @@ export default function PostDetail() {
         description={post.excerpt}
         keywords={post.tags?.join(', ')}
         pathname={`/posts/${post.slug}`}
+        ogType="article"
+        ogImage={post.cover && (post.cover.startsWith('/') || post.cover.startsWith('http')) ? post.cover : '/og-image.png'}
+        article={{ publishedTime: post.date, section: post.category, tags: post.tags || [] }}
       />
       <article className="min-h-screen pt-28 pb-20 px-4">
         <div className="max-w-2xl mx-auto">
