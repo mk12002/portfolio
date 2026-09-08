@@ -33,7 +33,6 @@ const Events = lazy(() => import('./pages/Events'))
 const Publications = lazy(() => import('./pages/Publications'))
 const Uses = lazy(() => import('./pages/Uses'))
 const Contact = lazy(() => import('./pages/Contact'))
-const Hire = lazy(() => import('./pages/Hire'))
 const CTF = lazy(() => import('./pages/CTF'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -116,7 +115,12 @@ function App() {
                 <Route path="/reads" element={<Navigate to="/posts" replace />} />
                 <Route path="/uses" element={<PageTransition><Uses /></PageTransition>} />
                 <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
-                <Route path="/hire" element={<PageTransition><Hire /></PageTransition>} />
+                {/* /hire is PARKED, not deleted — resurface when job-hunting resumes.
+                    To restore: re-add the lazy import + this route as <Hire />, the
+                    Navbar/CommandPalette/Footer entries, the prerender block and the
+                    vercel.json rewrite, and drop the temporary redirect. Hire.jsx is
+                    untouched. Redirect is TEMPORARY (307) so nothing caches it. */}
+                <Route path="/hire" element={<Navigate to="/contact" replace />} />
                 <Route path="/ctf" element={<PageTransition><CTF /></PageTransition>} />
                 <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
               </Routes>

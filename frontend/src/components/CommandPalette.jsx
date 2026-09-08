@@ -18,7 +18,6 @@ const PAGE_ITEMS = [
   { label: 'Certificates', to: '/certificates', icon: FaCertificate, group: 'Pages' },
   { label: 'Publications', to: '/publications', icon: FaFileAlt, group: 'Pages' },
   { label: 'Tech Stack', to: '/uses', icon: FaToolbox, group: 'Pages' },
-  { label: 'Hire Me', to: '/hire', icon: FaBriefcase, group: 'Pages' },
   { label: 'Contact', to: '/contact', icon: FaEnvelope, group: 'Pages' },
   { label: 'CTF Challenge', to: '/ctf', icon: FaFlag, group: 'Pages' },
 ]

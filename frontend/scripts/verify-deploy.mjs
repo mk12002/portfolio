@@ -23,7 +23,6 @@ const routes = [
   ['/experiences', 'Security Engineer'],
   ['/publications', 'Scientific Reports'],
   ['/resume', 'Security Engineer'],
-  ["/hire", "Roles I"],
 ]
 
 const grab = (html, re) => (html.match(re) || [])[1] || ''

@@ -238,26 +238,6 @@ pages.push({
     <p><a href="/demos">Try the analysis yourself</a> · <a href="/projects/bastion">About Bastion</a></p>`,
 })
 
-// Hire — recruiter landing page. Prerendered with real content so it works as a
-// search-and-share target, not just a client-side route.
-pages.push({
-  route: '/hire',
-  title: 'Hire Me | Mohit Kumar — Security Engineer (Bengaluru)',
-  description: 'Security Engineer in Bengaluru open to AI/ML security, product security, detection engineering, and offensive security roles. Open-source security tooling, published research, and hands-on VAPT and SOC experience.',
-  body: `<h1>Hire Mohit Kumar — Security Engineer</h1>
-    <p>Open to Security Engineering roles. Based in Bengaluru, India; on-site or hybrid, and open to remote-first teams. Indian citizen — no sponsorship required to work in India.</p>
-    <h2>Roles I'm looking for</h2>
-    <ul>
-      <li><strong>AI / ML Security</strong> — AI Security Engineer, ML Security Engineer, Security Research (AI).</li>
-      <li><strong>Product &amp; Platform Security</strong> — Product Security Engineer, Application Security Engineer, DevSecOps Engineer.</li>
-      <li><strong>Detection Engineering</strong> — Detection Engineer, Security Engineer (SOC), Cloud Security Engineer.</li>
-      <li><strong>Offensive Security</strong> — Security Engineer (Offensive), Penetration Tester, Red Team Engineer.</li>
-    </ul>
-    <h2>What I bring</h2>
-    <p>Five open-source security scanners across Kubernetes RBAC, the AI/ML supply chain, dependencies, cryptography, and CI/CD — packaged, documented, and citable. A real finding on the public argo-cd Helm chart: 19 escalation paths to cluster-admin that a pod-hygiene linter missed entirely. Day-to-day VAPT, Microsoft Sentinel and Splunk detection engineering, and J-SOX/MICS control auditing at ITC Infotech. Peer-reviewed research in Scientific Reports (Nature Portfolio).</p>
-    <p>Email <a href="mailto:${esc(profile.socialLinks?.email?.replace('mailto:', '') || 'mohit.kr1103@gmail.com')}">${esc(profile.socialLinks?.email?.replace('mailto:', '') || 'mohit.kr1103@gmail.com')}</a> · <a href="/resume">Resume</a> · <a href="/projects">Projects</a> · <a href="/case-study">Case study</a></p>`,
-})
-
 // Utility routes — correct head + a lightweight body
 const utility = [
   ['/certificates', 'Certificates | Mohit Kumar', 'Professional certifications across cybersecurity, cloud, and machine learning.'],
@@ -301,7 +281,7 @@ console.log(`[prerender] OK — ${n} routes prerendered with per-route canonical
 const today = new Date().toISOString().slice(0, 10)
 const priorityFor = (r) => {
   if (r === '/') return '1.0'
-  if (['/projects', '/posts', '/playground', '/demos', '/resume', '/hire'].includes(r)) return '0.9'
+  if (['/projects', '/posts', '/playground', '/demos', '/resume'].includes(r)) return '0.9'
   if (r === '/case-study' || r.startsWith('/projects/') || r.startsWith('/posts/')) return '0.8'
   if (['/publications', '/experiences', '/certificates'].includes(r)) return '0.8'
   return '0.6'

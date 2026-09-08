@@ -27,7 +27,6 @@ export default function Footer() {
               <Link to="/publications" className="text-gray-400 hover:text-vision transition-colors">Publications</Link>
               <Link to="/posts" className="text-gray-400 hover:text-vision transition-colors">Blog</Link>
               <Link to="/contact" className="text-gray-400 hover:text-vision transition-colors">Contact</Link>
-              <Link to="/hire" className="text-vision hover:text-reasoning transition-colors font-medium">Hire Me</Link>
             </div>
           </div>
 
