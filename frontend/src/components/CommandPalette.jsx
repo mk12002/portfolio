@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   FaSearch, FaHome, FaProjectDiagram, FaShieldAlt, FaPenFancy, FaBriefcase, FaFileAlt,
-  FaCertificate, FaBookOpen, FaEnvelope, FaFlag, FaToolbox, FaExternalLinkAlt, FaArrowRight,
+  FaCertificate, FaEnvelope, FaFlag, FaToolbox, FaExternalLinkAlt, FaArrowRight,
 } from 'react-icons/fa'
 import projectsContent from '../data/projectsContent.json'
 import { posts } from '../data/postsData'
@@ -17,8 +17,8 @@ const PAGE_ITEMS = [
   { label: 'Resume', to: '/resume', icon: FaFileAlt, group: 'Pages' },
   { label: 'Certificates', to: '/certificates', icon: FaCertificate, group: 'Pages' },
   { label: 'Publications', to: '/publications', icon: FaFileAlt, group: 'Pages' },
-  { label: 'Reading List', to: '/reads', icon: FaBookOpen, group: 'Pages' },
   { label: 'Tech Stack', to: '/uses', icon: FaToolbox, group: 'Pages' },
+  { label: 'Hire Me', to: '/hire', icon: FaBriefcase, group: 'Pages' },
   { label: 'Contact', to: '/contact', icon: FaEnvelope, group: 'Pages' },
   { label: 'CTF Challenge', to: '/ctf', icon: FaFlag, group: 'Pages' },
 ]

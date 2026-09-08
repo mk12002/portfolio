@@ -11,3 +11,6 @@ Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://mohitkumar-mu.vercel.app/sitemap.xml
+
+# RSS feed
+# https://mohitkumar-mu.vercel.app/rss.xml

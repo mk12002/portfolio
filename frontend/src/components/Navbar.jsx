@@ -28,13 +28,13 @@ const primaryLinks = [
   { name: 'Experience', path: '/experiences' },
   { name: 'Blog', path: '/posts' },
   { name: 'Resume', path: '/resume' },
+  { name: 'Hire Me', path: '/hire' },
   { name: 'Contact', path: '/contact' },
 ]
 
 const moreLinks = [
   { name: 'Certificates', path: '/certificates' },
   { name: 'Publications', path: '/publications' },
-  { name: 'Reads', path: '/reads' },
   { name: 'Tech Stack', path: '/uses' },
   { name: 'Events', path: '/events' },
 ]

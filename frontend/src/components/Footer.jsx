@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { FaGithub, FaLinkedin, FaEnvelope, FaCoffee, FaTwitter } from 'react-icons/fa'
+import { FaGithub, FaLinkedin, FaEnvelope, FaTwitter } from 'react-icons/fa'
 
 export default function Footer() {
   return (
@@ -25,8 +25,9 @@ export default function Footer() {
               <Link to="/resume" className="text-gray-400 hover:text-vision transition-colors">Resume</Link>
               <Link to="/experiences" className="text-gray-400 hover:text-vision transition-colors">Experience</Link>
               <Link to="/publications" className="text-gray-400 hover:text-vision transition-colors">Publications</Link>
+              <Link to="/posts" className="text-gray-400 hover:text-vision transition-colors">Blog</Link>
               <Link to="/contact" className="text-gray-400 hover:text-vision transition-colors">Contact</Link>
-              <Link to="/support" className="text-gray-400 hover:text-audio transition-colors">Support Me</Link>
+              <Link to="/hire" className="text-vision hover:text-reasoning transition-colors font-medium">Hire Me</Link>
             </div>
           </div>
 
@@ -49,16 +50,12 @@ export default function Footer() {
                 className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-audio hover:bg-white/10 transition-all">
                 <FaEnvelope size={20} />
               </a>
-              <Link to="/support" aria-label="Support me"
-                className="w-10 h-10 rounded-lg bg-white/5 flex items-center justify-center text-gray-400 hover:text-reasoning hover:bg-white/10 transition-all">
-                <FaCoffee size={20} />
-              </Link>
             </div>
           </div>
         </div>
 
         <div className="mt-8 pt-8 border-t border-white/10 text-center text-sm text-gray-500">
-          <p>&copy; {new Date().getFullYear()} Mohit Kumar. Built with React, Spring Boot & Three.js</p>
+          <p>&copy; {new Date().getFullYear()} Mohit Kumar. Built with React &amp; Vite — prerendered, CSP-hardened, no third-party runtime.</p>
           {/* Hidden CTF breadcrumb */}
           <Link to="/ctf" className="inline-block mt-2 text-gray-700 hover:text-vision transition-colors text-xs" title="Think you can hack it?">
             🏴 Can you capture the flag?

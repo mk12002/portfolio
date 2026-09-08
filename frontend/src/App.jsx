@@ -31,9 +31,9 @@ const Experiences = lazy(() => import('./pages/Experiences'))
 const Certificates = lazy(() => import('./pages/Certificates'))
 const Events = lazy(() => import('./pages/Events'))
 const Publications = lazy(() => import('./pages/Publications'))
-const Reads = lazy(() => import('./pages/Reads'))
 const Uses = lazy(() => import('./pages/Uses'))
 const Contact = lazy(() => import('./pages/Contact'))
+const Hire = lazy(() => import('./pages/Hire'))
 const CTF = lazy(() => import('./pages/CTF'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
@@ -110,9 +110,13 @@ function App() {
                 <Route path="/certificates" element={<PageTransition><Certificates /></PageTransition>} />
                 <Route path="/events" element={<PageTransition><Events /></PageTransition>} />
                 <Route path="/publications" element={<PageTransition><Publications /></PageTransition>} />
-                <Route path="/reads" element={<PageTransition><Reads /></PageTransition>} />
+                {/* /reads is retired — the page + data still live in the repo; restore the
+                    lazy import, this route, the Navbar/CommandPalette entries, and the
+                    prerender line to bring it back. Redirected so old links never 404. */}
+                <Route path="/reads" element={<Navigate to="/posts" replace />} />
                 <Route path="/uses" element={<PageTransition><Uses /></PageTransition>} />
                 <Route path="/contact" element={<PageTransition><Contact /></PageTransition>} />
+                <Route path="/hire" element={<PageTransition><Hire /></PageTransition>} />
                 <Route path="/ctf" element={<PageTransition><CTF /></PageTransition>} />
                 <Route path="*" element={<PageTransition><NotFound /></PageTransition>} />
               </Routes>

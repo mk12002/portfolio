@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { FaArrowRight, FaClock, FaCalendar, FaLink, FaTrophy, FaGlobe, FaDev } from 'react-icons/fa'
+import { FaArrowRight, FaClock, FaCalendar, FaLink, FaTrophy, FaGlobe, FaDev, FaRss } from 'react-icons/fa'
 import { SiHashnode } from 'react-icons/si'
 import GlowCard from '../components/GlowCard'
 import SEO from '../components/SEO'
@@ -30,9 +30,9 @@ export default function Posts() {
   return (
     <>
       <SEO 
-        title="Blog & Posts | Mohit Kumar - ML & AI Technical Insights"
-        description="Technical blog posts on ML systems, hybrid AI, multi-agent systems, computer vision, and NLP. Deep dives into real-world AI implementations."
-        keywords="ML Blog, AI Blog, Machine Learning Articles, Computer Vision Blog, NLP Articles, Multi-Agent Systems, Technical Writing"
+        title="Blog | Mohit Kumar — AI Security &amp; Supply-Chain Writing"
+        description="Technical writing on AI and agent security, the ML supply chain, detection engineering, and honest benchmarking — from the engineer building the open-source scanners behind them."
+        keywords="AI Security Blog, LLM Security, Agent Security, ML Supply Chain, Prompt Injection, AI-BOM, Detection Engineering, Pickle RCE, Technical Writing"
         pathname="/posts"
       />
       <div className="min-h-screen pt-24 pb-20">
@@ -64,6 +64,12 @@ export default function Posts() {
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:border-vision/40 transition-colors"
               >
                 <SiHashnode size={15} /> Follow on Hashnode
+              </a>
+              <a
+                href="/rss.xml"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-white/5 border border-white/10 text-gray-300 hover:text-white hover:border-vision/40 transition-colors"
+              >
+                <FaRss size={14} /> RSS
               </a>
             </div>
           </motion.div>
