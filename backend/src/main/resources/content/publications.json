@@ -57,15 +57,17 @@
         "Yuganshu Kumar",
         "Sudhakaran G"
       ],
-      "venue": "Under Review",
-      "year": 2025,
+      "venue": "2026 Intl. Conference on Computational Intelligence and Network Systems (CINS 2026)",
+      "year": 2026,
       "abstract": "A system blending neural models with rule-based reasoning to determine legal aid eligibility, achieving F1-score of 0.985.",
       "tags": [
         "Legal AI",
         "Hybrid Neural-Symbolic",
         "GNN",
         "Prolog"
-      ]
+      ],
+      "status": "Accepted · CINS 2026",
+      "date": "Accepted · 29–30 Oct 2026 — BITS Pilani Dubai Campus, UAE"
     },
     {
       "title": "High-Precision Polygonal Parking Slot Detection via SwinMask2Former and Dynamic Gap Analysis",
