@@ -5,6 +5,7 @@
 import { posts } from './postsData'
 
 export const milestones = [
+  { type: 'milestone', date: '2026-09-24', title: 'Résumé refreshed — new detailed projects, publications, and Microsoft Azure certifications', href: '/resume' },
   { type: 'paper', date: '2026-09-24', title: 'Paper accepted: HybEx-Law — CINS 2026 (BITS Pilani Dubai Campus, UAE)', href: '/publications' },
   { type: 'release', date: '2026-08-25', title: 'Bulwark packaged for PyPI under the bulwark-* namespace', href: 'https://github.com/mk12002/Bulwark' },
   { type: 'release', date: '2026-08-22', title: 'Portcullis — 175 tests + SARIF 2.1.0 schema validation', href: 'https://github.com/mk12002/Portcullis' },
