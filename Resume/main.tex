@@ -85,20 +85,30 @@
 % Projects
 \section{Projects}
 \vspace{-2pt}
-\textbf{Security Tooling Suite — 5 Open-Source Defensive Scanners} $|$ \textit{Python, SARIF 2.1.0, CycloneDX, Offline \& Deterministic}
+\href{https://github.com/mk12002/Bulwark}{\textbf{Bulwark — The Security Stack for Agentic AI}} $|$ \textit{Python, CycloneDX AI-BOM, SARIF, NIST AI RMF / EU AI Act}
 \begin{itemize}
-    \item \href{https://github.com/mk12002/Bulwark}{\textbf{Bulwark}} — security stack for agentic AI (models, MCP servers, agent assemblies); catches \textbf{14/14} evasive pickle-RCE payloads, outperforming picklescan, modelscan and fickling, and emits a CycloneDX AI-BOM; 270+ tests.
-    \item \href{https://github.com/mk12002/Bastion}{\textbf{Bastion}} — Kubernetes RBAC attack-path analyzer; surfaced \textbf{47 privilege-escalation paths} to cluster-admin across 9 real Helm charts (368 manifests) where a popular linter found 0; 530+ tests.
-    \item \href{https://github.com/mk12002/Lattice}{\textbf{Lattice}} — post-quantum crypto-readiness scanner; builds a Cryptographic BOM across \textbf{12 languages}, grading quantum and classical risk against NIST FIPS 203/204/205 with zero runtime dependencies; 171 tests.
-    \item \href{https://github.com/mk12002/Portcullis}{\textbf{Portcullis}} — CI/CD pipeline security scanner (GitHub Actions, GitLab CI, Jenkins) with trigger-context risk scoring; validated on 66 real pipelines and passes its own scan \textbf{100/100}; 130 tests.
-    \item \href{https://github.com/mk12002/Stowaway}{\textbf{Stowaway}} — software supply-chain scanner (npm/PyPI/Go/Cargo) detecting typosquatting, dependency confusion and install-hook malware with \textbf{0 false positives} on 153 real dependencies; 133 tests.
+    \item Built a defensive security suite for agentic-AI supply chains as three composable, deterministic scanners over one engine: \textbf{Airlock} statically disassembles model artifacts (pickle / safetensors / GGUF / ONNX / Keras) and probes live MCP servers \textit{without ever executing them}; \textbf{Warden} imports an agent (LangChain/LangGraph, CrewAI, MCP config), builds its capability graph and scores OWASP-LLM ``excessive agency'' with a least-privilege before/after rewrite; \textbf{Manifest} emits a CycloneDX/SPDX AI-BOM folded into one governance report mapped to NIST AI RMF and the EU AI Act.
+    \item On a corpus of \textbf{evasive adversarial pickle-RCE payloads, Airlock detected 14/14} — including the format/extension-confusion and Fickling-style import tricks that slip past picklescan, modelscan and fickling — with \textbf{zero false alarms} across benign models.
+    \item Field-tested against \textbf{19 real public HuggingFace models}: \textbf{100\%} carried at least one supply-chain finding and \textbf{95\%} shipped executable pickle weights, quantifying how routinely production models ship code that runs on load.
 \end{itemize}
 
-\vspace{2pt}
+\vspace{3pt}
 
-\href{https://github.com/mk12002/Intermediate-Representation-IR-Framework-for-SIEM-Rule-Generation}{\textbf{Schema-Grounded NL$\rightarrow$KQL for SIEM Rule Generation}} $|$ \textit{LLMs, LangGraph, ASIM, Microsoft Sentinel}
+\href{https://github.com/mk12002/Intermediate-Representation-IR-Framework-for-SIEM-Rule-Generation}{\textbf{Schema-Grounded NL$\rightarrow$KQL — An Intermediate Representation for SIEM Rule Generation}} $|$ \textit{LLMs, LangGraph, Pydantic, ASIM, Microsoft Sentinel}
 \begin{itemize}
-    \item Designed an intermediate-representation pipeline (schema validator + repair loop) that cut field-hallucination in LLM-generated Sentinel detection rules \textbf{from 93\% to 13\%} ($\sim$13$\times$ fewer, McNemar $p<$1e-7), recovering 96.2\% of failing cases within three repair attempts.
+    \item Borrowing intermediate-representation design from compilers, built a pipeline that turns a natural-language detection requirement into a typed, schema-validated \textbf{Security IR} grounded in Microsoft Sentinel's ASIM schema, then \textit{deterministically compiles} it to KQL — separating ``understand the threat'' from ``remember the syntax,'' with a closed-loop repair mechanism and an ambiguity check that asks a clarifying question instead of emitting a confidently-wrong rule.
+    \item Evaluated two pipelines on identical inputs (direct single-prompt generation vs.\ IR-mediated) so every difference is attributable to the IR layer: \textbf{field validity rose from 6.7\% to 86.7\%} (field hallucination cut $\sim$13$\times$, McNemar $p<$1e-7), syntax validity reached \textbf{97.8\%}, and the repair loop recovered \textbf{96.2\%} of failing cases within three attempts.
+\end{itemize}
+
+\vspace{-2pt}
+
+% Publications
+\section{Publications}
+\vspace{-2pt}
+\begin{itemize}
+    \item \textbf{Hybrid Intensity Normalization and Translation Network for Structure-Preserving Intensity Normalization in Medical Imaging} $|$ \textit{Scientific Reports (Nature Portfolio)} $|$ \href{https://doi.org/10.1038/s41598-026-67051-6}{DOI: 10.1038/s41598-026-67051-6} \hfill 2026
+    \item \textbf{HybEx-Law: A Hybrid Neural-Symbolic System for Legal Aid Eligibility Determination} $|$ \textit{Accepted --- Intl. Conf. on Computational Intelligence and Network Systems (CINS 2026), BITS Pilani Dubai} \hfill Oct 2026
+    \item \textbf{AgriCure: An AWS S3-Integrated Deep Learning Platform for Automated Crop Disease Detection} $|$ \textit{IEEE Xplore (i-PACT 2025)} $|$ \href{https://ieeexplore.ieee.org/document/11307938}{Link to Paper} \hfill Dec 2025
 \end{itemize}
 
 \vspace{-2pt}
@@ -116,7 +126,6 @@
 \section{Certifications \& Achievements}
 \vspace{-2pt}
 \textbf{Certifications:} \href{https://coursera.org/share/62b7320c3e53f81b4150e23d3e86c177}{IBM Cybersecurity Analyst Professional Certificate} $|$ \href{https://coursera.org/share/ad7d41c1bf4e64d3c3cffe247266a968}{Stanford Machine Learning Specialization} $|$ \href{https://learn.microsoft.com/en-us/users/mohitkumar-5451/credentials/fb7576bab685e9be}{Microsoft Azure AI Engineer Associate} $|$ \href{https://coursera.org/share/41ae000d50e2502a39c4c17e39b36ca6}{University of London Cyber Security Fundamentals} $|$ \href{https://catalog-education.oracle.com/ords/certview/sharebadge?id=CBA45575ECD2EA410B506FCD77CA2328F3CC8F54EE1EC201032A8490BDB46348}{OCI Generative AI Professional} $|$ \href{https://www.credly.com/badges/502f6d52-f56b-4bd7-8b4c-e3364c5acc8b/linked_in_profile}{Azure AI Fundamentals} \\
-\textbf{Publications:} \textbf{AgriCure: An AWS S3-Integrated Deep Learning Platform for Automated Crop Disease Detection} $|$ \textit{IEEE Xplore} $|$ \href{https://ieeexplore.ieee.org/document/11307938}{Link to Paper} \hfill Dec 2025 \\
 \textbf{Achievements:} IEEE IC Hackathon 2.0 Finalist (AIR 7/600 teams) $|$ 2nd Position State-level Science Exhibition $|$ Coordinated Bihar's first Atal Tinkering Lab (Niti Aayog funded) $|$ Languages: English, Hindi, Bengali
 
 \end{document}
